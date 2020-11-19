@@ -6,10 +6,10 @@
 name: kyryl horbushko
 
 # Short bio or description (displayed in the header)
-description: creator
+description: inspired
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
-avatar: https://github.com/khorbushko/jekyll-now/master/images/logo.png
+avatar: https://github.com/khorbushko/khorbushko.github.io/master/images/logo.png
 
 #
 # Flags below are optional
@@ -21,11 +21,11 @@ footer-links:
   email: kirill.ge@gmail.com
   facebook:
   flickr:
-  github: https://github.com/khorbushko
+  github: khorbushko
   instagram:
   linkedin:
   pinterest:
-  rss: yes
+  rss:
   twitter:
   stackoverflow: users/2012219/gbk
   youtube: # channel/<your_long_string> or user/<user-name>
