@@ -11,7 +11,7 @@ description: inspired
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://github.com/khorbushko/khorbushko.github.io/blob/master/images/logo.png
 
-
+theme: jekyll-theme-clean-blog
 #
 # Flags below are optional
 #
@@ -77,6 +77,8 @@ sass:
 gems:
   - jekyll-sitemap # Create a sitemap using the official Jekyll sitemap gem
   - jekyll-feed # Create an Atom feed using the official Jekyll feed gem
+  - jekyll-theme-clean-blog
+  - jekyll-paginate
 
 # Exclude these files from your production _site
 exclude:
