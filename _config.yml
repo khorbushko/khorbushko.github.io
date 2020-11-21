@@ -29,6 +29,12 @@ header_pages:
 
 theme: minima
 
+#discus
+
+disqus:
+  shortname: khorbushko-blog
+url: https://khorbushko.github.io
+
 # Use the following plug-ins
 plugins:
   - jekyll-feed # Create an Atom feed using the official Jekyll feed gem

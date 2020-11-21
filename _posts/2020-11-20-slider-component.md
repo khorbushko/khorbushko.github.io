@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: true
 title: "Custom slider with SwiftUI"
 categories: tutorial
 author:
