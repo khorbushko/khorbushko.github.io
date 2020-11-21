@@ -24,6 +24,12 @@ layout: default
             {%- if forloop.last == false %}, {% endif -%}
         {% endfor %}
       {%- endif -%}</p>
+      
+         <span style="float:right;">
+          {% include reading-time.html %}
+         </span>
+
+      </p>
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
