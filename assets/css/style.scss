@@ -5,3 +5,12 @@
 @import
   "minima/skins/{{ site.minima.skin | default: 'classic' }}",
   "minima/initialize";
+  
+ @import"_includes/_comments";
+
+#gh-comments-list a.user,
+#gh-comments-list a.comment-url {
+  text-decoration: none !important;
+  box-shadow: none !important;
+  border-bottom: none !important;
+}

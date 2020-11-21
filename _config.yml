@@ -31,10 +31,10 @@ header_pages:
 theme: minima
 
 #discus
-
-disqus:
-  shortname: khorbushko-blog
-url: https://khorbushko.github.io
+#disabled - use gitHUB issues instead
+#disqus:
+#  shortname: khorbushko-blog
+#url: https://khorbushko.github.io
 
 # Use the following plug-ins
 plugins:

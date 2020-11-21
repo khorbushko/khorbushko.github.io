@@ -5,6 +5,7 @@ title: "Custom slider with SwiftUI"
 categories: tutorial
 tags: iOS, SwiftUI, tutorial
 excerpt_separator: <!--more-->
+comments_id: 1
 
 author:
 - kyryl horbushko

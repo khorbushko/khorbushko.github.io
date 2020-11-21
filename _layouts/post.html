@@ -37,6 +37,10 @@ layout: default
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
 
+{% include share.html %}
+
+{% include comments.html element=".post-content" github_account="khorbushko/khorbushko.github.io" require_cookie_consent="true" %}
+
 {% if site.disqus.shortname %}
   {% include disqus_comments.html %}
 {% endif %}
