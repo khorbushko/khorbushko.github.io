@@ -73,18 +73,18 @@ struct FatSlider: View {
 
 So we defined few components here:
 
-- 'GeomentryReader' - required to correctly adjust position and resize subcomponents of slider
-- 'VStack' and 'Spacer' - to vertically organize all slider components in stack and make sure that our slider will be positioned in center (this part can be removed later, when we define geometry of our component)
-- 'ZStack' - this is container where we will position 'track' and 'thumb' one on each other
+- `GeomentryReader` - required to correctly adjust position and resize subcomponents of slider
+- `VStack` and `Spacer` - to vertically organize all slider components in stack and make sure that our slider will be positioned in center (this part can be removed later, when we define geometry of our component)
+- `ZStack` - this is container where we will position `track` and `thumb` one on each other
 
-Let's add content inside. We can think about content as some simple drawing like 'Rectangle'. But in my case I used 'Capsule', because the side a bit rounded.
+Let's add content inside. We can think about content as some simple drawing like `Rectangle`. But in my case I used `Capsule`, because the side a bit rounded.
 
 > **api -** A capsule shape is equivalent to a rounded rectangle where the corner radius is chosen as half the length of the rectangle’s smallest edge.
 
-So let's use 2 'Capsule' - one for 'track' and one for 'thumb' (i believe u can use 'Rectangle' if u like and add 'cornerRadius' as parameter).
-Adding 2 capsule gives us nothing, so we also need to use 'GeomentryReader' to figure-out correct position of each capsule.
+So let's use 2 `Capsule` - one for `track` and one for `thumb` (i believe u can use `Rectangle` if u like and add `cornerRadius` as parameter).
+Adding 2 capsule gives us nothing, so we also need to use `GeomentryReader` to figure-out correct position of each capsule.
 
-To do so we should think about 'track' and 'thumb' thickness.
+To do so we should think about `track` and `thumb` thickness.
 
 {% highlight swift %}
 
@@ -115,47 +115,33 @@ Also few moments that need to be done - this is size of components and position 
 So far so good - keeping this all in mind, let's transform the idea in the code:
 
 {% highlight swift %}
-struct FatSlider: View {
+// start of struct
+ZStack {
+    let centerYPoint = geometry.size.height / 2
     
-    var thikness: CGFloat = 4
-    @State private var trackPercentage: Float = 0
-
-    var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                Spacer()
-                ZStack {
-                    let centerYPoint = geometry.size.height / 2
-                    
-                    Capsule()
-                        .frame(height: thikness)
-                        .position(
-                            x: geometry.size.width / 2,
-                            y: centerYPoint
-                        )
-                    
-                    let heightOfPicker: CGFloat = thikness * 10
-                    let widthOfPicker: CGFloat = geometry.size.width / 3
-                    let currentXPositionOfPicker: CGFloat =
-                        geometry.size.width * CGFloat(trackPercentage)
-                    let normalizedPosX = min(
-                        geometry.size.width - widthOfPicker / 2,
-                        max(widthOfPicker / 2, currentXPositionOfPicker)
-                    )
-                    
-                    Capsule()
-                        .frame(width: widthOfPicker, height: heightOfPicker)
-                        .position(
-                            x: normalizedPosX,
-                            y: centerYPoint
-                        )
-                }
-                Spacer()
-            }
-        }
-    }
+    Capsule()
+        .frame(height: thikness)
+        .position(
+            x: geometry.size.width / 2,
+            y: centerYPoint
+        )
+    
+    let heightOfPicker: CGFloat = thikness * 10
+    let widthOfPicker: CGFloat = geometry.size.width / 3
+    let currentXPositionOfPicker: CGFloat =
+        geometry.size.width * CGFloat(trackPercentage)
+    let normalizedPosX = min(
+        geometry.size.width - widthOfPicker / 2,
+        max(widthOfPicker / 2, currentXPositionOfPicker)
+    )
+    
+    Capsule()
+        .frame(width: widthOfPicker, height: heightOfPicker)
+        .position(
+            x: normalizedPosX,
+            y: centerYPoint
+        )
 }
-
 {% endhighlight %}
 
 > note: on this point we can remove `VStack` and `Spacer`
@@ -181,53 +167,33 @@ var pickerShadowColor: Color = .black
 and apply them to slider:
 
 {% highlight swift %}
-struct FatSlider: View {
-    var backgroundTint: Color = .gray
-    var pickerTint: Color = .red
-    var pickerShadowColor: Color = .black
-    var thikness: CGFloat = 4
+// start of struct
+ZStack {
+    let centerYPoint = geometry.size.height / 2
     
-    @State private var trackPercentage: Float = 0
-
-    var body: some View {
-        GeometryReader { geometry in
-                ZStack {
-                    let centerYPoint = geometry.size.height / 2
-                    
-                    Capsule()
-                        .foregroundColor(backgroundTint)
-                        .frame(height: thikness)
-                        .position(
-                            x: geometry.size.width / 2,
-                            y: centerYPoint
-                        )
-                    
-                    let heightOfPicker: CGFloat = thikness * 10
-                    let widthOfPicker: CGFloat = geometry.size.width / 3
-                    let currentXPositionOfPicker: CGFloat =
-                        geometry.size.width * CGFloat(trackPercentage)
-                    let normalizedPosX = min(
-                        geometry.size.width - widthOfPicker / 2,
-                        max(widthOfPicker / 2, currentXPositionOfPicker)
-                    )
-                    
-                    Capsule()
-                        .foregroundColor(pickerTint)
-                        .frame(width: widthOfPicker, height: heightOfPicker)
-                        .position(
-                            x: normalizedPosX,
-                            y: centerYPoint
-                        )
-                        .shadow(
-                            color: pickerShadowColor,
-                            radius: 2.0,
-                            x: 2,
-                            y: 2
-                        )
-                }
-        }
-    }
+    Capsule()
+        .foregroundColor(backgroundTint)
+        .frame(height: thikness)
+        .position(
+            x: geometry.size.width / 2,
+            y: centerYPoint
+        )
+    // calculation                    
+    Capsule()
+        .foregroundColor(pickerTint)
+        .frame(width: widthOfPicker, height: heightOfPicker)
+        .position(
+            x: normalizedPosX,
+            y: centerYPoint
+        )
+        .shadow(
+            color: pickerShadowColor,
+            radius: 2.0,
+            x: 2,
+            y: 2
+        )
 }
+...                        
 {% endhighlight %}
 
 Asking preview for result:
@@ -291,7 +257,7 @@ let pointX =
 percentage = Float(pointX / activeWidth)
 {% endhighlight %}
 
-Now if u check output - everything fine - progress is a value in range '0...1'. Great, we are done.
+Now if u check output - everything fine - progress is a value in range `0...1`. Great, we are done.
 
 Ah, one more note: if u want to make sticky version of slider (the one that can return to initial position after release) u just need to add a few lines of code:
 
@@ -312,87 +278,4 @@ var isSticky: Bool = true
 
 ## Full solution code
 
-{% highlight swift %}
-import Foundation
-import SwiftUI
-
-struct FatSlider: View {
-    /// value in range 0...1
-    @Binding var percentage: Float
-    @State private var trackPercentage: Float = 0
-    
-    var backgroundTint: Color = .gray
-    var pickerTint: Color = .red
-    var pickerShadowColor: Color = .black
-    var thikness: CGFloat = 4
-    var isSticky: Bool = true
-    
-    var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                let centerYPoint = geometry.size.height / 2
-                
-                Capsule()
-                    .foregroundColor(backgroundTint)
-                    .frame(height: thikness)
-                    .position(
-                        x: geometry.size.width / 2,
-                        y: centerYPoint
-                    )
-                
-                let heightOfPicker: CGFloat = thikness * 10
-                let widthOfPicker: CGFloat = geometry.size.width / 3
-                let currentXPositionOfPicker: CGFloat =
-                    geometry.size.width * CGFloat(trackPercentage)
-                let normalizedPosX = min(
-                    geometry.size.width - widthOfPicker / 2,
-                    max(widthOfPicker / 2, currentXPositionOfPicker)
-                )
-                
-                Capsule()
-                    .foregroundColor(pickerTint)
-                    .frame(width: widthOfPicker, height: heightOfPicker)
-                    .position(
-                        x: normalizedPosX,
-                        y: centerYPoint
-                    )
-                    .shadow(
-                        color: pickerShadowColor,
-                        radius: 2.0,
-                        x: 2,
-                        y: 2
-                    )
-                    .gesture(
-                        DragGesture(minimumDistance: 0)
-                            .onChanged({ (value) in
-                                let currentPointX = value.location.x
-                                let dragPointXPercent =
-                                    currentPointX / geometry.size.width
-                                let normalizedPersent = min(
-                                    1,
-                                    max(0, dragPointXPercent)
-                                )
-                                self.trackPercentage = Float(normalizedPersent)
-                                
-                                let activeWidth = geometry.size.width - widthOfPicker
-                                let pointX =
-                                    min(
-                                        geometry.size.width - widthOfPicker,
-                                        max(0, value.location.x - widthOfPicker / 2)
-                                    )
-                                percentage = Float(pointX / activeWidth)
-                            })
-                            .onEnded({ (value) in
-                                if isSticky {
-                                    withAnimation {
-                                        percentage = 0
-                                        trackPercentage = 0
-                                    }
-                                }
-                            })
-                    )
-            }
-        }
-    }
-}
-{% endhighlight %}
+<script src="https://gist.github.com/khorbushko/8c81002c5c23226ddc6282efa745f0a3.js"></script>
