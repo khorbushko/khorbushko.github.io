@@ -30,6 +30,11 @@ header_pages:
 
 theme: minima
 
+donations:
+  paypal:
+    text:           Buy me a coffe
+    id:             KKXW84CNZ5PGN
+
 #discus
 #disabled - use gitHUB issues instead
 #disqus:
