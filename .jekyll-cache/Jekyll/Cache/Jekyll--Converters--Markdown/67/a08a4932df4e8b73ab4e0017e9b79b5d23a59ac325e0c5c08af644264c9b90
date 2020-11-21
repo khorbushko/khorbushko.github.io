@@ -1,23 +1,18 @@
----
-layout: page
-title: Contact
-permalink: /contact/
----
-
-Drop me a message using form below
+I"z<p>Drop me a message using form below</p>
 
 <form id="fs-frm" name="simple-contact-form" accept-charset="utf-8" action="https://formspree.io/f/mknpzlgb" method="post">
   <fieldset id="fs-frm-inputs">
     <label for="full-name">Full Name</label>
-    <input type="text" name="name" id="full-name" placeholder="First and Last Name" required="">
+    <input type="text" name="name" id="full-name" placeholder="First and Last" required="" />
     <label for="email-address">Email Address</label>
-    <input type="email" name="_replyto" id="email-address" placeholder="email@domain.tld" required="">
+    <input type="email" name="_replyto" id="email-address" placeholder="email@domain.tld" required="" />
     <label for="message">Message</label>
-    <textarea rows="5" name="message" id="message" placeholder="Your message" required=""></textarea>
-    <input type="hidden" name="_subject" id="email-subject" value="Contact Form Submission">
+    <textarea rows="5" name="message" id="message" placeholder="Aenean lacinia bibendum nulla sed consectetur. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Donec ullamcorper nulla non metus auctor fringilla nullam quis risus." required=""></textarea>
+    <input type="hidden" name="_subject" id="email-subject" value="Contact Form Submission" />
   </fieldset>
-  <input type="submit" value="Submit">
-</form><style>/* reset */
+  <input type="submit" value="Submit" />
+</form>
+<style>/* reset */
 #fs-frm input,
 #fs-frm select,
 #fs-frm textarea,
@@ -125,3 +120,5 @@ Drop me a message using form below
   margin-right: 3%;
 }
 </style>
+
+:ET

@@ -1,0 +1,10 @@
+I"X<p>Drop me a message using form below</p>
+
+<form action="https://formspree.io/f/mknpzlgb" method="POST">
+    <input type="email" name="_replyto" placeholder="Enter your email" size="50" />
+  <br />
+    <textarea name="message" placeholder="Enter your message" rows="8" cols="48"></textarea>
+<br />
+  <button type="submit">Send</button>
+</form>
+:ET
