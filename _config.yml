@@ -24,6 +24,7 @@ google_analytics: G-64DN886230
 # If you want to link only specific pages in your header, uncomment
 # this and add the path to the pages in order as they should show up
 header_pages:
+ - search.md
  - contact.md
  - about.md
 

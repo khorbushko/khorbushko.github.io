@@ -3,21 +3,24 @@ layout: post
 comments: true
 title: "Custom slider with SwiftUI"
 categories: tutorial
+tags: iOS, SwiftUI, tutorial
+excerpt_separator: <!--more-->
+
 author:
 - kyryl horbushko
 - Lviv
 ---
 
+`iOS 13+` `swiftUI 2.0`
+
 Custom components are independent pieces of functionality that can be reused in your code. In this tutorial we will make custom Slider.
 
-`iOS 13+` `swiftUI 2.0`
+<!--more-->
 
 # intro
 
 Sooner or later, each of us can face with the needs to create our own UI component.
-> As for me, one of the best approach — is to grab something simple or/and check existing similar custom component — to get understanding of upcoming work (just to find an idea how it works). Combining received information with API documentation u, in theory, can do anything u like.
-
-So today I got a task to create custom Slider component.
+So in this post I want to describe how to create custom Slider component.
 
 Well let's look at result first:
 
@@ -29,6 +32,8 @@ Well let's look at result first:
 ## structure
 
 I always start from making complex thing a bit easier. And then repeat this operation on received part until all parts become very simple and easy to understand. So, here let's do same way.
+
+> for me also one of the best approach — is to grab something simple or/and check existing similar custom component — to get understanding of upcoming work (just to find an idea how it works). Combining received information with API documentation u, in theory, can do anything u like.
 
 When I checked design first I analyze what should be done, which parts can be customized and so on. Looking at this slider I can see at least few basic components (offcause u may see even more - all depends only from customization level that is required):
 
