@@ -75,7 +75,7 @@ struct FatSlider: View {
 So we defined few components here:
 
 - `GeomentryReader` - required to correctly adjust position and resize subcomponents of slider
-- `VStack` and `Spacer` - to vertically organize all slider components in stack and make sure that our slider will be positioned in center (this part can be removed later, when we define geometry of our component)
+- `VStack` and `Spacer` - to vertically organize all slider components in stack and make sure that our slider will be positioned in center (this part can be removed later, when we define geometry of our component, for now it's just help us center all the content)
 - `ZStack` - this is container where we will position `track` and `thumb` one on each other
 
 Let's add content inside. We can think about content as some simple drawing like `Rectangle`. But in my case I used `Capsule`, because the side a bit rounded.
@@ -92,11 +92,11 @@ To do so we should think about `track` and `thumb` thickness.
 var thikness: CGFloat = 4
 {% endhighlight %}
 
-and to calculate position of `thumb` we need to define one more property - trackPercentage, this one should be `@State` - because we would like to store this value over view updates
+and to calculate position of `thumb` we need to define one more property - `percentage`, this one should be `@State` - because we would like to store this value over view updates
 
 {% highlight swift %}
 
-@State private var trackPercentage: Float = 0
+@Binding var percentage: Float
 {% endhighlight %}
 
 Also few moments that need to be done - this is size of components and position of components:
@@ -106,7 +106,7 @@ Also few moments that need to be done - this is size of components and position 
 	 - position - center of view
 - thumb:
 	 - size - .init(width: bounds.size.width / 3, height: thickness x 10)
-	 - position - left origin + size.width / 2 (controllable by `trackPercentage`). Here also a bit tricky moment - we sould limit position of thumb by it's size.
+	 - position - left origin + size.width / 2 (controllable by `percentage `). Here also a bit tricky moment - we sould limit position of thumb by it's size.
 
 <div style="text-align:center">
 <img src="assets/20-11-2020-slider-component/limit_.svg" alt="preview_1" width=500/>
@@ -130,7 +130,7 @@ ZStack {
     let heightOfPicker: CGFloat = thikness * 10
     let widthOfPicker: CGFloat = geometry.size.width / 3
     let currentXPositionOfPicker: CGFloat =
-        geometry.size.width * CGFloat(trackPercentage)
+        geometry.size.width * CGFloat(percentage)
     let normalizedPosX = min(
         geometry.size.width - widthOfPicker / 2,
         max(widthOfPicker / 2, currentXPositionOfPicker)
@@ -148,12 +148,13 @@ ZStack {
 > note: on this point we can remove `VStack` and `Spacer`
 
 Preview show for us next:
-> add `.frame(height: 44)` to `PreviewProvider`, in other case u will get full screen slider :]
 
 <div style="text-align:center">
 <img src="assets/20-11-2020-slider-component/preview_1.png" alt="preview_1" width="250"/>
 </div>
 
+> add `.frame(height: 44)` to `PreviewProvider`, in other case u will get full screen slider :]
+> 
 Not bad ;].
 
 Let's add some decoration to these shapes.
@@ -210,59 +211,30 @@ Ok, style looks fine, but how about interaction? To bring some life into our sli
 .gesture(
 	DragGesture(minimumDistance: 0)
 	.onChanged({ (value) in
-		// store start point
-		let currentPointX = value.location.x
-		// calculate drag percentage
-		let dragPointXPercent =
-		    currentPointX / geometry.size.width
-		// limit it to min/max boundaries
-		let normalizedPersent = min(
-		    1,
-		    max(0, dragPointXPercent)
-		)
-		// store in to @State prop
-		self.trackPercentage = Float(normalizedPersent)
-	})
+	    let activeWidth = geometry.size.width - widthOfPicker
+	    // calculate point including thumb size limits
+	    let pointX =
+	        min(
+	            geometry.size.width - widthOfPicker,
+	            max(0, value.location.x - widthOfPicker / 2)
+	        )
+	    percentage = Float(pointX / activeWidth)	})
 )
 {% endhighlight %}
 
-And that's it - remember we used `trackPercentage` when define current position of `thumb`.
+And that's it - remember we used `percentage` when define current position of `thumb`.
 
 
 <div style="text-align:center">
 <img src="assets/20-11-2020-slider-component/demo_2.gif" alt="preview_1" width="250"/>
 </div>
 
-Great, but wait, if we check `trackPercentage` output we can see, that value a bit limited by min/max values... Remember we add min/max value boundaries for `thumb` - yep, that the reason. So let's make another prop that will hold actual progress value of slider without boundaries limit.
+Great, basic functionality is done. You can add any additional feature to component if u like, for example if u want to make sticky version of slider (the one that can return to initial position after release) u just need to add a few lines of code:
 
 To do so 
 
 {% highlight swift %}
-//add at the top of file
-/// value in range 0...1
-@Binding var percentage: Float
-
-...
-
-// and at the end of .onChanged event from gesture
-
-// get active width
-let activeWidth = geometry.size.width - widthOfPicker
-// get current point with adjustment
-let pointX =
-    min(
-        geometry.size.width - widthOfPicker,
-        max(0, value.location.x - widthOfPicker / 2)
-    )
-// calculate scrolled value 
-percentage = Float(pointX / activeWidth)
-{% endhighlight %}
-
-Now if u check output - everything fine - progress is a value in range `0...1`. Great, we are done.
-
-Ah, one more note: if u want to make sticky version of slider (the one that can return to initial position after release) u just need to add a few lines of code:
-
-{% highlight swift %}
+// add at the top of file
 // define prop whenever this functionality required
 var isSticky: Bool = true
 
@@ -271,7 +243,6 @@ var isSticky: Bool = true
     if isSticky {
         withAnimation {
             percentage = 0
-            trackPercentage = 0
         }
     }
 })
