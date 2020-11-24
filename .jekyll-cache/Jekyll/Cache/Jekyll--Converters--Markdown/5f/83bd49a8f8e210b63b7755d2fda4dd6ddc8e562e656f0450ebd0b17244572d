@@ -1,0 +1,151 @@
+I"�H<p><code class="language-plaintext highlighter-rouge">iOS 13+</code> <code class="language-plaintext highlighter-rouge">swiftUI</code></p>
+
+<p>How many times do we need to change something in standard components supplied by Apple? Well, quite often, so I guess everything should be done keeping this simple thing in mind. But let’s check <code class="language-plaintext highlighter-rouge">NavigationBar</code> in SwiftUI.</p>
+
+<p>“Oh crap!” - u can say after the first 10 min of testing and trying to change something - it won’t be easy to customize that :(. So today I want to tell u about my experience related to <code class="language-plaintext highlighter-rouge">NavigationBar</code> customization in SwiftUI.
+<!--more--></p>
+
+<h2 id="history">history</h2>
+
+<p>Before we dive into SwiftUI detail, let’s refresh our memory and see how it works on UIKit. To do so, we may review <a href="https://developer.apple.com/documentation/uikit/uinavigationcontroller/customizing_your_app_s_navigation_bar">official sample</a>. When we dive into details we can see that there is no direct method of changing <code class="language-plaintext highlighter-rouge">NavigationBar</code> background color, instead Apple <s>propose</s> force us to use <code class="language-plaintext highlighter-rouge">UIAppearence</code>. Just to recap - appearance is kind of a proxy that is used to modify something without direct change. And here is also limitation - we can’t do that change <code class="language-plaintext highlighter-rouge">on the fly</code> because:</p>
+
+<blockquote>
+  <p>iOS applies appearance changes <strong>when a view enters a window, it doesn’t change the appearance of a view that’s already in a window</strong>. To change the appearance of a view that’s currently in a window, remove the view from the view hierarchy and then put it back.</p>
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">appearance</span> <span class="o">=</span> <span class="kt">UINavigationBarAppearance</span><span class="p">()</span>
+<span class="n">appearance</span><span class="o">.</span><span class="nf">configureWithOpaqueBackground</span><span class="p">()</span>
+<span class="n">appearance</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="kt">UIColor</span><span class="o">.</span><span class="n">systemRed</span>
+<span class="n">appearance</span><span class="o">.</span><span class="n">titleTextAttributes</span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="nv">foregroundColor</span><span class="p">:</span> <span class="kt">UIColor</span><span class="o">.</span><span class="n">lightText</span><span class="p">]</span> <span class="c1">// With a red background, make the title more readable.</span>
+<span class="n">navigationItem</span><span class="o">.</span><span class="n">standardAppearance</span> <span class="o">=</span> <span class="n">appearance</span>
+<span class="n">navigationItem</span><span class="o">.</span><span class="n">scrollEdgeAppearance</span> <span class="o">=</span> <span class="n">appearance</span>
+<span class="n">navigationItem</span><span class="o">.</span><span class="n">compactAppearance</span> <span class="o">=</span> <span class="n">appearance</span> <span class="c1">// For iPhone small navigation bar in landscape.</span></code></pre></figure>
+
+<p>This means that we change it through <code class="language-plaintext highlighter-rouge">navigationItem</code> of viewController in <code class="language-plaintext highlighter-rouge">viewDidLoad</code> method (for example).</p>
+
+<p>Another option is to use <code class="language-plaintext highlighter-rouge">UINavigationController</code> instance, like the following:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="o">!.</span><span class="n">navigationBar</span><span class="o">.</span><span class="n">barStyle</span> <span class="o">=</span> <span class="o">.</span><span class="k">default</span>
+<span class="c1">// Bars are translucent by default.</span>
+<span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="o">!.</span><span class="n">navigationBar</span><span class="o">.</span><span class="n">isTranslucent</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="c1">// Reset the bar's tint color to the system default.</span>
+<span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="o">!.</span><span class="n">navigationBar</span><span class="o">.</span><span class="n">tintColor</span> <span class="o">=</span> <span class="kc">nil</span>
+<span class="k">self</span><span class="o">.</span><span class="n">navigationController</span><span class="o">!.</span><span class="n">navigationBar</span><span class="o">.</span><span class="n">titleTextAttributes</span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="nv">foregroundColor</span><span class="p">:</span> <span class="kt">UIColor</span><span class="o">.</span><span class="n">label</span><span class="p">]</span></code></pre></figure>
+
+<p>and offcause use global settings:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">appearence</span> <span class="o">=</span> <span class="kt">UINavigationBarAppearance</span><span class="p">()</span>
+<span class="n">appearence</span><span class="o">.</span><span class="nf">configureWithOpaqueBackground</span><span class="p">()</span>
+<span class="n">appearence</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="n">backgroundColor</span>
+<span class="n">appearence</span><span class="o">.</span><span class="n">titleTextAttributes</span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="nv">foregroundColor</span><span class="p">:</span> <span class="n">tintColor</span><span class="p">]</span>
+<span class="n">appearence</span><span class="o">.</span><span class="n">largeTitleTextAttributes</span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="nv">foregroundColor</span><span class="p">:</span> <span class="n">tintColor</span><span class="p">]</span>
+    
+<span class="kt">UINavigationBar</span><span class="o">.</span><span class="nf">appearance</span><span class="p">()</span><span class="o">.</span><span class="n">standardAppearance</span> <span class="o">=</span> <span class="n">appearence</span>
+<span class="kt">UINavigationBar</span><span class="o">.</span><span class="nf">appearance</span><span class="p">()</span><span class="o">.</span><span class="n">scrollEdgeAppearance</span> <span class="o">=</span> <span class="n">appearence</span>
+<span class="kt">UINavigationBar</span><span class="o">.</span><span class="nf">appearance</span><span class="p">()</span><span class="o">.</span><span class="n">compactAppearance</span> <span class="o">=</span> <span class="n">appearence</span>
+<span class="kt">UINavigationBar</span><span class="o">.</span><span class="nf">appearance</span><span class="p">()</span><span class="o">.</span><span class="n">tintColor</span> <span class="o">=</span> <span class="n">tintColor</span></code></pre></figure>
+
+<p>Did u see it? None of the above methods didn’t provide an easy way of changing <code class="language-plaintext highlighter-rouge">backgroundColor</code>.  Why? There is must be some really good reason for that. Maybe this is due to <code class="language-plaintext highlighter-rouge">UIEffectsView</code> inside or due to <code class="language-plaintext highlighter-rouge">UIImageView</code> that serves as a background or due to some other points…</p>
+
+<p>This Appearance API can result in something like:</p>
+
+<p><br /></p>
+<div style="text-align:center">
+<img src="24-11-2020-navigation-bar/demo_apearence_uikit.gif" alt="preview_1" width="250" />
+</div>
+<p><br /></p>
+
+<blockquote>
+  <p>here u can see color change using appearance on <code class="language-plaintext highlighter-rouge">viewDidLoad</code> and <code class="language-plaintext highlighter-rouge">viewDidAppear</code></p>
+</blockquote>
+
+<p>So the problem actually is quite old and developers always tried to make some workarounds on this - from accessing subviews and reverse engineering to developing their own custom <code class="language-plaintext highlighter-rouge">navigationBars</code>.</p>
+
+<h2 id="swiftui">swiftUI</h2>
+
+<p>Ok, how about <code class="language-plaintext highlighter-rouge">SwiftUI</code>. This technology should bring to us a new experience and easy-to-use API. Apple heard a lot of responses and hopefully make some appropriate changes.</p>
+
+<blockquote>
+  <p>SwiftUI is an innovative, exceptionally simple way to build user interfaces across all Apple platforms with the power of Swift. … With a declarative Swift syntax that’s easy to read and natural to write, SwiftUI works seamlessly with new Xcode design tools to keep your code and design perfectly in sync. <a href="https://developer.apple.com/xcode/swiftui/#:~:text=SwiftUI%20is%20an%20innovative%2C%20exceptionally,with%20the%20power%20of%20Swift.&amp;text=With%20a%20declarative%20Swift%20syntax,and%20design%20perfectly%20in%20sync.">from offcial</a></p>
+</blockquote>
+
+<p>First look at the API created for <code class="language-plaintext highlighter-rouge">SwiftUI</code> and we see… nothing. Yes, nothing exists for changing <code class="language-plaintext highlighter-rouge">navigationBar</code> <code class="language-plaintext highlighter-rouge">backgroundColor</code>, at all - not even for appearance :(</p>
+
+<p><br /></p>
+<div style="text-align:center">
+<img src="24-11-2020-navigation-bar/navigation_view_1.png" alt="preview_1" width="250" />
+</div>
+<p><br /></p>
+
+<p>Wow, that’s a bit unexpected. You even don’t have access to <code class="language-plaintext highlighter-rouge">NavigationController</code> anymore.</p>
+
+<p>Starting from SwiftUI 2.0 (iOS 14) Apple add possibility to modify <code class="language-plaintext highlighter-rouge">navigationBar</code> via <code class="language-plaintext highlighter-rouge">toolbar</code>.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">NavigationView</span> <span class="p">{</span>
+	<span class="c1">// content</span>
+   <span class="o">.</span><span class="n">toolbar</span> <span class="p">{</span>
+      <span class="kt">ToolbarItem</span><span class="p">(</span><span class="nv">placement</span><span class="p">:</span> <span class="o">.</span><span class="n">principal</span><span class="p">)</span> <span class="p">{</span>
+      		<span class="c1">// do whatever u like</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Better, but it’s still tricky and non so easy as everyone wants. The question about the dynamic change of <code class="language-plaintext highlighter-rouge">backgroundColor</code> is still open. Even more - what about iOS 13?</p>
+
+<p>That the problem I faced with, like many other developers.</p>
+
+<h2 id="solution">solution</h2>
+
+<p>As u can imagine I have tested all appearance solutions and some other stuff also. Indeed I ended up with some, but first, let’s see what I got.</p>
+
+<p>Off cause, as u maybe already think about my first attempt was to use global appearance, but even without trying I assumed that this won’t for dynamic change thus it mention in the doc</p>
+
+<blockquote>
+  <p>iOS applies appearance changes <strong>when a view enters a window, it doesn’t change the appearance of a view that’s already in a window</strong>. To change the appearance of a view that’s currently in a window, remove the view from the view hierarchy and then put it back.</p>
+</blockquote>
+
+<p>Anyway, this is quite a good solution for those who have a constant color of navigationBar.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">appearence</span> <span class="o">=</span> <span class="kt">UINavigationBarAppearance</span><span class="p">()</span>
+<span class="n">appearence</span><span class="o">.</span><span class="nf">configureWithOpaqueBackground</span><span class="p">()</span>
+<span class="n">appearence</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="n">backgroundColor</span>
+<span class="n">appearence</span><span class="o">.</span><span class="n">titleTextAttributes</span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="nv">foregroundColor</span><span class="p">:</span> <span class="n">tintColor</span><span class="p">]</span>
+<span class="n">appearence</span><span class="o">.</span><span class="n">largeTitleTextAttributes</span> <span class="o">=</span> <span class="p">[</span><span class="o">.</span><span class="nv">foregroundColor</span><span class="p">:</span> <span class="n">tintColor</span><span class="p">]</span>
+    
+<span class="kt">UINavigationBar</span><span class="o">.</span><span class="nf">appearance</span><span class="p">()</span><span class="o">.</span><span class="n">standardAppearance</span> <span class="o">=</span> <span class="n">appearence</span>
+<span class="kt">UINavigationBar</span><span class="o">.</span><span class="nf">appearance</span><span class="p">()</span><span class="o">.</span><span class="n">scrollEdgeAppearance</span> <span class="o">=</span> <span class="n">appearence</span>
+<span class="kt">UINavigationBar</span><span class="o">.</span><span class="nf">appearance</span><span class="p">()</span><span class="o">.</span><span class="n">compactAppearance</span> <span class="o">=</span> <span class="n">appearence</span>
+<span class="kt">UINavigationBar</span><span class="o">.</span><span class="nf">appearance</span><span class="p">()</span><span class="o">.</span><span class="n">tintColor</span> <span class="o">=</span> <span class="n">tintColor</span></code></pre></figure>
+
+<p>to make it shiny we can even create <code class="language-plaintext highlighter-rouge">View</code> <code class="language-plaintext highlighter-rouge">modifier</code>:</p>
+
+<script src="https://gist.github.com/khorbushko/20bbcf44eb4542eef20007bb231bf3ff.js"></script>
+
+<p>but - remember <strong>pitfall</strong> - it won’t work for cases when u need to change color dynamically, like I want, so moving forward.</p>
+
+<p>Next attempt - to change <code class="language-plaintext highlighter-rouge">backgroundColor</code> directly on <code class="language-plaintext highlighter-rouge">navigationBar</code>. How to achieve this? Well, let’s think about <code class="language-plaintext highlighter-rouge">navigationBar</code> - every <code class="language-plaintext highlighter-rouge">viewController</code> has its own configuration related to used <code class="language-plaintext highlighter-rouge">NavigationController</code>. How to access this property? Aha - childViewController - when it attached to <code class="language-plaintext highlighter-rouge">viewcontroller</code> with <code class="language-plaintext highlighter-rouge">navigationController</code> - access granted :). How to attach? <code class="language-plaintext highlighter-rouge">UIViewControllerRepresentable</code> is here to rescue. So basically we need to create a viewModifier that attaches viewController and get access to <code class="language-plaintext highlighter-rouge">navigationBar</code> for future manipulation. Sounds like a good approach to go. Let’s do this:</p>
+
+<script src="https://gist.github.com/khorbushko/c38db74d8c801336bb9d605f77bac62b.js"></script>
+
+<blockquote>
+  <p>for modification <code class="language-plaintext highlighter-rouge">navigationBar</code> I used extenstion</p>
+
+  <p>there are few other <code class="language-plaintext highlighter-rouge">AppearenceType</code> props, but for a test - this is ok to go</p>
+</blockquote>
+
+<p>Usage:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="o">.</span><span class="n">configureNavigationBar</span> <span class="p">{</span>
+    <span class="nv">$0</span><span class="o">.</span><span class="nf">switchToAppearence</span><span class="p">(</span><span class="o">.</span><span class="n">defaultLight</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Ok, it’s time to play.</p>
+
+<p>“Just add modified for our view and everything should work like a charm” - I was thinking :). Indeed - it works, when u attach it and change on-the-flay, but not for the case when u open the screen momentary and want to change color instantly. Why? The reason is quite simple - view modifier don’t attach our <code class="language-plaintext highlighter-rouge">viewController</code> as child momentary and so we haven’t access to <code class="language-plaintext highlighter-rouge">navigationBar</code> at the very first moment of modifier usage :( This is because <code class="language-plaintext highlighter-rouge">coordinator</code> firstly creates an object, that calls modify callback and then attaches to our view - but what we need - it’s slightly another sequence.</p>
+
+<p>I can think about playing within <code class="language-plaintext highlighter-rouge">navigationItem</code> property in an similar way or some other alternatives (like iterate subview that is not preferable at all)… but the result will be the same because of the process of combining <code class="language-plaintext highlighter-rouge">SwiftUI</code> and <code class="language-plaintext highlighter-rouge">UIKit</code> is the same…</p>
+
+<p>So, what is my solution then? Ugly one :( - I switched <code class="language-plaintext highlighter-rouge">navigationBar</code> into <code class="language-plaintext highlighter-rouge">transparent</code> mode and every view that is needed to be modified has a <code class="language-plaintext highlighter-rouge">ZStack</code> with color that extends <code class="language-plaintext highlighter-rouge">safeArea</code> and the actual content. Not the perfect one.</p>
+
+<p>So this is one more improvement that needs to be done for <code class="language-plaintext highlighter-rouge">SwiftUI</code>.</p>
+:ET

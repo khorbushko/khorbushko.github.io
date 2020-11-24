@@ -71,7 +71,7 @@ This Appearance API can result in something like:
 
 <br>
 <div style="text-align:center">
-<img src="assets/24-11-2020-navigation-bar/demo_apearence_uikit.gif" alt="preview_1" width="250"/>
+<img src="24-11-2020-navigation-bar/demo_apearence_uikit.gif" alt="preview_1" width="250"/>
 </div>
 <br>
 
@@ -90,7 +90,7 @@ First look at the API created for `SwiftUI` and we see... nothing. Yes, nothing 
 
 <br>
 <div style="text-align:center">
-<img src="assets/24-11-2020-navigation-bar/navigation_view_1.png" alt="preview_1" width="250"/>
+<img src="24-11-2020-navigation-bar/navigation_view_1.png" alt="preview_1" width="250"/>
 </div>
 <br>
 
