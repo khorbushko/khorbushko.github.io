@@ -1,4 +1,4 @@
-I"CU<p><code class="language-plaintext highlighter-rouge">iOS 13+</code> <code class="language-plaintext highlighter-rouge">swiftUI 2.0</code></p>
+I"�K<p><code class="language-plaintext highlighter-rouge">iOS 13+</code> <code class="language-plaintext highlighter-rouge">swiftUI 2.0</code></p>
 
 <p>Custom components are independent pieces of functionality that can be reused in your code. In this tutorial we will make custom Slider.</p>
 
@@ -65,7 +65,7 @@ So in this post I want to describe how to create custom Slider component.</p>
 
 <ul>
   <li><code class="language-plaintext highlighter-rouge">GeomentryReader</code> - required to correctly adjust position and resize subcomponents of slider</li>
-  <li><code class="language-plaintext highlighter-rouge">VStack</code> and <code class="language-plaintext highlighter-rouge">Spacer</code> - to vertically organize all slider components in stack and make sure that our slider will be positioned in center (this part can be removed later, when we define geometry of our component)</li>
+  <li><code class="language-plaintext highlighter-rouge">VStack</code> and <code class="language-plaintext highlighter-rouge">Spacer</code> - to vertically organize all slider components in stack and make sure that our slider will be positioned in center (this part can be removed later, when we define geometry of our component, for now it’s just help us center all the content)</li>
   <li><code class="language-plaintext highlighter-rouge">ZStack</code> - this is container where we will position <code class="language-plaintext highlighter-rouge">track</code> and <code class="language-plaintext highlighter-rouge">thumb</code> one on each other</li>
 </ul>
 
@@ -82,9 +82,9 @@ Adding 2 capsule gives us nothing, so we also need to use <code class="language-
 
 <figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">thikness</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">4</span></code></pre></figure>
 
-<p>and to calculate position of <code class="language-plaintext highlighter-rouge">thumb</code> we need to define one more property - trackPercentage, this one should be <code class="language-plaintext highlighter-rouge">@State</code> - because we would like to store this value over view updates</p>
+<p>and to calculate position of <code class="language-plaintext highlighter-rouge">thumb</code> we need to define one more property - <code class="language-plaintext highlighter-rouge">percentage</code>, this one should be <code class="language-plaintext highlighter-rouge">@State</code> - because we would like to store this value over view updates</p>
 
-<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">@State</span> <span class="kd">private</span> <span class="k">var</span> <span class="nv">trackPercentage</span><span class="p">:</span> <span class="kt">Float</span> <span class="o">=</span> <span class="mi">0</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">@Binding</span> <span class="k">var</span> <span class="nv">percentage</span><span class="p">:</span> <span class="kt">Float</span></code></pre></figure>
 
 <p>Also few moments that need to be done - this is size of components and position of components:</p>
 
@@ -98,7 +98,7 @@ Adding 2 capsule gives us nothing, so we also need to use <code class="language-
   <li>thumb:
     <ul>
       <li>size - .init(width: bounds.size.width / 3, height: thickness x 10)</li>
-      <li>position - left origin + size.width / 2 (controllable by <code class="language-plaintext highlighter-rouge">trackPercentage</code>). Here also a bit tricky moment - we sould limit position of thumb by it’s size.</li>
+      <li>position - left origin + size.width / 2 (controllable by <code class="language-plaintext highlighter-rouge">percentage </code>). Here also a bit tricky moment - we sould limit position of thumb by it’s size.</li>
     </ul>
   </li>
 </ul>
@@ -123,7 +123,7 @@ Adding 2 capsule gives us nothing, so we also need to use <code class="language-
     <span class="k">let</span> <span class="nv">heightOfPicker</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="n">thikness</span> <span class="o">*</span> <span class="mi">10</span>
     <span class="k">let</span> <span class="nv">widthOfPicker</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">3</span>
     <span class="k">let</span> <span class="nv">currentXPositionOfPicker</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span>
-        <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="n">trackPercentage</span><span class="p">)</span>
+        <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="n">percentage</span><span class="p">)</span>
     <span class="k">let</span> <span class="nv">normalizedPosX</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span>
         <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">widthOfPicker</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
         <span class="nf">max</span><span class="p">(</span><span class="n">widthOfPicker</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">currentXPositionOfPicker</span><span class="p">)</span>
@@ -142,15 +142,16 @@ Adding 2 capsule gives us nothing, so we also need to use <code class="language-
 </blockquote>
 
 <p>Preview show for us next:</p>
-<blockquote>
-  <p>add <code class="language-plaintext highlighter-rouge">.frame(height: 44)</code> to <code class="language-plaintext highlighter-rouge">PreviewProvider</code>, in other case u will get full screen slider :]</p>
-</blockquote>
 
 <div style="text-align:center">
 <img src="assets/20-11-2020-slider-component/preview_1.png" alt="preview_1" width="250" />
 </div>
 
-<p>Not bad ;].</p>
+<blockquote>
+  <p>add <code class="language-plaintext highlighter-rouge">.frame(height: 44)</code> to <code class="language-plaintext highlighter-rouge">PreviewProvider</code>, in other case u will get full screen slider :]</p>
+
+  <p>Not bad ;].</p>
+</blockquote>
 
 <p>Let’s add some decoration to these shapes.
 As was mention above I’m going to change only few aspects of the slider, so let’s add appropriate properties for them:</p>
@@ -201,55 +202,28 @@ As was mention above I’m going to change only few aspects of the slider, so le
 <span class="o">.</span><span class="nf">gesture</span><span class="p">(</span>
 	<span class="kt">DragGesture</span><span class="p">(</span><span class="nv">minimumDistance</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
 	<span class="o">.</span><span class="nf">onChanged</span><span class="p">({</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
-		<span class="c1">// store start point</span>
-		<span class="k">let</span> <span class="nv">currentPointX</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span>
-		<span class="c1">// calculate drag percentage</span>
-		<span class="k">let</span> <span class="nv">dragPointXPercent</span> <span class="o">=</span>
-		    <span class="n">currentPointX</span> <span class="o">/</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span>
-		<span class="c1">// limit it to min/max boundaries</span>
-		<span class="k">let</span> <span class="nv">normalizedPersent</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span>
-		    <span class="mi">1</span><span class="p">,</span>
-		    <span class="nf">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dragPointXPercent</span><span class="p">)</span>
-		<span class="p">)</span>
-		<span class="c1">// store in to @State prop</span>
-		<span class="k">self</span><span class="o">.</span><span class="n">trackPercentage</span> <span class="o">=</span> <span class="kt">Float</span><span class="p">(</span><span class="n">normalizedPersent</span><span class="p">)</span>
-	<span class="p">})</span>
+	    <span class="k">let</span> <span class="nv">activeWidth</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">widthOfPicker</span>
+	    <span class="c1">// calculate point including thumb size limits</span>
+	    <span class="k">let</span> <span class="nv">pointX</span> <span class="o">=</span>
+	        <span class="nf">min</span><span class="p">(</span>
+	            <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">widthOfPicker</span><span class="p">,</span>
+	            <span class="nf">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">widthOfPicker</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+	        <span class="p">)</span>
+	    <span class="n">percentage</span> <span class="o">=</span> <span class="kt">Float</span><span class="p">(</span><span class="n">pointX</span> <span class="o">/</span> <span class="n">activeWidth</span><span class="p">)</span>	<span class="p">})</span>
 <span class="p">)</span></code></pre></figure>
 
-<p>And that’s it - remember we used <code class="language-plaintext highlighter-rouge">trackPercentage</code> when define current position of <code class="language-plaintext highlighter-rouge">thumb</code>.</p>
+<p>And that’s it - remember we used <code class="language-plaintext highlighter-rouge">percentage</code> when define current position of <code class="language-plaintext highlighter-rouge">thumb</code>.</p>
 
 <div style="text-align:center">
 <img src="assets/20-11-2020-slider-component/demo_2.gif" alt="preview_1" width="250" />
 </div>
 
-<p>Great, but wait, if we check <code class="language-plaintext highlighter-rouge">trackPercentage</code> output we can see, that value a bit limited by min/max values… Remember we add min/max value boundaries for <code class="language-plaintext highlighter-rouge">thumb</code> - yep, that the reason. So let’s make another prop that will hold actual progress value of slider without boundaries limit.</p>
+<p>Great, basic functionality is done. You can add any additional feature to component if u like, for example if u want to make sticky version of slider (the one that can return to initial position after release) u just need to add a few lines of code:</p>
 
 <p>To do so</p>
 
-<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">//add at the top of file</span>
-<span class="c1">/// value in range 0...1</span>
-<span class="kd">@Binding</span> <span class="k">var</span> <span class="nv">percentage</span><span class="p">:</span> <span class="kt">Float</span>
-
-<span class="o">...</span>
-
-<span class="c1">// and at the end of .onChanged event from gesture</span>
-
-<span class="c1">// get active width</span>
-<span class="k">let</span> <span class="nv">activeWidth</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">widthOfPicker</span>
-<span class="c1">// get current point with adjustment</span>
-<span class="k">let</span> <span class="nv">pointX</span> <span class="o">=</span>
-    <span class="nf">min</span><span class="p">(</span>
-        <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">widthOfPicker</span><span class="p">,</span>
-        <span class="nf">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">widthOfPicker</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="p">)</span>
-<span class="c1">// calculate scrolled value </span>
-<span class="n">percentage</span> <span class="o">=</span> <span class="kt">Float</span><span class="p">(</span><span class="n">pointX</span> <span class="o">/</span> <span class="n">activeWidth</span><span class="p">)</span></code></pre></figure>
-
-<p>Now if u check output - everything fine - progress is a value in range <code class="language-plaintext highlighter-rouge">0...1</code>. Great, we are done.</p>
-
-<p>Ah, one more note: if u want to make sticky version of slider (the one that can return to initial position after release) u just need to add a few lines of code:</p>
-
-<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// define prop whenever this functionality required</span>
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// add at the top of file</span>
+<span class="c1">// define prop whenever this functionality required</span>
 <span class="k">var</span> <span class="nv">isSticky</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span>
 
 <span class="c1">//add one event handler for gesture</span>
@@ -257,7 +231,6 @@ As was mention above I’m going to change only few aspects of the slider, so le
     <span class="k">if</span> <span class="n">isSticky</span> <span class="p">{</span>
         <span class="n">withAnimation</span> <span class="p">{</span>
             <span class="n">percentage</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">trackPercentage</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">})</span></code></pre></figure>

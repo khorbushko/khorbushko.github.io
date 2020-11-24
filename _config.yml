@@ -16,6 +16,7 @@ minima:
   social_links:
     email: kirill.ge@gmail.com
     github: khorbushko
+    stackoverflow: "2012219"
 
 # Short bio or description (displayed in the header)
 description: inspired by "software craftsmanship"
