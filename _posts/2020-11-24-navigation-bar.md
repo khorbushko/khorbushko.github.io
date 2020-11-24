@@ -17,7 +17,7 @@ author:
 
 How many times do we need to change something in standard components supplied by Apple? Well, quite often, so I guess everything should be done keeping this simple thing in mind. But let's check `NavigationBar` in SwiftUI.
 
-Oh crap, u can say after the first 10 min of testing and trying to change something - it won't be easy to customize that :(. So today I want to tell u about my experience related to `NavigationBar` customization in SwiftUI.
+"Oh crap!" - u can say after the first 10 min of testing and trying to change something - it won't be easy to customize that :(. So today I want to tell u about my experience related to `NavigationBar` customization in SwiftUI.
 <!--more-->
 
 ## history
