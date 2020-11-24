@@ -1,0 +1,8 @@
+I"<p>If u want to present some <code class="language-plaintext highlighter-rouge">View</code> in <code class="language-plaintext highlighter-rouge">SwiftUI</code> over whole content like <code class="language-plaintext highlighter-rouge">Alert</code> or <code class="language-plaintext highlighter-rouge">UIViewController</code> does (with <code class="language-plaintext highlighter-rouge">overCurrentContext</code> style) with transparent background - u will be surprized.</p>
+
+<p>What u can - is actually create <code class="language-plaintext highlighter-rouge">View</code> and show it under current context but not under <code class="language-plaintext highlighter-rouge">TabBar</code> for example. That’s not your responsibility. And it’s true, except cases when u want to show alert with <code class="language-plaintext highlighter-rouge">Image</code> - this is definetly not a standart one, so you need to design it and present … somehow.</p>
+
+<p>One option is to always present it from appropriate context - but sometimes it’s hard to achive and we would like to make it in same way as Apple does within <code class="language-plaintext highlighter-rouge">.alert</code>.</p>
+
+<p>How to achive this? Well, we can use <code class="language-plaintext highlighter-rouge">UIKit</code>.</p>
+:ET

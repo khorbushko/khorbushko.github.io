@@ -1,0 +1,4 @@
+I"i<p><code class="language-plaintext highlighter-rouge">iOS 13+</code> <code class="language-plaintext highlighter-rouge">swiftUI</code></p>
+
+<p>If u want to present some <code class="language-plaintext highlighter-rouge">View</code> in <code class="language-plaintext highlighter-rouge">SwiftUI</code> over whole content like <code class="language-plaintext highlighter-rouge">Alert</code> or <code class="language-plaintext highlighter-rouge">UIViewController</code> does (with <code class="language-plaintext highlighter-rouge">overCurrentContext</code> style) with transparent background - u will be surprized.</p>
+:ET

@@ -1,0 +1,95 @@
+I"7+<p>#Present View overFullScreen in SwiftUI</p>
+
+<p>If u want to present some <code class="language-plaintext highlighter-rouge">View</code> in <code class="language-plaintext highlighter-rouge">SwiftUI</code> over whole content like <code class="language-plaintext highlighter-rouge">Alert</code> or <code class="language-plaintext highlighter-rouge">UIViewController</code> does (with <code class="language-plaintext highlighter-rouge">overCurrentContext</code> style) with transparent background - u will be surprized.</p>
+
+<p>What u can - is actually create <code class="language-plaintext highlighter-rouge">View</code> and show it under current context but not under <code class="language-plaintext highlighter-rouge">TabBar</code> for example. That’s not your responsibility. And it’s true, except cases when u want to show alert with <code class="language-plaintext highlighter-rouge">Image</code> - this is definetly not a standart one, so you need to design it and present … somehow.</p>
+
+<p>One option is to always present it from appropriate context - but sometimes it’s hard to achive and we would like to make it in same way as Apple does within <code class="language-plaintext highlighter-rouge">.alert</code>.</p>
+
+<p>How to achive this? Well, we can use <code class="language-plaintext highlighter-rouge">UIKit</code>.</p>
+
+<p>All that we need - is to create <code class="language-plaintext highlighter-rouge">UIViewController</code>, configure appropriate presentation style, add content and present on root window.</p>
+
+<p>Let’s start one-by-one.</p>
+
+<p>To <strong>find presenter</strong> we can use well-known approach of selecting <code class="language-plaintext highlighter-rouge">topMostViewController</code> - our presenter:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">extension</span> <span class="kt">UIWindow</span> <span class="p">{</span>
+    
+    <span class="kd">static</span> <span class="k">var</span> <span class="nv">topMostController</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">?</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">keyWindow</span> <span class="o">=</span> <span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">windows</span>
+            <span class="o">.</span><span class="n">filter</span> <span class="p">{</span> <span class="nv">$0</span><span class="o">.</span><span class="n">isKeyWindow</span> <span class="p">}</span>
+            <span class="o">.</span><span class="n">first</span>
+        
+        <span class="k">if</span> <span class="k">var</span> <span class="nv">topController</span> <span class="o">=</span> <span class="n">keyWindow</span><span class="p">?</span><span class="o">.</span><span class="n">rootViewController</span> <span class="p">{</span>
+            <span class="k">while</span> <span class="k">let</span> <span class="nv">presentedViewController</span> <span class="o">=</span> <span class="n">topController</span><span class="o">.</span><span class="n">presentedViewController</span> <span class="p">{</span>
+                <span class="n">topController</span> <span class="o">=</span> <span class="n">presentedViewController</span>
+            <span class="p">}</span>
+            
+            <span class="k">return</span> <span class="n">topController</span>
+        <span class="p">}</span>
+        
+        <span class="k">return</span> <span class="kc">nil</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>To <strong>create <code class="language-plaintext highlighter-rouge">UIViewController</code> and configure appropriate presentation style</strong> - nothing special also:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">let</span> <span class="nv">presentableContent</span> <span class="o">=</span> <span class="kt">UIViewController</span><span class="p">()</span>
+<span class="n">presentableContent</span><span class="o">.</span><span class="n">modalPresentationStyle</span> <span class="o">=</span> <span class="o">.</span><span class="n">overCurrentContext</span>
+<span class="n">presentableContent</span><span class="o">.</span><span class="n">modalTransitionStyle</span> <span class="o">=</span> <span class="o">.</span><span class="n">crossDissolve</span>
+<span class="n">presentableContent</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="o">.</span><span class="n">clear</span>
+</code></pre></div></div>
+
+<p>Last step - add modifier to allow usage in <code class="language-plaintext highlighter-rouge">SwiftIU</code> flow. Here we also got one more task - is how to popuplate any content that we want in our <code class="language-plaintext highlighter-rouge">UIViewController</code>? Well - use <code class="language-plaintext highlighter-rouge">UIHostingController</code>. Combining all togeter:</p>
+
+<div class="language-swift highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">import</span> <span class="kt">Foundation</span>
+<span class="kd">import</span> <span class="kt">SwiftUI</span>
+<span class="kd">import</span> <span class="kt">UIKit</span>
+
+<span class="kd">extension</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">func</span> <span class="n">presentContentOverFullScreen</span><span class="o">&lt;</span><span class="kt">ContentView</span><span class="o">&gt;</span><span class="p">(</span>
+        <span class="nv">isPresented</span><span class="p">:</span> <span class="kt">Binding</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="nv">content</span><span class="p">:</span> <span class="p">(</span><span class="kt">Binding</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ContentView</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="n">isPresented</span><span class="o">.</span><span class="n">wrappedValue</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="nv">presentableContent</span> <span class="o">=</span> <span class="kt">PresentedHostingController</span><span class="o">&lt;</span><span class="kt">ContentView</span><span class="o">&gt;</span><span class="p">(</span>
+                <span class="nv">rootView</span><span class="p">:</span> <span class="nf">content</span><span class="p">(</span><span class="n">isPresented</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">presentableContent</span><span class="o">.</span><span class="n">modalPresentationStyle</span> <span class="o">=</span> <span class="o">.</span><span class="n">overCurrentContext</span>
+            <span class="n">presentableContent</span><span class="o">.</span><span class="n">modalTransitionStyle</span> <span class="o">=</span> <span class="o">.</span><span class="n">crossDissolve</span>
+            <span class="n">presentableContent</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">backgroundColor</span> <span class="o">=</span> <span class="o">.</span><span class="n">clear</span>
+            
+            <span class="kt">UIWindow</span><span class="o">.</span><span class="n">topMostController</span><span class="p">?</span><span class="o">.</span><span class="nf">present</span><span class="p">(</span><span class="n">presentableContent</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="k">let</span> <span class="nv">controller</span> <span class="o">=</span> <span class="kt">UIWindow</span><span class="o">.</span><span class="n">topMostController</span>
+                <span class="k">as?</span> <span class="kt">PresentedHostingController</span><span class="o">&lt;</span><span class="kt">ContentView</span><span class="o">&gt;</span> <span class="p">{</span>
+                <span class="n">controller</span><span class="o">.</span><span class="nf">dismiss</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        
+        <span class="k">return</span> <span class="k">self</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">fileprivate</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">PresentedHostingController</span><span class="o">&lt;</span><span class="kt">Content</span><span class="o">&gt;</span><span class="p">:</span>
+    <span class="kt">UIHostingController</span><span class="o">&lt;</span><span class="kt">Content</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">Content</span><span class="p">:</span> <span class="kt">View</span>
+<span class="p">{</span>
+    <span class="cm">/*dummy*/</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Here you can find tricky thing - I passed <code class="language-plaintext highlighter-rouge">isPresented: Binding&lt;Bool&gt;</code> in both - modifier and <code class="language-plaintext highlighter-rouge">PresentedHostingController</code> - why? Actually we have few reasons:</p>
+
+<ol>
+  <li>to allow dismiss process of <code class="language-plaintext highlighter-rouge">PresentedHostingController</code> based on changes related in <code class="language-plaintext highlighter-rouge">isPresented</code></li>
+  <li>to allow our <code class="language-plaintext highlighter-rouge">Content</code> to deside when to dismiss itself - like it was done by <code class="language-plaintext highlighter-rouge">.alert</code>.</li>
+</ol>
+
+<p>Few notes about dismiss logic - it’s not ideal but this approach is way better than for example capture variable within controller and refer to it.</p>
+
+<p>This moment also can be improved - by checking <code class="language-plaintext highlighter-rouge">presentingController</code> existance (to make sure that we don’t present few controllers on one presenter) and by adding some <code class="language-plaintext highlighter-rouge">identifier</code> to container (to make sure that we dismiss required presented controller).</p>
+:ET

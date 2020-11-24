@@ -12,7 +12,7 @@ author:
 - Lviv
 ---
 
-`iOS 13+` `swiftUI 2.0`
+`iOS 13+` `swiftUI`
 
 
 How many times do we need to change something in standard components supplied by Apple? Well, quite often, so I guess everything should be done keeping this simple thing in mind. But let's check `NavigationBar` in SwiftUI.
