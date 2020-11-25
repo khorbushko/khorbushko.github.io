@@ -1,0 +1,186 @@
+I"[><p><code class="language-plaintext highlighter-rouge">tips</code> <code class="language-plaintext highlighter-rouge">BLE</code> <code class="language-plaintext highlighter-rouge">iOS</code></p>
+
+<p>Abbreviations (in order of appearance):</p>
+
+<ul>
+  <li><strong>BLE</strong>- Bluetooth Low</li>
+  <li><strong>PCB</strong> — Printed circuit board</li>
+  <li><strong>API</strong> — Application Programming Interface</li>
+</ul>
+
+<p>Every developer who worked with iOS BLE knows that not everything is so good as it’s described in the documentation. And today, I would like to describe a few main points that can be tricky when working with BLE. I would like to provide some information for you, reader and I guess BLE-developer, to make your journey in Cocoa BLE world less painful and more productive.
+<!--more--></p>
+
+<p>So, the very first thing you need to know is the answer to the question ”Where exactly something goes wrong — on my side or on the connected device? Does something happen when I send a command to the device?”</p>
+
+<p>To get an answer to this question I recommend to use a few approaches:</p>
+
+<ul>
+  <li>sniffer tool</li>
+  <li>3rd party apps for testing API</li>
+  <li>logging</li>
+  <li>firmware version of the device, with which you work without encryption or any other protection</li>
+</ul>
+
+<p>So, let’s discuss every point more details.</p>
+
+<h2 id="sniffer-tool">Sniffer tool</h2>
+
+<p><strong>Sniffer tool</strong> — this a tool that allows you to intersect data packets and analyze them without a CoreBluetooth framework. It can be very helpful to distinguish different aspects of BLE communication — requests, responses, unhandled error, unexpected messages, etc. To set up such tool, you basically need several things: special Ppcband firmware Mac. I used Wireshark and Nordic Semiconductors test board. Together they provide a powerful toolset for sniffing activities.</p>
+
+<p>Sniffer tools can be used in two modes — advertisement and connection.</p>
+
+<p>Useful links are:</p>
+
+<ul>
+  <li><a href="http://www.argenox.com/bluetooth-low-energy-ble-v4-0-development/library/ultimate-guide-to-debugging-bluetooth-smart-ble-products/">info about sniffing tools and how they work</a></li>
+  <li><a href="https://www.nordicsemi.com/eng/nordic/Products/nRF52-DK/nRF-Sniffer-UG-v2/65245">sniffer-tool — nRF-Sniffer-UG</a></li>
+  <li><a href="https://www.wireshark.org/">Wireshark</a></li>
+  <li><a href="https://www.xquartz.org/releases/XQuartz-2.7.8.html">XQuartz (needed for some versions of Wireshark)</a></li>
+</ul>
+
+<h2 id="3rd-party-apps-for-testing-api">3rd party apps for testing API</h2>
+
+<p>3rd party apps for testing API — one of the fastest ways to test your device is to use 3rd party solutions. With such products, you can easily scan, discover, send/receive, or even simulate some functionality of your device.</p>
+
+<p>Great examples are:</p>
+
+<ul>
+  <li><a href="https://itunes.apple.com/us/app/lightblue-explorer/id557428110?mt=8">LightBlue</a></li>
+  <li><a href="https://itunes.apple.com/us/app/silicon-labs-blue-gecko-wstk/id1030932759?mt=8">BlueGecko</a></li>
+</ul>
+
+<div style="text-align:center">
+<img src="2018-04-28-ble-pitfalls/src_1.png" alt="preview_1" width="550" />
+</div>
+
+<h2 id="logging">Logging</h2>
+
+<p>Logging — most BLE devices talk to a smartphone on the other end. Because of this, understanding what’s happening on the phone itself can be critical. One of the most useful techniques for checking what’s happening on the phone is to use the operating system’s own logging capabilities.</p>
+
+<p>In iOS, enabling Bluetooth logging requires installing a special profile in the device. You can find more information on enabling it at <a href="https://developer.apple.com/bluetooth/">link</a></p>
+
+<p>Once enabled, iTunes can sync the logs to a computer and they can be analyzed.</p>
+
+<h2 id="firmware">Firmware</h2>
+
+<p>Firmware — to protect own product it’s common to use an encrypted protocol of communication between app and device. Such approach ensures a higher security level for a user, but at the same time is much harder in terms of development. To simplify this process, always use an unencrypted version of firmware during development and include an additional level of security only for production purposes. This, of course, affects firmware development time a little bit, but this also reduces efforts required from your side to develop a great app using such firmware.</p>
+
+<p>At this point, I assume that development environment is up and running, and all you need is just to make your hands dirty and write some code to bring life to the app :).</p>
+
+<p>Now, to make sure your user gets best UX you should fully control all processes inside your app and, correspondingly, all aspects of it. Basically, you should think about the following points:</p>
+
+<ul>
+  <li>Bluetooth device availability (status observation)</li>
+  <li>timeout for from the connected device</li>
+  <li>multiline response handling (if needed)</li>
+  <li>backgrounding (if needed)</li>
+  <li>multi-device connection (if needed)</li>
+</ul>
+
+<p>I won’t describe all aspects of each point in the list above, instead, I will give you some advice for them.</p>
+
+<h2 id="status-observation">Status observation</h2>
+
+<p>Status observation — luckily for us, iOS may work with a few devices at the same time and so with a few objects that can handle work with Bluetooth devices. And of course, we will use this possibility. One approach is to prepare a simple device scanner — this will allow you to be notified when a Bluetooth device is up and running and vise This approach is simple and effective and may be as follows:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="kt">Foundation</span>
+<span class="kd">import</span> <span class="kt">CoreBluetooth</span>
+ 
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">BLEStatusObserver</span><span class="p">:</span> <span class="kt">NSObject</span> <span class="p">{</span>
+ 
+    <span class="kd">public</span> <span class="kd">struct</span> <span class="kt">Notifications</span> <span class="p">{</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">BLEStatusObserverDidDetectBLEStatusChange</span> <span class="o">=</span> <span class="s">"BLEStatusObserverDidDetectBLEStatusChangeNotification"</span>
+ 
+        <span class="kd">struct</span> <span class="kt">Keys</span> <span class="p">{</span>
+            <span class="kd">static</span> <span class="k">let</span> <span class="nv">availability</span> <span class="o">=</span> <span class="s">"availability"</span><span class="kd">static</span> <span class="k">let</span> <span class="nv">message</span> <span class="o">=</span> <span class="s">"message"</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="kd">static</span> <span class="k">let</span> <span class="nv">observer</span> <span class="o">=</span> <span class="kt">BLEStatusObserver</span><span class="p">()</span>
+ 
+    <span class="k">var</span> <span class="nv">isBleDeviceActive</span><span class="p">:</span><span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">currentState</span> <span class="o">==</span> <span class="o">.</span><span class="n">poweredOn</span>
+    <span class="p">}</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">centralManager</span><span class="p">:</span><span class="kt">CBCentralManager</span><span class="p">?</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">currentState</span><span class="p">:</span><span class="kt">CBManagerState</span> <span class="o">=</span> <span class="o">.</span><span class="n">unknown</span>
+ 
+    <span class="c1">// MARK: - LifeCycle</span>
+ 
+    <span class="k">override</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">init</span><span class="p">()</span>
+ 
+        <span class="n">centralManager</span> <span class="o">=</span> <span class="kt">CBCentralManager</span><span class="p">(</span><span class="nv">delegate</span><span class="p">:</span> <span class="k">self</span><span class="p">,</span> <span class="nv">queue</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+ 
+<span class="kd">extension</span> <span class="kt">BLEStatusObserver</span><span class="p">:</span><span class="kt">CBCentralManagerDelegate</span> <span class="p">{</span>
+    <span class="c1">// MARK: - CBCentralManagerDelegate</span>
+ 
+    <span class="kd">func</span> <span class="nf">centralManagerDidUpdateState</span><span class="p">(</span><span class="n">_</span> <span class="nv">central</span><span class="p">:</span> <span class="kt">CBCentralManager</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">var</span> <span class="nv">notificationMessage</span><span class="p">:</span><span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="n">nilswitch</span> <span class="n">central</span><span class="o">.</span><span class="n">state</span> <span class="p">{</span>
+            <span class="k">case</span> <span class="o">.</span><span class="nv">unauthorized</span><span class="p">:</span>
+                <span class="n">notificationMessage</span> <span class="o">=</span> <span class="kt">NdynamicLocalizableString</span><span class="s">"bleService.message.StatusUnathorized"</span><span class="p">)</span>
+            <span class="k">case</span> <span class="o">.</span><span class="nv">unsupported</span><span class="p">:</span>
+                <span class="n">notificationMessage</span> <span class="o">=</span> <span class="kt">NdynamicocalizableString</span><span class="p">(</span><span class="s">"bleService.message.Unsupported"</span><span class="p">)</span>
+            <span class="k">case</span> <span class="o">.</span><span class="nv">poweredOff</span><span class="p">:</span>
+                <span class="n">notificationMessage</span> <span class="o">=</span> <span class="kt">NdynamicocalizableString</span><span class="p">(</span><span class="s">"bleService.message.PowerOff"</span><span class="p">)</span>
+            <span class="k">case</span> <span class="o">.</span><span class="nv">poweredOn</span><span class="p">:</span>
+                <span class="n">notificationMessage</span> <span class="o">=</span> <span class="kt">NdynamicocalizableString</span><span class="p">(</span><span class="s">"bleService.message.PowerOn"</span><span class="p">)</span>
+            <span class="k">default</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="p">}</span>
+ 
+        <span class="n">currentState</span> <span class="o">=</span> <span class="n">central</span><span class="o">.</span><span class="n">state</span>
+ 
+        <span class="kt">NotificationCenter</span><span class="o">.</span><span class="k">default</span><span class="o">.</span><span class="nf">post</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">NSNotification</span><span class="o">.</span><span class="kt">Name</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="kt">BLEStatusObserver</span><span class="o">.</span><span class="kt">Notifications</span><span class="o">.</span><span class="kt">BLEStatusObserverDidDetectBLEStatusChange</span><span class="p">),</span> 
+                                       <span class="nv">object</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">userInfo</span><span class="p">:</span> <span class="p">[</span>
+                                                                    <span class="kt">Notifications</span><span class="o">.</span><span class="kt">Keys</span><span class="o">.</span><span class="nv">availability</span> <span class="p">:</span> <span class="n">central</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="o">.</span><span class="n">poweredOn</span><span class="p">,</span>
+                                                                    <span class="kt">Notifications</span><span class="o">.</span><span class="kt">Keys</span><span class="o">.</span><span class="nv">message</span> <span class="p">:</span> <span class="n">notificationMessage</span> <span class="p">??</span> <span class="s">""</span>
+                                                                <span class="p">])</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="timeout">Timeout</h2>
+
+<p>Timeout — timeout for BLE requests is not handled by CoreBluetooth by default, so you should implement such mechanism by yourself. And here is the place where you can use all your creativity within project requirements. The only thing that I guess you need to know — yes, timeout is required.</p>
+
+<p>Another useful point may be the knowledge of the data packet transferring speed and dependencies. Someone has already prepared tests on real devices (<a href="https://punchthrough.com/blog/posts/maximizing-ble-throughput-on-ios-and-android">like this one</a>), you may also want to check out an official Bluetooth doc (<a href="http://people.csail.mit.edu/rudolph/Teaching/Articles/BTBook.pdf">like this one</a>).</p>
+
+<p>I suppose that this time may depend on several things:</p>
+
+<ul>
+  <li>transmitter models of your BLE devices</li>
+  <li>realization of firmware (different functions may require different time to execute, on one project we have a request that may execute up to 4 sec on the device side)</li>
+  <li>range from the device</li>
+  <li>transmitting power</li>
+</ul>
+
+<p>Taking this into account, I suggest to start within 50–100 ms as a start point and adjust it based on your needs.</p>
+
+<h2 id="multiline-response">Multiline response</h2>
+
+<p>Multiline response — some firmware may return a few lines of response for specific requests (because of the packet size limitation or realization or another reason). In this case, I would like to suggest to agree on the exact protocol of communication and structure of each request/response. For example, it may be something like this:</p>
+
+<ul>
+  <li>every request should be n-bytes, with 0 on unused space</li>
+  <li>every response should start/end within some symbol(s)</li>
+</ul>
+
+<p>Such approach is very simple and, believe me, very effective. If you implement this behavior, you may even have better sleep at night :)</p>
+
+<p>One more point — make sure you execute 1 request at a time. To use such approach, NSOperationQueue may be very helpful. I will not dive into details of realization, but I want to emphasize that you should create some kind of AsyncOperation to properly handle all cases.</p>
+
+<script src="https://gist.github.com/calebd/93fa347397cec5f88233.js"></script>
+
+<blockquote>
+  <p>note - this is just a sample</p>
+</blockquote>
+
+<h2 id="backgrounding">Backgrounding</h2>
+
+<p>Backgrounding — this is interesting. Seriously, very interesting. You should read all available documentation, and do it again. A lot of things are tricky. I can’t describe all tricky parts here, I guess this is a question for a separate <a href="https://www.cloudcity.io/blog/2015/06/11/zero-to-ble-on-ios-part-one/">article</a>.</p>
+
+<p>All you need to know about backgrounding within CocoaTouch — it works, but sometimes it may work not as you expected. In this case, there is only one solution — read the documentation again.</p>
+
+<p>Huh, I guess now you can start coding :).</p>
+:ET

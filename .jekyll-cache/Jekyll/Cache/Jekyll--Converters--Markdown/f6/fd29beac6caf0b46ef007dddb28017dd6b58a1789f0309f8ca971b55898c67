@@ -1,0 +1,59 @@
+I"�<p><code class="language-plaintext highlighter-rouge">tips</code> <code class="language-plaintext highlighter-rouge">BLE</code> <code class="language-plaintext highlighter-rouge">iOS</code></p>
+
+<p>Abbreviations (in order of appearance):</p>
+
+<ul>
+  <li><strong>BLE</strong>- Bluetooth Low</li>
+  <li><strong>PCB</strong> — Printed circuit board</li>
+  <li><strong>API</strong> — Application Programming Interface</li>
+</ul>
+
+<p>Every developer who worked with iOS BLE knows that not everything is so good as it’s described in the documentation. And today, I would like to describe a few main points that can be tricky when working with BLE. I would like to provide some information for you, reader and I guess BLE-developer, to make your journey in Cocoa BLE world less painful and more productive.
+<!--more--></p>
+
+<p>So, the very first thing you need to know is the answer to the question ”Where exactly something goes wrong — on my side or on the connected device? Does something happen when I send a command to the device?”</p>
+
+<p>To get an answer to this question I recommend to use a few approaches:</p>
+
+<ul>
+  <li>sniffer tool</li>
+  <li>3rd party apps for testing API</li>
+  <li>logging</li>
+  <li>firmware version of the device, with which you work without encryption or any other protection</li>
+</ul>
+
+<p>So, let’s discuss every point more details.</p>
+
+<h2 id="sniffer-tool">Sniffer tool</h2>
+
+<p><strong>Sniffer tool</strong> — this a tool that allows you to intersect data packets and analyze them without a CoreBluetooth framework. It can be very helpful to distinguish different aspects of BLE communication — requests, responses, unhandled error, unexpected messages, etc. To set up such tool, you basically need several things: special Ppcband firmware Mac. I used Wireshark and Nordic Semiconductors test board. Together they provide a powerful toolset for sniffing activities.</p>
+
+<p>Sniffer tools can be used in two modes — advertisement and connection.</p>
+
+<p>Useful links are:</p>
+
+<ul>
+  <li><a href="http://www.argenox.com/bluetooth-low-energy-ble-v4-0-development/library/ultimate-guide-to-debugging-bluetooth-smart-ble-products/">info about sniffing tools and how they work</a></li>
+  <li><a href="https://www.nordicsemi.com/eng/nordic/Products/nRF52-DK/nRF-Sniffer-UG-v2/65245">sniffer-tool — nRF-Sniffer-UG</a></li>
+  <li><a href="https://www.wireshark.org/">Wireshark</a></li>
+  <li><a href="https://www.xquartz.org/releases/XQuartz-2.7.8.html">XQuartz (needed for some versions of Wireshark)</a></li>
+</ul>
+
+<h2 id="3rd-party-apps-for-testing-api">3rd party apps for testing API</h2>
+
+<p>3rd party apps for testing API — one of the fastest ways to test your device is to use 3rd party solutions. With such products, you can easily scan, discover, send/receive, or even simulate some functionality of your device.</p>
+
+<p>Great examples are:</p>
+
+<ul>
+  <li><a href="https://itunes.apple.com/us/app/lightblue-explorer/id557428110?mt=8">LightBlue</a></li>
+  <li><a href="https://itunes.apple.com/us/app/silicon-labs-blue-gecko-wstk/id1030932759?mt=8">BlueGecko</a></li>
+</ul>
+
+<div style="text-align:center">
+<img src="2018-04-28-ble-pitfalls/src_1.png" alt="preview_1" width="550" />
+</div>
+
+<h2 id="logging">Logging</h2>
+
+:ET
