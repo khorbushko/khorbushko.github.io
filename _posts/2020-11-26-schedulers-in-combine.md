@@ -36,23 +36,23 @@ First aff all - is usage, thanks to Apple, it's can be done within minimal work 
 
 Scheduler exist just to simplify everything. And instead of doing something like:
 
-```swift
+{% highlight swift %}
 sink {
 	DispatchQueue.main.async {
 	   // do something with data
 	}
 }
-```
+{% endhighlight %}
 
 we can simple use it like this:
 
-```
+{% highlight swift %}
 publisher
 	.receive(on: DispatchQueue.main)
 	.sink {
 		// do something with data
 	}
-```
+{% endhighlight %}
 
 So, how about `Scheduler` itself? `Scheduler` is simply an abstraction that helps you to define how and when performing some amount of work. 
 
@@ -107,23 +107,23 @@ U should also note, that if u even try to schedule execution on a future date - 
 
 But, we can check available API and may found:
 
-```
+{% highlight swift %}
 /// The immediate scheduler’s definition of the current moment in time.
 public var now: ImmediateScheduler.SchedulerTimeType { get }
-```
+{% endhighlight %}
 
 This means that in theory, we can set up some future date using `now` that is `ImmediateScheduler.SchedulerTimeType` and some of protocol required functions that `SchedulerTimeType` **should** implement, for example:
 
-```
+{% highlight swift %}
 /// Returns the distance to another immediate scheduler time; this distance is always `0` in the context of an immediate scheduler.
 ///
 /// - Parameter other: The other scheduler time.
 /// - Returns: `0`, as a `Stride`.
 public func distance(to other: ImmediateScheduler.SchedulerTimeType) -> ImmediateScheduler.SchedulerTimeType.Stride
-```
+{% endhighlight %}
 Let's test this. Firstly let's check normal behaviour:
 
-```
+{% highlight swift %}
 let queue = DispatchQueue(label: "sample.queue")
 var subscriptions = Set<AnyCancellable>()
 
@@ -142,7 +142,7 @@ queue.async {
         }
         .store(in: &subscriptions)
 }
-```
+{% endhighlight %}
 
 <div style="text-align:center">
 <img src="2020-11-26-schedulers-in-combine/immediate_normal.png" alt="preview_1" width="550"/>
@@ -152,7 +152,7 @@ In the log, we can see that events are coming as expected.
 
 Well let's check now that we can't schedule ImmediateScheduler for future, as it mention in docs:
 
-```
+{% highlight swift %}
 queue.async {
     print("Create on \(Thread.current)")
     
@@ -177,7 +177,7 @@ queue.async {
         print("Canceled at \(Date())")
     }
 }
-```
+{% endhighlight %}
 
 And result is:
 
@@ -189,9 +189,9 @@ Here u can see that **cancel** operation is ***immediate***. As expected. It's a
 
 One more moment to know - this scheduler haven't any options to use, and if we check API, we will find that 
 
-```
+{% highlight swift %}
 // ImmediateScheduler.SchedulerOptions
 typealias SchedulerOptions = Never
-```
+{% endhighlight %}
 
 In next part i will cover `RunLoop Scheduler`.
