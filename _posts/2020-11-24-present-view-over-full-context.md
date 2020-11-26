@@ -72,9 +72,16 @@ extension View {
     func presentContentOverFullScreen<ContentView>(
         isPresented: Binding<Bool>,
         content: (Binding<Bool>) -> ContentView
-    ) -> some View where ContentView: View
-    {
+    ) -> some View where ContentView: View {
+        let presentingController = UIWindow.topMostController as? PresentedHostingController<ContentView>
         if isPresented.wrappedValue {
+            let isViewControllerAlreadyPresented = presentingController != nil
+            if isViewControllerAlreadyPresented {
+                // this prevent from presenting one more instance of controller
+                // when SwiftUI View redraw body during presentation of this controller
+                return self
+            }
+
             let presentableContent = PresentedHostingController<ContentView>(
                 rootView: content(isPresented)
             )
@@ -84,8 +91,7 @@ extension View {
             
             UIWindow.topMostController?.present(presentableContent, animated: true)
         } else {
-            if let controller = UIWindow.topMostController
-                as? PresentedHostingController<ContentView> {
+            if let controller = presentingController {
                 controller.dismiss(animated: true)
             }
         }
