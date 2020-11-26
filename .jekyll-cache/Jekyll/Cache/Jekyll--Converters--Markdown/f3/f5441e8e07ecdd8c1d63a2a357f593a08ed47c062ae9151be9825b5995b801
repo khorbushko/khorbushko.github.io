@@ -1,8 +1,0 @@
-I"(<p><code class="language-plaintext highlighter-rouge">iOS 13+</code> <code class="language-plaintext highlighter-rouge">Combine</code></p>
-
-<p>When we start dealing with <code class="language-plaintext highlighter-rouge">Combine</code>, soon we realize that threads and task managing between them are essential. Luckily for us, Combine has a build-in realization of this routine called <code class="language-plaintext highlighter-rouge">Scheduler</code> - <em>” a protocol that defines when and how to execute a closure”</em> (Apple).</p>
-
-<p>So today I would like to tell you about <code class="language-plaintext highlighter-rouge">Scheduler</code> and how to use it.</p>
-
-<p>I’m going to cover all schedulers for <code class="language-plaintext highlighter-rouge">Combine</code> in this series.</p>
-:ET

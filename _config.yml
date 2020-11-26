@@ -26,7 +26,6 @@ google_analytics: G-64DN886230
 # this and add the path to the pages in order as they should show up
 header_pages:
  - search.md
- - tags.md
  - contact.md
  - about.md
 
