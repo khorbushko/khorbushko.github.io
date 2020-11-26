@@ -5,8 +5,9 @@
 @import
   "minima/skins/{{ site.minima.skin | default: 'classic' }}",
   "minima/initialize";
-  
- @import"_includes/_comments";
+
+@import"_includes/_comments";
+@import"_includes/_tags";
 
 #gh-comments-list a.user,
 #gh-comments-list a.comment-url {

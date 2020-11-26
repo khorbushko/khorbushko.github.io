@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "BLE pitfalls"
 categories: article
-tags: fastlane, utils, article
+tags: [BLE,iOS, utils]
 excerpt_separator: <!--more-->
 comments_id: 5
 
@@ -11,8 +11,6 @@ author:
 - kyryl horbushko
 - Lviv
 ---
-
-`BLE` `iOS`
 
 > originally this post was written on Apr 28, 2018 and available [here](https://medium.com/@kirill.ge/cocoatouch-ble-pitfalls-9b9b92ebc739) 
 

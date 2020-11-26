@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "Navigation Bar background color in SwiftUI"
 categories: article
-tags: iOS, SwiftUI, article, tutorial
+tags: [iOS, SwiftUI, tutorial]
 excerpt_separator: <!--more-->
 comments_id: 2
 
@@ -11,8 +11,6 @@ author:
 - kyryl horbushko
 - Lviv
 ---
-
-`iOS 13+` `swiftUI`
 
 
 How many times do we need to change something in standard components supplied by Apple? Well, quite often, so I guess everything should be done keeping this simple thing in mind. But let's check `NavigationBar` in SwiftUI.

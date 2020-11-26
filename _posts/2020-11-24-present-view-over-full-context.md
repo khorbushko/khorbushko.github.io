@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "Present View overFullScreen in SwiftUI"
 categories: article
-tags: iOS, SwiftUI, article, tutorial
+tags: [iOS, SwiftUI, tutorial]
 excerpt_separator: <!--more-->
 comments_id: 3
 
@@ -11,8 +11,6 @@ author:
 - kyryl horbushko
 - Lviv
 ---
-
-`iOS 13+` `swiftUI`
 
 If u want to present some `View` in `SwiftUI` over whole content like `Alert` or `UIViewController` does (with `overCurrentContext` style) with transparent background - u will be surprized. 
 <!--more-->

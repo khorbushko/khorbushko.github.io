@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "fastlane for beginners"
 categories: tutorial
-tags: fastlane, utils, tutorial
+tags: [fastlane, utils, tutorial]
 excerpt_separator: <!--more-->
 comments_id: 4
 
@@ -11,8 +11,6 @@ author:
 - kyryl horbushko
 - Lviv
 ---
-
-`utils` `fastlane`
 
 Before we start...
 

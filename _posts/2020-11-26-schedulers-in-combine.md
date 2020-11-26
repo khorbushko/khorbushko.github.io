@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "Schedulers in Combine. Part 1: ImmediateScheduler"
 categories: article
-tags: iOS, Combine, article
+tags: [iOS, Combine]
 excerpt_separator: <!--more-->
 comments_id: 6
 
@@ -11,8 +11,6 @@ author:
 - kyryl horbushko
 - Lviv
 ---
-
-`iOS 13+` `Combine`
 
 When we start dealing with `Combine`, soon we realize that threads and task managing between them are essential. Luckily for us, Combine has a build-in realization of this routine called `Scheduler` - *" a protocol that defines when and how to execute a closure"* (Apple).
 

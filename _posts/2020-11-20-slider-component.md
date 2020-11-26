@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "Custom slider with SwiftUI"
 categories: tutorial
-tags: iOS, SwiftUI, tutorial
+tags: [iOS, SwiftUI, tutorial]
 excerpt_separator: <!--more-->
 comments_id: 1
 
@@ -11,8 +11,6 @@ author:
 - kyryl horbushko
 - Lviv
 ---
-
-`iOS 13+` `swiftUI 2.0`
 
 Custom components are independent pieces of functionality that can be reused in your code. In this tutorial we will make custom Slider.
 

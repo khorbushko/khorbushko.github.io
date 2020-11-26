@@ -17,6 +17,7 @@ layout: default
           {{ mdate | date: date_format }}
         </time>
       {%- endif -%}
+      
       {%- if page.author -%}
         • {% for author in page.author %}
           <span itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -24,11 +25,16 @@ layout: default
             {%- if forloop.last == false %}, {% endif -%}
         {% endfor %}
       {%- endif -%}</p>
-      
+
+      {% if page.tags %}
+         {% for tag in page.tags %}
+          <a class="post-tag" href="{{ site.baseurl }}/tags/#{{ tag | slugify }}">{{ tag }}</a>
+         {% endfor %}
+      {% endif %}
          <span style="float:right;">
           {% include reading-time.html %}
          </span>
-
+         <br>
       </p>
   </header>
 

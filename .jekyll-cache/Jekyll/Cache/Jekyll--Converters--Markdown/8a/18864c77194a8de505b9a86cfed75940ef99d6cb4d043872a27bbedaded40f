@@ -1,0 +1,240 @@
+I"(K<p>Custom components are independent pieces of functionality that can be reused in your code. In this tutorial we will make custom Slider.</p>
+
+<!--more-->
+
+<h1 id="intro">intro</h1>
+
+<p>Sooner or later, each of us can face with the needs to create our own UI component.
+So in this post I want to describe how to create custom Slider component.</p>
+
+<p>Well let’s look at result first:</p>
+
+<div style="text-align:center">
+<img src="20-11-2020-slider-component/demo.gif" alt="preview_1" width="250" />
+</div>
+
+<h2 id="structure">structure</h2>
+
+<p>I always start from making complex thing a bit easier. And then repeat this operation on received part until all parts become very simple and easy to understand. So, here let’s do same way.</p>
+
+<blockquote>
+  <p>for me also one of the best approach — is to grab something simple or/and check existing similar custom component — to get understanding of upcoming work (just to find an idea how it works). Combining received information with API documentation u, in theory, can do anything u like.</p>
+</blockquote>
+
+<p>When I checked design first I analyze what should be done, which parts can be customized and so on. Looking at this slider I can see at least few basic components (offcause u may see even more - all depends only from customization level that is required):</p>
+
+<ul>
+  <li>track (and params)</li>
+  <li>thumb (thumb and params)</li>
+</ul>
+
+<p>under params we may assume at minimum next:</p>
+
+<ul>
+  <li>color</li>
+  <li>shadow</li>
+  <li>active/inacitve state</li>
+</ul>
+
+<p>So, looks like all components is quite simple, so let’s try to put them all together.</p>
+
+<p>Let’s call this component <code class="language-plaintext highlighter-rouge">FatSlider</code> :].</p>
+
+<h2 id="implementation">implementation</h2>
+
+<p>We can start by defining simple structure:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">FatSlider</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+        
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">GeometryReader</span> <span class="p">{</span> <span class="n">geometry</span> <span class="k">in</span>
+            <span class="kt">VStack</span> <span class="p">{</span>
+                <span class="kt">Spacer</span><span class="p">()</span>
+                <span class="kt">ZStack</span> <span class="p">{</span>
+                    <span class="c1">// here will be our content</span>
+                <span class="p">}</span>
+                <span class="kt">Spacer</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>So we defined few components here:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GeomentryReader</code> - required to correctly adjust position and resize subcomponents of slider</li>
+  <li><code class="language-plaintext highlighter-rouge">VStack</code> and <code class="language-plaintext highlighter-rouge">Spacer</code> - to vertically organize all slider components in stack and make sure that our slider will be positioned in center (this part can be removed later, when we define geometry of our component, for now it’s just help us center all the content)</li>
+  <li><code class="language-plaintext highlighter-rouge">ZStack</code> - this is container where we will position <code class="language-plaintext highlighter-rouge">track</code> and <code class="language-plaintext highlighter-rouge">thumb</code> one on each other</li>
+</ul>
+
+<p>Let’s add content inside. We can think about content as some simple drawing like <code class="language-plaintext highlighter-rouge">Rectangle</code>. But in my case I used <code class="language-plaintext highlighter-rouge">Capsule</code>, because the side a bit rounded.</p>
+
+<blockquote>
+  <p><strong>api -</strong> A capsule shape is equivalent to a rounded rectangle where the corner radius is chosen as half the length of the rectangle’s smallest edge.</p>
+</blockquote>
+
+<p>So let’s use 2 <code class="language-plaintext highlighter-rouge">Capsule</code> - one for <code class="language-plaintext highlighter-rouge">track</code> and one for <code class="language-plaintext highlighter-rouge">thumb</code> (i believe u can use <code class="language-plaintext highlighter-rouge">Rectangle</code> if u like and add <code class="language-plaintext highlighter-rouge">cornerRadius</code> as parameter).
+Adding 2 capsule gives us nothing, so we also need to use <code class="language-plaintext highlighter-rouge">GeomentryReader</code> to figure-out correct position of each capsule.</p>
+
+<p>To do so we should think about <code class="language-plaintext highlighter-rouge">track</code> and <code class="language-plaintext highlighter-rouge">thumb</code> thickness.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">thikness</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">4</span></code></pre></figure>
+
+<p>and to calculate position of <code class="language-plaintext highlighter-rouge">thumb</code> we need to define one more property - <code class="language-plaintext highlighter-rouge">percentage</code>, this one should be <code class="language-plaintext highlighter-rouge">@State</code> - because we would like to store this value over view updates</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">@Binding</span> <span class="k">var</span> <span class="nv">percentage</span><span class="p">:</span> <span class="kt">Float</span></code></pre></figure>
+
+<p>Also few moments that need to be done - this is size of components and position of components:</p>
+
+<ul>
+  <li>track:
+    <ul>
+      <li>size - .init(width: bounds.size.width, height: thickness)</li>
+      <li>position - center of view</li>
+    </ul>
+  </li>
+  <li>thumb:
+    <ul>
+      <li>size - .init(width: bounds.size.width / 3, height: thickness x 10)</li>
+      <li>position - left origin + size.width / 2 (controllable by <code class="language-plaintext highlighter-rouge">percentage </code>). Here also a bit tricky moment - we sould limit position of thumb by it’s size.</li>
+    </ul>
+  </li>
+</ul>
+
+<div style="text-align:center">
+<img src="20-11-2020-slider-component/limit_.svg" alt="preview_1" width="500" />
+</div>
+
+<p>So far so good - keeping this all in mind, let’s transform the idea in the code:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// start of struct</span>
+<span class="kt">ZStack</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">centerYPoint</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+    
+    <span class="kt">Capsule</span><span class="p">()</span>
+        <span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="n">thikness</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">position</span><span class="p">(</span>
+            <span class="nv">x</span><span class="p">:</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nv">y</span><span class="p">:</span> <span class="n">centerYPoint</span>
+        <span class="p">)</span>
+    
+    <span class="k">let</span> <span class="nv">heightOfPicker</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="n">thikness</span> <span class="o">*</span> <span class="mi">10</span>
+    <span class="k">let</span> <span class="nv">widthOfPicker</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">3</span>
+    <span class="k">let</span> <span class="nv">currentXPositionOfPicker</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span>
+        <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="kt">CGFloat</span><span class="p">(</span><span class="n">percentage</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">normalizedPosX</span> <span class="o">=</span> <span class="nf">min</span><span class="p">(</span>
+        <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">widthOfPicker</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="nf">max</span><span class="p">(</span><span class="n">widthOfPicker</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">currentXPositionOfPicker</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="kt">Capsule</span><span class="p">()</span>
+        <span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span> <span class="n">widthOfPicker</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="n">heightOfPicker</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">position</span><span class="p">(</span>
+            <span class="nv">x</span><span class="p">:</span> <span class="n">normalizedPosX</span><span class="p">,</span>
+            <span class="nv">y</span><span class="p">:</span> <span class="n">centerYPoint</span>
+        <span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>note: on this point we can remove <code class="language-plaintext highlighter-rouge">VStack</code> and <code class="language-plaintext highlighter-rouge">Spacer</code></p>
+</blockquote>
+
+<p>Preview show for us next:</p>
+
+<div style="text-align:center">
+<img src="20-11-2020-slider-component/preview_1.png" alt="preview_1" width="250" />
+</div>
+
+<blockquote>
+  <p>add <code class="language-plaintext highlighter-rouge">.frame(height: 44)</code> to <code class="language-plaintext highlighter-rouge">PreviewProvider</code>, in other case u will get full screen slider :]</p>
+
+  <p>Not bad ;].</p>
+</blockquote>
+
+<p>Let’s add some decoration to these shapes.
+As was mention above I’m going to change only few aspects of the slider, so let’s add appropriate properties for them:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">backgroundTint</span><span class="p">:</span> <span class="kt">Color</span> <span class="o">=</span> <span class="o">.</span><span class="n">gray</span>
+<span class="k">var</span> <span class="nv">pickerTint</span><span class="p">:</span> <span class="kt">Color</span> <span class="o">=</span> <span class="o">.</span><span class="n">red</span>
+<span class="k">var</span> <span class="nv">pickerShadowColor</span><span class="p">:</span> <span class="kt">Color</span> <span class="o">=</span> <span class="o">.</span><span class="n">black</span></code></pre></figure>
+
+<p>and apply them to slider:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// start of struct</span>
+<span class="kt">ZStack</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">centerYPoint</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="mi">2</span>
+    
+    <span class="kt">Capsule</span><span class="p">()</span>
+        <span class="o">.</span><span class="nf">foregroundColor</span><span class="p">(</span><span class="n">backgroundTint</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="n">thikness</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">position</span><span class="p">(</span>
+            <span class="nv">x</span><span class="p">:</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nv">y</span><span class="p">:</span> <span class="n">centerYPoint</span>
+        <span class="p">)</span>
+    <span class="c1">// calculation                    </span>
+    <span class="kt">Capsule</span><span class="p">()</span>
+        <span class="o">.</span><span class="nf">foregroundColor</span><span class="p">(</span><span class="n">pickerTint</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span> <span class="n">widthOfPicker</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="n">heightOfPicker</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">position</span><span class="p">(</span>
+            <span class="nv">x</span><span class="p">:</span> <span class="n">normalizedPosX</span><span class="p">,</span>
+            <span class="nv">y</span><span class="p">:</span> <span class="n">centerYPoint</span>
+        <span class="p">)</span>
+        <span class="o">.</span><span class="nf">shadow</span><span class="p">(</span>
+            <span class="nv">color</span><span class="p">:</span> <span class="n">pickerShadowColor</span><span class="p">,</span>
+            <span class="nv">radius</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>
+            <span class="nv">x</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nv">y</span><span class="p">:</span> <span class="mi">2</span>
+        <span class="p">)</span>
+<span class="p">}</span>
+<span class="o">...</span>                        </code></pre></figure>
+
+<p>Asking preview for result:</p>
+
+<div style="text-align:center">
+<img src="20-11-2020-slider-component/preview_2.png" alt="preview_1" width="250" />
+</div>
+
+<p>Ok, style looks fine, but how about interaction? To bring some life into our slider we gonna use <code class="language-plaintext highlighter-rouge">Gesture</code> (we will apply it to the <code class="language-plaintext highlighter-rouge">thumb</code>, thus only this part should be movable):</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// exactly after defining shadow for thumb add this code</span>
+<span class="o">.</span><span class="nf">gesture</span><span class="p">(</span>
+	<span class="kt">DragGesture</span><span class="p">(</span><span class="nv">minimumDistance</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="o">.</span><span class="nf">onChanged</span><span class="p">({</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+	    <span class="k">let</span> <span class="nv">activeWidth</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">widthOfPicker</span>
+	    <span class="c1">// calculate point including thumb size limits</span>
+	    <span class="k">let</span> <span class="nv">pointX</span> <span class="o">=</span>
+	        <span class="nf">min</span><span class="p">(</span>
+	            <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">widthOfPicker</span><span class="p">,</span>
+	            <span class="nf">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">widthOfPicker</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+	        <span class="p">)</span>
+	    <span class="n">percentage</span> <span class="o">=</span> <span class="kt">Float</span><span class="p">(</span><span class="n">pointX</span> <span class="o">/</span> <span class="n">activeWidth</span><span class="p">)</span>	<span class="p">})</span>
+<span class="p">)</span></code></pre></figure>
+
+<p>And that’s it - remember we used <code class="language-plaintext highlighter-rouge">percentage</code> when define current position of <code class="language-plaintext highlighter-rouge">thumb</code>.</p>
+
+<div style="text-align:center">
+<img src="20-11-2020-slider-component/demo_2.gif" alt="preview_1" width="250" />
+</div>
+
+<p>Great, basic functionality is done. You can add any additional feature to component if u like, for example if u want to make sticky version of slider (the one that can return to initial position after release) u just need to add a few lines of code:</p>
+
+<p>To do so</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// add at the top of file</span>
+<span class="c1">// define prop whenever this functionality required</span>
+<span class="k">var</span> <span class="nv">isSticky</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span>
+
+<span class="c1">//add one event handler for gesture</span>
+<span class="o">.</span><span class="nf">onEnded</span><span class="p">({</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+    <span class="k">if</span> <span class="n">isSticky</span> <span class="p">{</span>
+        <span class="n">withAnimation</span> <span class="p">{</span>
+            <span class="n">percentage</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">})</span></code></pre></figure>
+
+<h2 id="full-solution-code">Full solution code</h2>
+
+<script src="https://gist.github.com/khorbushko/8c81002c5c23226ddc6282efa745f0a3.js"></script>
+
+:ET
