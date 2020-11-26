@@ -16,7 +16,7 @@ Custom components are independent pieces of functionality that can be reused in 
 
 <!--more-->
 
-# intro
+## intro
 
 Sooner or later, each of us can face with the needs to create our own UI component.
 So in this post I want to describe how to create custom Slider component.

@@ -25,7 +25,7 @@ In this article we will cover next:
 - main functionality
 - ImmediateScheduler
 
-# intro
+## intro
 
 First aff all - is usage, thanks to Apple, it's can be done within minimal work from our side - only one call for both subscription and for receiving event:
 
