@@ -33,7 +33,7 @@ layout: default
         </h3>
         
         {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
+          {{ post.excerpt | lstrip | truncatewords: 50, "" }}<a href="{{ post.url | relative_url }}"> &hellip; read more &raquo;</a>
         {%- endif -%}
       </li>
       {%- endfor -%}

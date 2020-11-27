@@ -2,6 +2,7 @@ title: kyryl horbushko
 author:
   name: khorbushko
   email: kirill.ge@gmail.com
+logo: /assets/favicon.png
 description: >
   blog about diferent aspects of programming
   for iOS, using Swift/Obj-C
@@ -17,6 +18,7 @@ minima:
     email: kirill.ge@gmail.com
     github: khorbushko
     stackoverflow: "2012219"
+    linkedin: "kyryl-horbushko-67936bb5"
 
 # Short bio or description (displayed in the header)
 description: inspired by "software craftsmanship"
