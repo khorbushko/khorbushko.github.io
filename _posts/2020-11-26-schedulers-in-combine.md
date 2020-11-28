@@ -92,13 +92,13 @@ If u check [official doc](https://developer.apple.com/documentation/combine/imme
 This is quite a good option in case u want to execute the operation as is, without any delay (in the future).
 
 <div style="text-align:center">
-<img src="2020-11-26-schedulers-in-combine/immediate_sample_1.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2020-11-26-schedulers-in-combine/immediate_sample_1.png" alt="preview_1" width="550"/>
 </div>
 
 U should also note, that if u even try to schedule execution on a future date - this scheduler will ignore it and execute your code immediately. If u check the `ImmediateScheduler.SchedulerTimeType` - parameter that can be used to schedule some work in the future, u can see that this struct has no available initialization, so it's simply blocking us from performing and future work within it. So u can't use any `schedule(after:)` variant from the `Schedule` protocol.
 
 <div style="text-align:center">
-<img src="2020-11-26-schedulers-in-combine/immediate_sample_2.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2020-11-26-schedulers-in-combine/immediate_sample_2.png" alt="preview_1" width="550"/>
 </div>
 
 > Try to create instance of this struct like `ImmediateScheduler.SchedulerTimeType()` - and u will get error from compiler - *'ImmediateScheduler.SchedulerTimeType' cannot be constructed because it has no accessible initializers*
@@ -143,7 +143,7 @@ queue.async {
 {% endhighlight %}
 
 <div style="text-align:center">
-<img src="2020-11-26-schedulers-in-combine/immediate_normal.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2020-11-26-schedulers-in-combine/immediate_normal.png" alt="preview_1" width="550"/>
 </div>
 
 In the log, we can see that events are coming as expected.
@@ -180,7 +180,7 @@ queue.async {
 And result is:
 
 <div style="text-align:center">
-<img src="2020-11-26-schedulers-in-combine/immediate_future cancel.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2020-11-26-schedulers-in-combine/immediate_future cancel.png" alt="preview_1" width="550"/>
 </div>
 
 Here u can see that **cancel** operation is ***immediate***. As expected. It's a bit strange for me, that we didn't receive any warning or assertion from Apple, but ok, this is can be improved in the future, and we already know it.

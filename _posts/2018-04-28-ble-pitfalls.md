@@ -60,7 +60,7 @@ Great examples are:
 * [BlueGecko](https://itunes.apple.com/us/app/silicon-labs-blue-gecko-wstk/id1030932759?mt=8)
 
 <div style="text-align:center">
-<img src="2018-04-28-ble-pitfalls/src_1.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2018-04-28-ble-pitfalls/src_1.png" alt="preview_1" width="550"/>
 </div>
 
 ## Logging

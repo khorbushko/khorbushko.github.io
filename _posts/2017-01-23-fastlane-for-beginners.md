@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-title: "fastlane for beginners"
+title: "Fastlane for beginners"
 categories: tutorial
 tags: [fastlane, utils, tutorial]
 excerpt_separator: <!--more-->
@@ -85,7 +85,7 @@ To install fastlane open your terminal and do next steps:
 1. check for latest xCode - tools by typing code-select - install
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_1.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_1.png" alt="preview_1" width="550"/>
 </div>
 
 > Here, in my case, it's already installed, if it's not, you will see log with detailed process description and some pop-Up window with progress for installing xCode tools.
@@ -93,7 +93,7 @@ To install fastlane open your terminal and do next steps:
 2. The next step is to install fastlane itself, to do this just type sudo gem install fastlane
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_2.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_2.png" alt="preview_1" width="550"/>
 </div>
 
 When this 2 steps are done, we can start setup fastlane for test project.
@@ -109,7 +109,7 @@ Navigate to root folder of your project, open terminal and switch to project dir
 `cd <path_to_root_proj_folder>`
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_3.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_3.png" alt="preview_1" width="550"/>
 </div>
 
 Next, type `fastlane init` - this command will create default directory with FASTFILE for you. After you will see request to enter your Apple ID, like developer@apple.com. In the next step - **fastlane** will automatically generate a fastlane configuration for you, based on the information provided.
@@ -118,13 +118,13 @@ Next, type `fastlane init` - this command will create default directory with
 After creating you will be able to see new fastlane directory with all metadata fetched from iTunesConnect. In my case I don't have much:
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_4.png" alt="preview_1" width="250"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_4.png" alt="preview_1" width="250"/>
 </div>
 
 If you have some metadata on account, you will see something like this:
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_5.png" alt="preview_1" width="250"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_5.png" alt="preview_1" width="250"/>
 </div>
 
 > Tip - It's recommended to use Gemfile to define all dependencies for fastlane. This will allow to define fastlane version and dependencies and share them across the team with the help of "Gemfile.lock". The Gemfile also speed up work of fastlane.
@@ -135,7 +135,7 @@ To prepare Gemfile you need:
 2. Run bundler init to create Gemfile like below
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_6.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_6.png" alt="preview_1" width="550"/>
 </div>
 
 Run `[sudo] bundle update` and add both the ./Gemfile and the ./Gemfile.lock to version control:
@@ -161,7 +161,7 @@ I recommend to setup this tool before we start configuring the FASTFILE.
 At the start you should create some private repository for storing certificates and provision profiles. When you're done, open terminal, switch to folder with cd command and run match init:
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_7.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_7.png" alt="preview_1" width="550"/>
 </div>
 
 You will be asked for repository url, type url link to connect match with it.
@@ -173,7 +173,7 @@ If your certificates are not created yet - fastlane will ask about additiona
 Let's create pair for appstore distribution by typing fastlane match appstore. You will see something like on screenshot below:
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_8.png" alt="preview_1" width="450"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_8.png" alt="preview_1" width="450"/>
 </div>
 <br>
 
@@ -193,13 +193,13 @@ If you go to repository source, you will see content like on screenshot below. F
 > Tip : You can run similar command to add certificates for development (**fastlane match development**) and adhoc (**fastlane match adhoc**)
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_9.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_9.png" alt="preview_1" width="550"/>
 </div>
 
 Now, navigate to project folder and open fastlane directory, you will be able to see MATCHFILE. The content of this file will looks like on screenshot below.
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_10.png" alt="preview_1" width="450"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_10.png" alt="preview_1" width="450"/>
 </div>
 <br>
 
@@ -211,7 +211,7 @@ Before opening and editing FASTFILE from the directory in your project, check Ap
 Appfile can look like on screenshot below:
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_10.png" alt="preview_1" width="450"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_10.png" alt="preview_1" width="450"/>
 </div>
 <br>
 
@@ -334,7 +334,7 @@ build increment and match step
 
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_12.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_12.png" alt="preview_1" width="550"/>
 </div>
 <br>
 
@@ -342,28 +342,28 @@ build increment and match step
 Installing certificates and gym step:
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_13.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_13.png" alt="preview_1" width="550"/>
 </div>
 <br>
 
 After, compile step log and iTunes upload.
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_14.png" alt="preview_1" width="550"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_14.png" alt="preview_1" width="550"/>
 </div>
 <br>
 
 And of course notification on slack
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_15.png" alt="preview_1" width="250"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_15.png" alt="preview_1" width="250"/>
 </div>
 <br>
 
 Great, now you should feel yourself better and more powerful
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_16.png" alt="preview_1" width="250"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_16.png" alt="preview_1" width="250"/>
 </div>
 <br>
 
@@ -467,7 +467,7 @@ What are hell is it?
 Be patience! Let's run fastlane itunes, at the end, you will be able to see squirrel or ship in terminal like:
 
 <div style="text-align:center">
-<img src="2017-01-23-fastlane-for-beginners/src_17.png" alt="preview_1" width="350"/>
+<img src="{{site.baseurl}}/assets/posts/images/2017-01-23-fastlane-for-beginners/src_17.png" alt="preview_1" width="350"/>
 </div>
 <br>
 

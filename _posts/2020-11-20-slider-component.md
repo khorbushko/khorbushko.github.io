@@ -1,9 +1,9 @@
 ---
 layout: post
 comments: true
-title: "Custom slider with SwiftUI"
+title: "Custom Slider with SwiftUI"
 categories: tutorial
-tags: [iOS, SwiftUI, tutorial]
+tags: [iOS, SwiftUI, tutorial, customComponent]
 excerpt_separator: <!--more-->
 comments_id: 1
 
@@ -24,7 +24,7 @@ So in this post I want to describe how to create custom Slider component.
 Well let's look at result first:
 
 <div style="text-align:center">
-<img src="20-11-2020-slider-component/demo.gif" alt="preview_1" width="250"/>
+<img src="{{site.baseurl}}/assets/posts/images/20-11-2020-slider-component/demo.gif" alt="preview_1" width="250"/>
 </div>
 
 
@@ -107,7 +107,7 @@ Also few moments that need to be done - this is size of components and position 
 	 - position - left origin + size.width / 2 (controllable by `percentage `). Here also a bit tricky moment - we sould limit position of thumb by it's size.
 
 <div style="text-align:center">
-<img src="20-11-2020-slider-component/limit_.svg" alt="preview_1" width=500/>
+<img src="{{site.baseurl}}/assets/posts/images/20-11-2020-slider-component/limit_.svg" alt="preview_1" width=500/>
 </div>
 
 
@@ -148,7 +148,7 @@ ZStack {
 Preview show for us next:
 
 <div style="text-align:center">
-<img src="20-11-2020-slider-component/preview_1.png" alt="preview_1" width="250"/>
+<img src="{{site.baseurl}}/assets/posts/images/20-11-2020-slider-component/preview_1.png" alt="preview_1" width="250"/>
 </div>
 
 > add `.frame(height: 44)` to `PreviewProvider`, in other case u will get full screen slider :]
@@ -199,7 +199,7 @@ ZStack {
 Asking preview for result:
 
 <div style="text-align:center">
-<img src="20-11-2020-slider-component/preview_2.png" alt="preview_1" width="250"/>
+<img src="{{site.baseurl}}/assets/posts/images/20-11-2020-slider-component/preview_2.png" alt="preview_1" width="250"/>
 </div>
 
 Ok, style looks fine, but how about interaction? To bring some life into our slider we gonna use `Gesture` (we will apply it to the `thumb`, thus only this part should be movable):
@@ -224,7 +224,7 @@ And that's it - remember we used `percentage` when define current position of `t
 
 
 <div style="text-align:center">
-<img src="20-11-2020-slider-component/demo_2.gif" alt="preview_1" width="250"/>
+<img src="{{site.baseurl}}/assets/posts/images/20-11-2020-slider-component/demo_2.gif" alt="preview_1" width="250"/>
 </div>
 
 Great, basic functionality is done. You can add any additional feature to component if u like, for example if u want to make sticky version of slider (the one that can return to initial position after release) u just need to add a few lines of code:

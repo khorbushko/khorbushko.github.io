@@ -1,0 +1,542 @@
+I"�<p>Recently I have faced with design-related requirements for <code class="language-plaintext highlighter-rouge">Alert</code> on my project - <code class="language-plaintext highlighter-rouge">Image</code> should be shown with rich description and additional actions.</p>
+
+<p>Quick check of existing Alert Api provided by Apple shows that there is nothing exist for showing alert to user with custom <code class="language-plaintext highlighter-rouge">Content</code> either <code class="language-plaintext highlighter-rouge">Image</code> either <code class="language-plaintext highlighter-rouge">TextInput</code>… So I decided to prepare it by myself. <!--more--></p>
+
+<h2 id="idea">idea</h2>
+
+<p>The very first that need to be designed - it’s <code class="language-plaintext highlighter-rouge">Buttons</code> for alert. Let’s grab idea from <strong>Apple</strong> and introduce our own <code class="language-plaintext highlighter-rouge">Button</code> with separate building functions - one for <code class="language-plaintext highlighter-rouge">destructive</code> and another one for <code class="language-plaintext highlighter-rouge">regular</code> type of button.</p>
+
+<p>I always prefere to separate full implementation into simplest possible components and implement all of them separatly. Also let’s keep in mind the possibility of extension any part of our component.</p>
+
+<p>Now, when we already separate component in to simple parts, let’s try to implement them.</p>
+
+<h2 id="implementation">implementation</h2>
+
+<p>So let’s stard and implement this. To do so, we can define <code class="language-plaintext highlighter-rouge">struct</code> for this:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="kt">Foundation</span>
+<span class="kd">import</span> <span class="kt">SwiftUI</span>
+
+<span class="kd">struct</span> <span class="kt">UniAlertButton</span> <span class="p">{</span>
+
+    <span class="kd">enum</span> <span class="kt">Variant</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="n">destructive</span>
+        <span class="k">case</span> <span class="n">regular</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>And we need to add builders for buttons. Putting all together, we can have next:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">UniAlertButton</span> <span class="p">{</span>
+    
+    <span class="kd">enum</span> <span class="kt">Variant</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="n">destructive</span>
+        <span class="k">case</span> <span class="n">regular</span>
+    <span class="p">}</span>
+    
+    <span class="k">let</span> <span class="nv">content</span><span class="p">:</span> <span class="kt">AnyView</span>
+    <span class="k">let</span> <span class="nv">action</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span>
+    <span class="k">let</span> <span class="nv">type</span><span class="p">:</span> <span class="kt">Variant</span>
+    
+    <span class="k">var</span> <span class="nv">isDestructive</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="n">type</span> <span class="o">==</span> <span class="o">.</span><span class="n">destructive</span>
+    <span class="p">}</span>
+    
+    <span class="kd">static</span> <span class="kd">func</span> <span class="n">destructive</span><span class="o">&lt;</span><span class="kt">Content</span><span class="p">:</span> <span class="kt">View</span><span class="o">&gt;</span><span class="p">(</span>
+        <span class="kd">@ViewBuilder</span> <span class="nv">content</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Content</span><span class="p">,</span>
+        <span class="nv">action</span><span class="p">:</span> <span class="p">(()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)?</span> <span class="o">=</span> <span class="kc">nil</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UniAlertButton</span> <span class="p">{</span>
+        <span class="kt">UniAlertButton</span><span class="p">(</span>
+            <span class="nv">content</span><span class="p">:</span> <span class="n">content</span><span class="p">,</span>
+            <span class="nv">action</span><span class="p">:</span> <span class="n">action</span> <span class="p">??</span> <span class="p">{</span> <span class="p">},</span>
+            <span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">destructive</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="kd">static</span> <span class="kd">func</span> <span class="n">regular</span><span class="o">&lt;</span><span class="kt">Content</span><span class="p">:</span> <span class="kt">View</span><span class="o">&gt;</span><span class="p">(</span>
+        <span class="kd">@ViewBuilder</span> <span class="nv">content</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Content</span><span class="p">,</span>
+        <span class="nv">action</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">UniAlertButton</span> <span class="p">{</span>
+        <span class="kt">UniAlertButton</span><span class="p">(</span>
+            <span class="nv">content</span><span class="p">:</span> <span class="n">content</span><span class="p">,</span>
+            <span class="nv">action</span><span class="p">:</span> <span class="n">action</span><span class="p">,</span>
+            <span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">regular</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="kd">private</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt">Content</span><span class="p">:</span> <span class="kt">View</span><span class="o">&gt;</span><span class="p">(</span>
+        <span class="kd">@ViewBuilder</span> <span class="nv">content</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Content</span><span class="p">,</span>
+        <span class="nv">action</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">,</span>
+        <span class="nv">type</span><span class="p">:</span> <span class="kt">Variant</span>
+    <span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="kt">AnyView</span><span class="p">(</span><span class="nf">content</span><span class="p">())</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">type</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">action</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Note: <code class="language-plaintext highlighter-rouge">private init</code> - this will restrict anyone to create uncategorized button’s for <code class="language-plaintext highlighter-rouge">Alert</code>.</p>
+</blockquote>
+
+<p>Now it’s time to design  <code class="language-plaintext highlighter-rouge">Alert</code> itself. Basically this should be a <code class="language-plaintext highlighter-rouge">View</code> that can be constructed from <code class="language-plaintext highlighter-rouge">Content</code> and attach some buttons (<code class="language-plaintext highlighter-rouge">UniAlertButton</code>) that we already have.</p>
+
+<p>Thus we would like to build our <code class="language-plaintext highlighter-rouge">Alert</code> within <code class="language-plaintext highlighter-rouge">Content</code> with <code class="language-plaintext highlighter-rouge">View</code> type, we need to define this at <code class="language-plaintext highlighter-rouge">struct</code> description:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">UniAlert</span><span class="o">&lt;</span><span class="kt">Content</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">Content</span><span class="p">:</span> <span class="kt">View</span></code></pre></figure>
+
+<p>next - add inputParam for <code class="language-plaintext highlighter-rouge">View</code> in order to store <code class="language-plaintext highlighter-rouge">Content</code> and as it done within Apple Alert - <code class="language-plaintext highlighter-rouge">@State</code> about <code class="language-plaintext highlighter-rouge">visibility</code> of <code class="language-plaintext highlighter-rouge">Alert</code>, and don’t forget about buttons (<code class="language-plaintext highlighter-rouge">UniAlertButton</code>).</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="kt">Foundation</span>
+<span class="kd">import</span> <span class="kt">SwiftUI</span>
+
+<span class="kd">struct</span> <span class="kt">UniAlert</span><span class="o">&lt;</span><span class="kt">Content</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">Content</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+
+    <span class="kd">@Binding</span> <span class="kd">private</span> <span class="p">(</span><span class="k">set</span><span class="p">)</span> <span class="k">var</span> <span class="nv">isShowing</span><span class="p">:</span> <span class="kt">Bool</span>
+    
+    <span class="k">let</span> <span class="nv">displayContent</span><span class="p">:</span> <span class="kt">Content</span>
+    <span class="k">let</span> <span class="nv">buttons</span><span class="p">:</span> <span class="p">[</span><span class="kt">UniAlertButton</span><span class="p">]</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+		<span class="n">displayContent</span>
+	 <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Now we already should be able to create convenience way of presenting <code class="language-plaintext highlighter-rouge">Alert</code> - usign <code class="language-plaintext highlighter-rouge">View</code> extenstion modifiers:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">func</span> <span class="n">uniAlert</span><span class="o">&lt;</span><span class="kt">Content</span><span class="o">&gt;</span><span class="p">(</span>
+        <span class="nv">isShowing</span><span class="p">:</span> <span class="kt">Binding</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="kd">@ViewBuilder</span> <span class="nv">content</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Content</span><span class="p">,</span>
+        <span class="nv">actions</span><span class="p">:</span> <span class="p">[</span><span class="kt">UniAlertButton</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">Content</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">UniAlert</span><span class="p">(</span>
+            <span class="nv">isShowing</span><span class="p">:</span> <span class="n">isShowing</span><span class="p">,</span>
+            <span class="nv">displayContent</span><span class="p">:</span> <span class="nf">content</span><span class="p">(),</span>
+            <span class="nv">buttons</span><span class="p">:</span> <span class="n">actions</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>And if we create some preview for testing purpose with body like this:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">UniAlert_Previews</span><span class="p">:</span> <span class="kt">PreviewProvider</span> <span class="p">{</span>
+    
+    <span class="kd">static</span> <span class="k">var</span> <span class="nv">previews</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">NavigationView</span> <span class="p">{</span>
+            <span class="kt">Color</span><span class="o">.</span><span class="n">white</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">uniAlert</span><span class="p">(</span>
+            <span class="nv">isShowing</span><span class="p">:</span> <span class="o">.</span><span class="nf">constant</span><span class="p">(</span><span class="kc">true</span><span class="p">),</span>
+            <span class="nv">content</span><span class="p">:</span> <span class="p">{</span>
+                <span class="kt">VStack</span> <span class="p">{</span>
+                    <span class="kt">Text</span><span class="p">(</span><span class="s">"Title"</span><span class="p">)</span>
+                        <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="nf">system</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">semibold</span><span class="p">))</span>
+                        <span class="o">.</span><span class="nf">padding</span><span class="p">(</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+                    <span class="kt">Text</span><span class="p">(</span><span class="s">"Subtitle"</span><span class="p">)</span>
+                        <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="nf">system</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">regular</span><span class="p">))</span>
+                <span class="p">}</span>
+                <span class="o">.</span><span class="nf">padding</span><span class="p">(</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+                <span class="o">.</span><span class="nf">multilineTextAlignment</span><span class="p">(</span><span class="o">.</span><span class="n">center</span><span class="p">)</span>
+                <span class="o">.</span><span class="nf">foregroundColor</span><span class="p">(</span><span class="kt">Color</span><span class="o">.</span><span class="n">black</span><span class="p">)</span>
+            <span class="p">},</span>
+            <span class="nv">actions</span><span class="p">:</span> <span class="p">[</span>
+                <span class="o">.</span><span class="nf">destructive</span><span class="p">(</span><span class="nv">content</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="kt">Text</span><span class="p">(</span><span class="s">"Cancel"</span><span class="p">)</span>
+                        <span class="o">.</span><span class="nf">foregroundColor</span><span class="p">(</span><span class="kt">Color</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span>
+                        <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="nf">system</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">regular</span><span class="p">))</span>
+                <span class="p">}),</span>
+                <span class="o">.</span><span class="nf">regular</span><span class="p">(</span><span class="nv">content</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="kt">Text</span><span class="p">(</span><span class="s">"Continue"</span><span class="p">)</span>
+                        <span class="o">.</span><span class="nf">foregroundColor</span><span class="p">(</span><span class="kt">Color</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span>
+                        <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="nf">system</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">semibold</span><span class="p">))</span>
+                <span class="p">},</span> <span class="nv">action</span><span class="p">:</span> <span class="p">{</span> <span class="p">})</span>
+            <span class="p">])</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>we can get unexpected result:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-27-custom-alert-swiftUI/preview_1.png" alt="preview body" width="250" />
+</div>
+
+<p>Heh, good - we know that our content can be rendered as expected. Let’s add all other compomemt and update their position by adding <code class="language-plaintext highlighter-rouge">GeometryReader</code> and by calculating positioning of all components on required places.</p>
+
+<p>Before we proceed, let’s recap how system <code class="language-plaintext highlighter-rouge">Alert</code> handle 2 and 3 or more buttons:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-27-custom-alert-swiftUI/sample_alert.png" alt="sample alert for mulitply buttons" width="450" />
+</div>
+
+<p>Ok, keeping this im mind we should define different building blocks:</p>
+
+<ul>
+  <li>determine which approach to use for buttons - position horizontally or vertically (<code class="language-plaintext highlighter-rouge">requireHorizontalPositioning</code>)</li>
+  <li>determine presenting context color (<code class="language-plaintext highlighter-rouge">backgroundColorView</code>)</li>
+  <li>determine builders for horizontal and vertical buttons with appropriate layouts (<code class="language-plaintext highlighter-rouge">verticalButtonPad</code> and <code class="language-plaintext highlighter-rouge">horizontalButtonsPad</code>)</li>
+</ul>
+
+<p>First items is quite easy to achive - just check number of buttons and we are ready to go:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">private</span> <span class="k">var</span> <span class="nv">requireHorizontalPositioning</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">maxButtonPositionedHorizontally</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">buttons</span><span class="o">.</span><span class="n">count</span> <span class="o">&gt;</span> <span class="n">maxButtonPositionedHorizontally</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Context color also not a problem:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">private</span> <span class="kd">func</span> <span class="nf">backgroundColorView</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="n">backgroundColor</span>
+        <span class="o">.</span><span class="nf">edgesIgnoringSafeArea</span><span class="p">(</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">opacity</span><span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">isShowing</span> <span class="p">?</span> <span class="mf">0.8</span> <span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>note u may vant to use <code class="language-plaintext highlighter-rouge">@ViewBuilder</code> instead like:</p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"> 
+<span class="kd">@ViewBuilder</span>
+<span class="k">var</span> <span class="nv">backgroundColorView</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="n">backgroundColor</span>
+        <span class="o">.</span><span class="nf">edgesIgnoringSafeArea</span><span class="p">(</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">opacity</span><span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">isShowing</span> <span class="p">?</span> <span class="mf">0.8</span> <span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Ok, and last but not least - positioning of content:</p>
+
+<p>Let’s start from easiet part - vertical buttons pad for case when we have 3 or more buttons:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">private</span> <span class="kd">func</span> <span class="nf">verticalButtonPad</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kt">VStack</span> <span class="p">{</span>
+        <span class="kt">ForEach</span><span class="p">(</span><span class="mi">0</span><span class="o">..&lt;</span><span class="n">buttons</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">Divider</span><span class="p">()</span>
+                <span class="o">.</span><span class="nf">padding</span><span class="p">([</span><span class="o">.</span><span class="n">leading</span><span class="p">,</span> <span class="o">.</span><span class="n">trailing</span><span class="p">],</span> <span class="o">-</span><span class="n">contentPadding</span><span class="p">)</span>
+            <span class="k">let</span> <span class="nv">current</span> <span class="o">=</span> <span class="n">buttons</span><span class="p">[</span><span class="nv">$0</span><span class="p">]</span>
+            <span class="kt">Button</span><span class="p">(</span><span class="nv">action</span><span class="p">:</span> <span class="p">{</span>
+                <span class="n">current</span><span class="o">.</span><span class="nf">action</span><span class="p">()</span>
+                <span class="n">withAnimation</span> <span class="p">{</span>
+                    <span class="k">self</span><span class="o">.</span><span class="n">isShowing</span><span class="o">.</span><span class="nf">toggle</span><span class="p">()</span>
+                <span class="p">}</span>
+            <span class="p">},</span> <span class="nv">label</span><span class="p">:</span> <span class="p">{</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="mi">30</span><span class="p">)</span>
+            <span class="p">})</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>note <code class="language-plaintext highlighter-rouge">contentPadding</code> - property that we will use for controlling content padding all over the <code class="language-plaintext highlighter-rouge">Alert</code></p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var contentPadding: CGFloat = 16
+</code></pre></div>  </div>
+</blockquote>
+
+<p>Basically, we just iterate through all buttons and put them in <code class="language-plaintext highlighter-rouge">VStack</code> with <code class="language-plaintext highlighter-rouge">Divider</code> between them. And adjusting padding.</p>
+
+<p>Next part - is to position horizontal buttons. In similar approach let’s iterate over buttons and put them in <code class="language-plaintext highlighter-rouge">HStack</code> with <code class="language-plaintext highlighter-rouge">Divider</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">private</span> <span class="kd">func</span> <span class="nf">horizontalButtonsPadFor</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kt">VStack</span> <span class="p">{</span>
+        <span class="kt">Divider</span><span class="p">()</span>
+            <span class="o">.</span><span class="nf">padding</span><span class="p">([</span><span class="o">.</span><span class="n">leading</span><span class="p">,</span> <span class="o">.</span><span class="n">trailing</span><span class="p">],</span> <span class="o">-</span><span class="n">contentPadding</span><span class="p">)</span>
+        <span class="kt">HStack</span> <span class="p">{</span>
+            <span class="kt">Spacer</span><span class="p">()</span>
+            <span class="kt">ForEach</span><span class="p">(</span><span class="mi">0</span><span class="o">..&lt;</span><span class="n">buttons</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">Spacer</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nv">$0</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">{</span>
+                    <span class="kt">Divider</span><span class="p">()</span><span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="mi">50</span><span class="p">)</span>
+                        <span class="o">.</span><span class="nf">padding</span><span class="p">([</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="o">.</span><span class="n">bottom</span><span class="p">],</span> <span class="o">-</span><span class="mi">8</span><span class="p">)</span>
+                <span class="p">}</span>
+                <span class="k">let</span> <span class="nv">current</span> <span class="o">=</span> <span class="n">buttons</span><span class="p">[</span><span class="nv">$0</span><span class="p">]</span>
+                <span class="kt">Button</span><span class="p">(</span><span class="nv">action</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="n">current</span><span class="o">.</span><span class="nf">action</span><span class="p">()</span>
+                    <span class="n">withAnimation</span> <span class="p">{</span>
+                        <span class="k">self</span><span class="o">.</span><span class="n">isShowing</span><span class="o">.</span><span class="nf">toggle</span><span class="p">()</span>
+                    <span class="p">}</span>
+                <span class="p">},</span> <span class="nv">label</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="n">current</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="mi">30</span><span class="p">)</span>
+                        <span class="o">.</span><span class="nf">multilineTextAlignment</span><span class="p">(</span><span class="o">.</span><span class="n">center</span><span class="p">)</span>
+                <span class="p">})</span>
+                <span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="mi">30</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="kt">Spacer</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>We can organize auto-layout selection like:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">private</span> <span class="kd">func</span> <span class="nf">buttonsPad</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kt">VStack</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">requireHorizontalPositioning</span> <span class="p">{</span>
+            <span class="nf">verticalButtonPad</span><span class="p">()</span>
+                <span class="o">.</span><span class="nf">padding</span><span class="p">([</span><span class="o">.</span><span class="n">bottom</span><span class="p">],</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nf">horizontalButtonsPadFor</span><span class="p">()</span>
+                <span class="o">.</span><span class="nf">padding</span><span class="p">([</span><span class="o">.</span><span class="n">bottom</span><span class="p">],</span> <span class="mi">12</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Ok, now we should combine all together in to <code class="language-plaintext highlighter-rouge">body</code> of the <code class="language-plaintext highlighter-rouge">Alert</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kt">ZStack</span> <span class="p">{</span>
+        <span class="nf">backgroundColorView</span><span class="p">()</span>
+        <span class="kt">VStack</span> <span class="p">{</span>
+            <span class="kt">VStack</span> <span class="p">{</span>
+                <span class="n">displayContent</span>
+            <span class="p">}</span>
+            <span class="o">.</span><span class="nf">padding</span><span class="p">(</span><span class="n">contentPadding</span><span class="p">)</span>
+            <span class="nf">buttonsPad</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">edgesIgnoringSafeArea</span><span class="p">(</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>And result:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-27-custom-alert-swiftUI/preview_2.png" alt="body redndering first attempt" width="250" />
+</div>
+
+<p>Ok, so here we can see, that content is stretched to width of View and it hasn’t any background color. We should add few more properties for Alert setup and use them in combination with <code class="language-plaintext highlighter-rouge">GeometryReader</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// at the top of View</span>
+<span class="k">var</span> <span class="nv">backgroundColor</span><span class="p">:</span> <span class="kt">Color</span> <span class="o">=</span> <span class="kt">Color</span><span class="o">.</span><span class="n">gray</span><span class="o">.</span><span class="nf">opacity</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="k">var</span> <span class="nv">contentBackgroundColor</span><span class="p">:</span> <span class="kt">Color</span> <span class="o">=</span> <span class="kt">Color</span><span class="o">.</span><span class="n">white</span>
+<span class="k">var</span> <span class="nv">contentCornerRadius</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="c1">//...</span>
+
+<span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kt">GeometryReader</span> <span class="p">{</span> <span class="n">geometry</span> <span class="k">in</span>
+        <span class="kt">ZStack</span> <span class="p">{</span>
+            <span class="nf">backgroundColorView</span><span class="p">()</span>
+            <span class="k">let</span> <span class="nv">expectedWidth</span> <span class="o">=</span> <span class="n">geometry</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="mf">0.7</span>
+            <span class="kt">VStack</span><span class="p">(</span><span class="nv">spacing</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">VStack</span> <span class="p">{</span>
+                    <span class="n">displayContent</span>
+                <span class="p">}</span>
+                <span class="o">.</span><span class="nf">padding</span><span class="p">(</span><span class="n">contentPadding</span><span class="p">)</span>
+                <span class="nf">buttonsPad</span><span class="p">()</span>
+            <span class="p">}</span>
+            <span class="o">.</span><span class="nf">background</span><span class="p">(</span><span class="n">contentBackgroundColor</span><span class="p">)</span>
+            <span class="o">.</span><span class="nf">cornerRadius</span><span class="p">(</span><span class="n">contentCornerRadius</span><span class="p">)</span>
+            <span class="o">.</span><span class="nf">shadow</span><span class="p">(</span><span class="nv">radius</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="o">.</span><span class="nf">frame</span><span class="p">(</span>
+                <span class="nv">minWidth</span><span class="p">:</span> <span class="n">expectedWidth</span><span class="p">,</span>
+                <span class="nv">maxWidth</span><span class="p">:</span> <span class="n">expectedWidth</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="nf">background</span><span class="p">(</span><span class="kt">Color</span><span class="o">.</span><span class="n">clear</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">edgesIgnoringSafeArea</span><span class="p">(</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">zIndex</span><span class="p">(</span><span class="kt">Double</span><span class="o">.</span><span class="n">greatestFiniteMagnitude</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Result:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-27-custom-alert-swiftUI/preview_3.png" alt="body redndering with geometry reader" width="250" />
+</div>
+
+<p>Ok, much better, but we can see some misalignment for buttons… To fix this, we need to adjust a bit the process how horizontalPad is configured. To do so - pass <code class="language-plaintext highlighter-rouge">width</code> of <code class="language-plaintext highlighter-rouge">View</code> in to building function and apply few changes:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">private</span> <span class="kd">func</span> <span class="nf">horizontalButtonsPadFor</span><span class="p">(</span><span class="n">_</span> <span class="nv">expectedWidth</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kt">VStack</span> <span class="p">{</span>
+        <span class="kt">Divider</span><span class="p">()</span>
+            <span class="o">.</span><span class="nf">padding</span><span class="p">([</span><span class="o">.</span><span class="n">leading</span><span class="p">,</span> <span class="o">.</span><span class="n">trailing</span><span class="p">],</span> <span class="o">-</span><span class="n">contentPadding</span><span class="p">)</span>
+        <span class="kt">HStack</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="nv">sidesOffset</span> <span class="o">=</span> <span class="n">contentPadding</span> <span class="o">*</span> <span class="mi">2</span>
+            <span class="k">let</span> <span class="nv">maxHorizontalWidth</span> <span class="o">=</span> <span class="n">expectedWidth</span> <span class="o">-</span> <span class="n">sidesOffset</span>
+            <span class="kt">Spacer</span><span class="p">()</span>
+            <span class="kt">ForEach</span><span class="p">(</span><span class="mi">0</span><span class="o">..&lt;</span><span class="n">buttons</span><span class="o">.</span><span class="n">count</span><span class="p">)</span> <span class="p">{</span>
+                <span class="kt">Spacer</span><span class="p">()</span>
+                <span class="k">if</span> <span class="nv">$0</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">{</span>
+                    <span class="kt">Divider</span><span class="p">()</span><span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="mi">50</span><span class="p">)</span>
+                        <span class="o">.</span><span class="nf">padding</span><span class="p">([</span><span class="o">.</span><span class="n">top</span><span class="p">,</span> <span class="o">.</span><span class="n">bottom</span><span class="p">],</span> <span class="o">-</span><span class="mi">8</span><span class="p">)</span>
+                <span class="p">}</span>
+                <span class="k">let</span> <span class="nv">current</span> <span class="o">=</span> <span class="n">buttons</span><span class="p">[</span><span class="nv">$0</span><span class="p">]</span>
+                <span class="kt">Button</span><span class="p">(</span><span class="nv">action</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="n">current</span><span class="o">.</span><span class="nf">action</span><span class="p">()</span>
+                    <span class="n">withAnimation</span> <span class="p">{</span>
+                        <span class="k">self</span><span class="o">.</span><span class="n">isShowing</span><span class="o">.</span><span class="nf">toggle</span><span class="p">()</span>
+                    <span class="p">}</span>
+                <span class="p">},</span> <span class="nv">label</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="n">current</span><span class="o">.</span><span class="n">content</span><span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="mi">30</span><span class="p">)</span>
+                        <span class="o">.</span><span class="nf">multilineTextAlignment</span><span class="p">(</span><span class="o">.</span><span class="n">center</span><span class="p">)</span>
+                <span class="p">})</span>
+                <span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">maxWidth</span><span class="p">:</span> <span class="n">maxHorizontalWidth</span><span class="p">,</span> <span class="nv">minHeight</span><span class="p">:</span> <span class="mi">30</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="kt">Spacer</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Let’s check the result:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-27-custom-alert-swiftUI/preview_4.png" alt="body redndering with adjusted horizontal Pad" width="250" />
+</div>
+
+<p>Looks good.</p>
+
+<p>Ok,let’s apply few changes in to preview - to check appearence of our <code class="language-plaintext highlighter-rouge">Alert</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kt">VStack</span> <span class="p">{</span>
+        <span class="kt">Button</span><span class="p">(</span><span class="nv">action</span><span class="p">:</span> <span class="p">{</span>
+            <span class="n">withAnimation</span> <span class="p">{</span>
+                <span class="n">isAlertWith2ButtonsShowed</span><span class="o">.</span><span class="nf">toggle</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">},</span> <span class="nv">label</span><span class="p">:</span> <span class="p">{</span>
+            <span class="kt">Text</span><span class="p">(</span><span class="s">"Show alert"</span><span class="p">)</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">uniAlert</span><span class="p">(</span>
+        <span class="nv">isShowing</span><span class="p">:</span> <span class="err">$</span><span class="n">isAlertWith2ButtonsShowed</span><span class="p">,</span>
+        <span class="nv">content</span><span class="p">:</span> <span class="p">{</span>
+            <span class="kt">VStack</span> <span class="p">{</span>
+                <span class="kt">Text</span><span class="p">(</span><span class="s">"Title"</span><span class="p">)</span>
+                    <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="nf">system</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">semibold</span><span class="p">))</span>
+                    <span class="o">.</span><span class="nf">padding</span><span class="p">(</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+                <span class="kt">Text</span><span class="p">(</span><span class="s">"Subtitle"</span><span class="p">)</span>
+                    <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="nf">system</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">regular</span><span class="p">))</span>
+            <span class="p">}</span>
+            <span class="o">.</span><span class="nf">padding</span><span class="p">(</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="o">.</span><span class="nf">multilineTextAlignment</span><span class="p">(</span><span class="o">.</span><span class="n">center</span><span class="p">)</span>
+            <span class="o">.</span><span class="nf">foregroundColor</span><span class="p">(</span><span class="kt">Color</span><span class="o">.</span><span class="n">black</span><span class="p">)</span>
+        <span class="p">},</span>
+        <span class="nv">actions</span><span class="p">:</span> <span class="p">[</span>
+            <span class="o">.</span><span class="nf">destructive</span><span class="p">(</span><span class="nv">content</span><span class="p">:</span> <span class="p">{</span>
+                <span class="kt">Text</span><span class="p">(</span><span class="s">"Cancel"</span><span class="p">)</span>
+                    <span class="o">.</span><span class="nf">foregroundColor</span><span class="p">(</span><span class="kt">Color</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span>
+                    <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="nf">system</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">regular</span><span class="p">))</span>
+            <span class="p">}),</span>
+            <span class="o">.</span><span class="nf">regular</span><span class="p">(</span><span class="nv">content</span><span class="p">:</span> <span class="p">{</span>
+                <span class="kt">Text</span><span class="p">(</span><span class="s">"Continue"</span><span class="p">)</span>
+                    <span class="o">.</span><span class="nf">foregroundColor</span><span class="p">(</span><span class="kt">Color</span><span class="o">.</span><span class="n">blue</span><span class="p">)</span>
+                    <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="nf">system</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">semibold</span><span class="p">))</span>
+            <span class="p">},</span> <span class="nv">action</span><span class="p">:</span> <span class="p">{</span> <span class="p">})</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Result is quite unexpected:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-27-custom-alert-swiftUI/preview_5.png" alt="firt's attempt of presenting" width="250" />
+</div>
+
+<p>Wow! But the reason is quite simple - we need to tell explicitly what exactly view is shown and what not. To do so - let’s add one more modification:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// add Presenter - the actual view at which we would like to apply `uniAlert`</span>
+<span class="kd">struct</span> <span class="kt">UniAlert</span><span class="o">&lt;</span><span class="kt">Presenter</span><span class="p">,</span> <span class="kt">Content</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">Content</span><span class="p">:</span> <span class="kt">View</span><span class="p">,</span> <span class="kt">Presenter</span><span class="p">:</span> <span class="kt">View</span>
+
+<span class="c1">// add property to store ref to presenter </span>
+    <span class="k">let</span> <span class="nv">presentationView</span><span class="p">:</span> <span class="kt">Presenter</span>
+    
+<span class="c1">// describe when to show/hide this view</span>
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">GeometryReader</span> <span class="p">{</span> <span class="n">geometry</span> <span class="k">in</span>
+            <span class="kt">ZStack</span> <span class="p">{</span>
+                <span class="n">presentationView</span><span class="o">.</span><span class="nf">disabled</span><span class="p">(</span><span class="n">isShowing</span><span class="p">)</span> <span class="c1">// &lt;-- here</span>
+
+                <span class="nf">backgroundColorView</span><span class="p">()</span>
+                <span class="o">...</span>
+
+<span class="c1">// modify extension for building alert by adding new param</span>
+<span class="kd">extension</span> <span class="kt">View</span> <span class="p">{</span>
+
+    <span class="kd">func</span> <span class="n">uniAlert</span><span class="o">&lt;</span><span class="kt">Content</span><span class="o">&gt;</span><span class="p">(</span>
+        <span class="nv">isShowing</span><span class="p">:</span> <span class="kt">Binding</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="kd">@ViewBuilder</span> <span class="nv">content</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Content</span><span class="p">,</span>
+        <span class="nv">actions</span><span class="p">:</span> <span class="p">[</span><span class="kt">UniAlertButton</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">Content</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">UniAlert</span><span class="p">(</span>
+            <span class="nv">isShowing</span><span class="p">:</span> <span class="n">isShowing</span><span class="p">,</span>
+            <span class="nv">displayContent</span><span class="p">:</span> <span class="nf">content</span><span class="p">(),</span>
+            <span class="nv">buttons</span><span class="p">:</span> <span class="n">actions</span><span class="p">,</span>
+            <span class="nv">presentationView</span><span class="p">:</span> <span class="k">self</span> <span class="c1">// &lt;--- this one</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Looks like we are done. Let’s try again:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-27-custom-alert-swiftUI/alert_demo.gif" alt="demo of alert with 2 button" width="250" />
+</div>
+
+<p>Great! That’s exactly what we would like to have.
+But wait, how about 3 and more buttons? Let’s check:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-27-custom-alert-swiftUI/demo_alert_3Button.gif" alt="demo of alert with 3 button" width="250" />
+</div>
+
+<p>Exactly what we expect.</p>
+
+<h2 id="complete-solution">complete solution</h2>
+
+<p>The complete solution is available here</p>
+
+<script src="https://gist.github.com/khorbushko/de42603c42b9e8dfa87c9e729af0bd09.js"></script>
+
+<h2 id="bonus">bonus</h2>
+
+<p>Alert that we build is good for very simple cases. But let’s think what we will receve if we present this alert on <code class="language-plaintext highlighter-rouge">View</code> that is in <code class="language-plaintext highlighter-rouge">ZStack</code> or on <code class="language-plaintext highlighter-rouge">View</code> that in <code class="language-plaintext highlighter-rouge">TabBar</code> or similar case?. Yes, we will not cover the whole screen, but just a part of <strong>presented</strong> view. That’s not always expected…</p>
+
+<p>How to solve this?</p>
+
+<p>I believe there are many solutions that depends from few factors. At least from iOS supported version. I’m thinking about iOS 13+, so I ended up with combination this solution within <code class="language-plaintext highlighter-rouge">FullScreenPresenter</code> modifier that was covered previously and described here.</p>
+
+<p>Off cause u need to modify a bit solution code like remove presenter reference (thus we use special context for Alert presentation) and modification of extension with <strong>modifier</strong> that we used to create an <code class="language-plaintext highlighter-rouge">Alert</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">func</span> <span class="n">uniAlert</span><span class="o">&lt;</span><span class="kt">Content</span><span class="o">&gt;</span><span class="p">(</span>
+        <span class="nv">isShowing</span><span class="p">:</span> <span class="kt">Binding</span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="kd">@ViewBuilder</span> <span class="nv">content</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Content</span><span class="p">,</span>
+        <span class="nv">actions</span><span class="p">:</span> <span class="p">[</span><span class="kt">UniAlertButton</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">Content</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="nf">presentContentOverFullScreen</span><span class="p">(</span><span class="nv">isPresented</span><span class="p">:</span> <span class="n">isShowing</span><span class="p">)</span> <span class="p">{</span> <span class="n">appearenceFlag</span> <span class="k">in</span>
+            <span class="kt">UniAlert</span><span class="p">(</span>
+                <span class="nv">isShowing</span><span class="p">:</span> <span class="n">appearenceFlag</span><span class="p">,</span>
+                <span class="nv">displayContent</span><span class="p">:</span> <span class="nf">content</span><span class="p">(),</span>
+                <span class="nv">buttons</span><span class="p">:</span> <span class="n">actions</span>
+            <span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>You can also think about some extension that will simplify the way how to create alert body</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">enum</span> <span class="kt">UniAlertBuilder</span> <span class="p">{</span>
+    
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">makeTypicalBody</span><span class="p">(</span>
+        <span class="nv">title</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+        <span class="nv">message</span><span class="p">:</span> <span class="kt">String</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">VStack</span> <span class="p">{</span>
+            <span class="kt">Text</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+                <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="nf">system</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="mi">17</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">semibold</span><span class="p">))</span>
+                <span class="o">.</span><span class="nf">padding</span><span class="p">(</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+            
+            <span class="kt">Text</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+                <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="nf">system</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span> <span class="nv">weight</span><span class="p">:</span> <span class="o">.</span><span class="n">regular</span><span class="p">))</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">padding</span><span class="p">(</span><span class="o">.</span><span class="n">bottom</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">multilineTextAlignment</span><span class="p">(</span><span class="o">.</span><span class="n">center</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">foregroundColor</span><span class="p">(</span><span class="kt">Color</span><span class="o">.</span><span class="n">black</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// and other ...</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>but this is just limited to you. ;]</p>
+:ET
