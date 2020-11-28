@@ -1,4 +1,0 @@
-I"‘<p>Recently I have faced with design-related requirements for <code class="language-plaintext highlighter-rouge">Alert</code> on my project - <code class="language-plaintext highlighter-rouge">Image</code> should be shown with rich description and additional actions.</p>
-
-<p>Quick check of existing Alert Api provided by Apple shows that there is nothing exist for showing alert to user with custom <code class="language-plaintext highlighter-rouge">Content</code> either <code class="language-plaintext highlighter-rouge">Image</code> either <code class="language-plaintext highlighter-rouge">TextInput</code>â€¦ So I decided to prepare it by myself.</p>
-:ET
