@@ -15,18 +15,18 @@ author:
 Recently I have faced with design-related requirements for `Alert` on my project - `Image` should be shown with rich description and additional actions.
 <!--more-->
 
-Quick check of existing Alert Api provided by Apple shows that there is nothing exist for showing alert to user with custom `Content` either `Image` either `TextInput`... So I decided to prepare it by myself. 
+A quick check of the existing Alert API provided by Apple shows that there is nothing exist for showing alert to the user with custom `Content` either `Image` either `TextInput`... So I decided to prepare it by myself. 
 ## idea
 
-The very first that need to be designed - it's `Buttons` for alert. Let's grab idea from **Apple** and introduce our own `Button` with separate building functions - one for `destructive` and another one for `regular` type of button. 
+The very first that need to be designed - it's `Buttons` for an alert. Let's grab an idea from **Apple** and introduce our own `Button` with separate building functions - one for `destructive` and another one for the `regular` type of button. 
 
-I always prefere to separate full implementation into simplest possible components and implement all of them separatly. Also let's keep in mind the possibility of extension any part of our component.
+I always prefer to separate full implementation into the simplest possible components and implement all of them separately. Also, let's keep in mind the possibility of extending any part of our component.
 
-Now, when we already separate component in to simple parts, let's try to implement them.
+Now, when we already separate components into simple parts, let's try to implement them.
 
 ## implementation
 
-So let's stard and implement this. To do so, we can define `struct` for this:
+So let's start and implement this. To do so, we can define `struct` for this:
 
 {% highlight swift %}
 import Foundation
@@ -93,9 +93,9 @@ struct UniAlertButton {
 }
 {% endhighlight %}
 
-> Note: `private init` - this will restrict anyone to create uncategorized button's for `Alert`.
+> Note: `private init` - this will restrict anyone to create uncategorized buttons for `Alert`.
 
-Now it's time to design  `Alert` itself. Basically this should be a `View` that can be constructed from `Content` and attach some buttons (`UniAlertButton`) that we already have.
+Now it's time to design  `Alert` itself. This should be a `View` that can be constructed from `Content` and attach some buttons (`UniAlertButton`) that we already have.
 
 Thus we would like to build our `Alert` within `Content` with `View` type, we need to define this at `struct` description:
 
@@ -103,7 +103,7 @@ Thus we would like to build our `Alert` within `Content` with `View` type, we ne
 struct UniAlert<Content>: View where Content: View
 {% endhighlight %}
 
-next - add inputParam for `View` in order to store `Content` and as it done within Apple Alert - `@State` about `visibility` of `Alert`, and don't forget about buttons (`UniAlertButton`).
+next - add input param for `View` to store `Content` and as it is done within Apple Alert - `@State` about `visibility` of `Alert`, and don't forget about buttons (`UniAlertButton`).
 
 {% highlight swift %}
 import Foundation
@@ -122,7 +122,7 @@ struct UniAlert<Content>: View where Content: View {
 }
 {% endhighlight %}
 
-Now we already should be able to create convenience way of presenting `Alert` - usign `View` extenstion modifiers:
+Now we should be able to create a convenient way of presenting `Alert` - using `View` extension modifiers:
 
 {% highlight swift %}
 extension View {
@@ -141,7 +141,7 @@ extension View {
 }
 {% endhighlight %}
 
-And if we create some preview for testing purpose with body like this:
+And if we create some preview for testing purpose with a body like this:
 
 {% highlight swift %}
 struct UniAlert_Previews: PreviewProvider {
@@ -186,7 +186,7 @@ we can get unexpected result:
 <img src="{{site.baseurl}}/assets/posts/images/2020-11-27-custom-alert-swiftUI/preview_1.png" alt="preview body" width="250"/>
 </div>
 
-Heh, good - we know that our content can be rendered as expected. Let's add all other compomemt and update their position by adding `GeometryReader` and by calculating positioning of all components on required places.
+Heh, good - we know that our content can be rendered as expected. Let's add all other components and update their position by adding `GeometryReader` and by calculating the positioning of all components in required places.
 
 Before we proceed, let's recap how system `Alert` handle 2 and 3 or more buttons:
 
@@ -194,7 +194,7 @@ Before we proceed, let's recap how system `Alert` handle 2 and 3 or more buttons
 <img src="{{site.baseurl}}/assets/posts/images/2020-11-27-custom-alert-swiftUI/sample_alert.png" alt="sample alert for mulitply buttons" width="450"/>
 </div>
 
-Ok, keeping this im mind we should define different building blocks:
+Ok, keeping this in mind we should define different building blocks:
 
 - determine which approach to use for buttons - position horizontally or vertically (`requireHorizontalPositioning`)
 - determine presenting context color (`backgroundColorView`)
@@ -256,7 +256,7 @@ private func verticalButtonPad() -> some View {
 > 
 >     var contentPadding: CGFloat = 16
 
-Basically, we just iterate through all buttons and put them in `VStack` with `Divider` between them. And adjusting padding.
+We just iterate through all buttons and put them in `VStack` with `Divider` between them. And adjusting padding.
 
 Next part - is to position horizontal buttons. In similar approach let's iterate over buttons and put them in `HStack` with `Divider`:
 
@@ -465,7 +465,7 @@ Result is quite unexpected:
 <img src="{{site.baseurl}}/assets/posts/images/2020-11-27-custom-alert-swiftUI/preview_5.png" alt="firt's attempt of presenting" width="250"/>
 </div>
 
-Wow! But the reason is quite simple - we need to tell explicitly what exactly view is shown and what not. To do so - let's add one more modification:
+Wow! But the reason is quite simple - we need to tell explicitly what exactly the view is shown and what not. To do so - let's add one more modification:
 
 {% highlight swift %}
 // add Presenter - the actual view at which we would like to apply `uniAlert`
@@ -527,11 +527,11 @@ The complete solution is available here
 
 ## bonus
 
-Alert that we build is good for very simple cases. But let's think what we will receve if we present this alert on `View` that is in `ZStack` or on `View` that in `TabBar` or similar case?. Yes, we will not cover the whole screen, but just a part of **presented** view. That's not always expected...
+The `Alert` that we build is good for very simple cases. But let's think about what we will receive if we present this alert on `View` that is in `ZStack` or on `View` that in `TabBar` or similar case?. Yes, we will not cover the whole screen, but just a part of **presented** view. That's not always expected...
 
 How to solve this? 
 
-I believe there are many solutions that depends from few factors. At least from iOS supported version. I'm thinking about iOS 13+, so I ended up with combination this solution within `FullScreenPresenter` modifier that was covered previously and described [here]({% post_url 2020-11-24-present-view-over-full-context %}). 
+I believe many solutions depend on a few factors. At least from the iOS supported version. I'm thinking about iOS 13+, so I ended up with combination this solution within `FullScreenPresenter` modifier that was covered previously and described [here]({% post_url 2020-11-24-present-view-over-full-context %}). 
 
 Off cause u need to modify a bit solution code like remove presenter reference (thus we use special context for Alert presentation) and modification of extension with **modifier** that we used to create an `Alert`:
 
@@ -554,7 +554,7 @@ extension View {
 }
 {% endhighlight %}
 
-You can also think about some extension that will simplify the way how to create alert body
+You can also think about some extension that will simplify the way how to create an alert body
 
 {% highlight swift %}
 enum UniAlertBuilder {
