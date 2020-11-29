@@ -1,0 +1,768 @@
+I"T#<p>Often we can hear such terms as <code class="language-plaintext highlighter-rouge">RunLoop</code>, <code class="language-plaintext highlighter-rouge">MainLoop</code>, or <code class="language-plaintext highlighter-rouge">EventLoop</code>. But do we know how it works? And what responsibilities it has? 
+<!--more--></p>
+
+<h2 id="runloop">RunLoop</h2>
+
+<p><code class="language-plaintext highlighter-rouge">RunLoop</code> is the implementation of well-known <a href="https://en.wikipedia.org/wiki/Event_loop">EventLoop</a> pattern - * programming construct or design pattern that waits for and dispatches events or messages in a program*.</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">while (!end) { } </code></p>
+</blockquote>
+
+<p>This pattern has been implemented on many platforms. Thus, the main problems that it should resolve are:</p>
+
+<ul>
+  <li>receive events/messages</li>
+  <li>work when works exist and sleep when no work available (correct resource management).</li>
+</ul>
+
+<p>Hight level description of <code class="language-plaintext highlighter-rouge">Thread</code>:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-29-runloop-in-depth/thread.pdf" alt="thread life" width="350" />
+</div>
+
+<p>Hight level description of <code class="language-plaintext highlighter-rouge">EventLoop</code>:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-29-runloop-in-depth/eventLoop.pdf" alt="thread life" width="450" />
+</div>
+
+<h2 id="iosmacos-runloop">iOS/macOS RunLoop</h2>
+
+<p>Talking about iOS/macOS we always refer to <code class="language-plaintext highlighter-rouge">RunLoop</code>. To be more correct - 2 classes implement this behavior:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">CFRunLoopRef</code> (<a href="https://link.jianshu.com/?t=http://opensource.apple.com/source/CF/CF-855.17/CFRunLoop.c">open source</a>)</li>
+  <li><code class="language-plaintext highlighter-rouge">NSRunLoop</code> (based on <code class="language-plaintext highlighter-rouge">CFRunLoopRef</code>)</li>
+</ul>
+
+<p>As you already see, <code class="language-plaintext highlighter-rouge">RunLoop</code> is connected to the thread. You can’t create <code class="language-plaintext highlighter-rouge">RunLoop</code> directly, instead, it’s can be created at the very start of <code class="language-plaintext highlighter-rouge">Thread</code> creating and destroyed at the very end of the<code class="language-plaintext highlighter-rouge">Thread</code> lifecycle. There are 2 function that provide access to RunLoop - <code class="language-plaintext highlighter-rouge">CFRunLoopGetMain()</code> and <code class="language-plaintext highlighter-rouge">CFRunLoopGetCurrent()</code></p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-29-runloop-in-depth/runloop_iOS.pdf" alt="debug backtrace" width="650" />
+</div>
+
+<blockquote>
+  <p><em>Run loops are part of the fundamental infrastructure associated with threads. A run loop is an event processing loop that you use <strong>to schedule work</strong> and coordinate the receipt of incoming events. The purpose of a run loop is to <strong>keep your thread busy when there is work</strong> to do and <strong>put your thread to sleep when there is none</strong>.</em> - <a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html">Apple</a>.</p>
+</blockquote>
+
+<h3 id="interface">interface</h3>
+
+<p>CoreFoundation has 5 classes that represent full interface for work with RunLoop:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">CFRunLoopRef</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CFRunLoopModeRef</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CFRunLoopSourceRef</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CFRunLoopTimerRef</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CFRunLoopObserverRef</code></li>
+</ul>
+
+<p>Let’s review each of these types.</p>
+
+<p><a href="https://developer.apple.com/documentation/corefoundation/cfrunloopref"><strong><code class="language-plaintext highlighter-rouge">CFRunLoopRef</code></strong></a> - reference to a run loop object. This object monitors sources of input tasks and dispatches control when they ready to proceed. Three types of objects can be monitored by a run loop: sources (<code class="language-plaintext highlighter-rouge">CFRunLoopSource</code>), timers (<code class="language-plaintext highlighter-rouge">CFRunLoopTimer</code>), and observers (<code class="language-plaintext highlighter-rouge">CFRunLoopObserver</code>). To get any event u need to put any of the supported objects in RunLoop first with an appropriate function call (it’s also possible to remove that object later).</p>
+
+<p>Supported modes for CoreFoundation are:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">kCFRunLoopDefaultMode</code> - observe any object changes when the thread is sitting idle. <strong><code class="language-plaintext highlighter-rouge">Default</code></strong>. This mode good when a thread is created for receiving events.</li>
+  <li><code class="language-plaintext highlighter-rouge">kCFRunLoopCommonMode</code> - pseudo mode, hold an object and share it with other sets of “common” modes. Thus this is pseudo mode - RunLoop never runs in this mode. Should be used only for a specific set of sources, timers, and observers shared by other modes.</li>
+</ol>
+
+<blockquote>
+  <p>check this from <code class="language-plaintext highlighter-rouge">CFRunLoop</code></p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">CFMutableSetRef</span> <span class="n">_commonModes</span><span class="p">;</span>
+<span class="kt">CFMutableSetRef</span> <span class="n">_commonModeItems</span><span class="p">;</span></code></pre></figure>
+
+<p>Each <code class="language-plaintext highlighter-rouge">Thread</code> has <strong>ONLY</strong> one run loop. <code class="language-plaintext highlighter-rouge">RunLoop</code> can’t be created or destroyed on your own - it’s done automatically in CoreFoundation when needed (according to doc). Instead u can get <code class="language-plaintext highlighter-rouge">current</code> <code class="language-plaintext highlighter-rouge">RunLoop</code> mode.</p>
+
+<p><code class="language-plaintext highlighter-rouge">RunLoop</code> has few Modes with Source/Timer/Observer in it. Only <strong>ONE</strong> Mode can be active at once, and it’s called <code class="language-plaintext highlighter-rouge">current</code>. To switch between modes u need to exit Loop and set a new mode. Why? just to separate Source/Timer/Observer and make them not affect each other.</p>
+
+<p><a href="/assets/posts/images/2020-11-29-runloop-in-depth/pdf/CFRunLoopRef.pdf">CFRunLoopRef</a></p>
+
+<p><a href="https://developer.apple.com/documentation/corefoundation/cfrunloopsourceref?language=objc"><strong><code class="language-plaintext highlighter-rouge">CFRunLoopSourceRef</code></strong> </a>- This is an abstraction of an input source that can be put into the RunLoop. They can create some async events (network message or user action). So this is an abstraction for some events/operations.</p>
+
+<p>There are 2 categories Version 0 and Version 1</p>
+
+<p><code class="language-plaintext highlighter-rouge">Version 0</code> has only one callback (function pointer), which does not actively trigger an event. In use, you need to call <code class="language-plaintext highlighter-rouge">CFRunLoopSourceSignal(source)</code> first, mark the Source as pending, and then manually call <code class="language-plaintext highlighter-rouge">CFRunLoopWakeUp(RunLoop)</code> to wake up RunLoop and let it handle the event.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Version 1</code> managed by run loop and kernel. This source use <code class="language-plaintext highlighter-rouge">mach_ports</code> to signal when it’s ready to be executed (automatically). This Source can actively wake up the <code class="language-plaintext highlighter-rouge">RunLoop</code> thread.</p>
+
+<p>A run loop source can be registered in multiple run loops and run loop modes at the same time.</p>
+
+<p><a href="/assets/posts/images/2020-11-29-runloop-in-depth/pdf/CFRunLoopSourceRef.pdf">CFRunLoopSourceRef</a></p>
+
+<p><a href="https://developer.apple.com/documentation/corefoundation/cfrunlooptimerref"><strong><code class="language-plaintext highlighter-rouge">CFRunLoopTimerRef</code></strong></a> - timer-based trigger. This is a specialized RunLoop source that can be fired at present and at a future time. Each RunLoop timer can be registered in one RunLoop at a time but can be added to a few modes within one run loop.</p>
+
+<p><code class="language-plaintext highlighter-rouge">CFRunLoopTimer</code> is “toll-free bridged” with its Cocoa Foundation counterpart, <code class="language-plaintext highlighter-rouge">NSTimer</code>. This means that the Core Foundation type is interchangeable in function or method calls with the bridged Foundation object.</p>
+
+<blockquote>
+  <p>A timer is not a real-time mechanism; it fires only when one of the run loop modes to which the timer has been added is running and able to check if the timer’s firing time has passed. If a timer’s firing time occurs while the run loop is in a mode that is not monitoring the timer or during a long callout, the timer does not fire until the next time the run loop checks the timer. Therefore, the actual time at which the timer fires potentially can be a significant period of time after the scheduled firing time.</p>
+</blockquote>
+
+<p><a href="/assets/posts/images/2020-11-29-runloop-in-depth/pdf/CFRunLoopTimerRef.pdf">CFRunLoopTimerRef</a></p>
+
+<p><a href="https://developer.apple.com/documentation/corefoundation/cfrunloopobserver-ri3"><strong><code class="language-plaintext highlighter-rouge">CFRunLoopObserverRef</code></strong> </a> - provides a general means to receive callbacks at different points within a running run loop. They fire at a specific location and execution of RunLoop. Can be one-time or repeatable.
+Observers do not automatically added to the RunLoop, instead, a special call should be executed to add them.</p>
+
+<p>Each run loop observer can be registered in only one run loop at a time, although it can be added to multiple run loop modes within that run loop.</p>
+
+<p><a href="/assets/posts/images/2020-11-29-runloop-in-depth/pdf/CFRunLoopObserverRef.pdf">CFRunLoopObserverRef</a></p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="cm">/* Run Loop Observer Activities */</span>
+<span class="n">typedef</span> <span class="kt">CF_OPTIONS</span><span class="p">(</span><span class="kt">CFOptionFlags</span><span class="p">,</span> <span class="kt">CFRunLoopActivity</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// about to enter Loop</span>
+    <span class="n">kCFRunLoopEntry</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="kt">UL</span> <span class="o">&lt;&lt;</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="c1">// About to process Timer</span>
+    <span class="n">kCFRunLoopBeforeTimers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="kt">UL</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="c1">// About to process Source</span>
+    <span class="n">kCFRunLoopBeforeSources</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="kt">UL</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="c1">// about to enter sleep</span>
+    <span class="n">kCFRunLoopBeforeWaiting</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="kt">UL</span> <span class="o">&lt;&lt;</span> <span class="mi">5</span><span class="p">),</span>
+    <span class="c1">// Just wake up from sleep</span>
+    <span class="n">kCFRunLoopAfterWaiting</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="kt">UL</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span><span class="p">),</span>
+    <span class="c1">// About to exit Loop</span>
+    <span class="n">kCFRunLoopExit</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="kt">UL</span> <span class="o">&lt;&lt;</span> <span class="mi">7</span><span class="p">),</span>
+    <span class="c1">// All states</span>
+    <span class="n">kCFRunLoopAllActivities</span> <span class="o">=</span> <span class="mh">0x0FFFFFFF</span><span class="kt">U</span>
+<span class="p">};</span></code></pre></figure>
+
+<h3 id="mode">mode</h3>
+
+<p>We can check source of CFRunLoop.c and found actual declaration for RunLoop mode:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="n">__CFRunLoopMode</span> <span class="p">{</span>
+    <span class="kt">CFRuntimeBase</span> <span class="n">_base</span><span class="p">;</span>
+    <span class="n">pthread_mutex_t</span> <span class="n">_lock</span><span class="p">;</span>	<span class="cm">/* must have the run loop locked before locking this */</span>
+    <span class="kt">CFStringRef</span> <span class="n">_name</span><span class="p">;</span>
+    <span class="kt">Boolean</span> <span class="n">_stopped</span><span class="p">;</span>
+    <span class="n">char</span> <span class="n">_padding</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="n">__CFRunLoop</span> <span class="p">{</span>
+    <span class="kt">CFRuntimeBase</span> <span class="n">_base</span><span class="p">;</span>
+    <span class="n">pthread_mutex_t</span> <span class="n">_lock</span><span class="p">;</span>			<span class="cm">/* locked for accessing mode list */</span>
+    <span class="n">__CFPort</span> <span class="n">_wakeUpPort</span><span class="p">;</span>			<span class="c1">// used for CFRunLoopWakeUp </span>
+    <span class="kt">Boolean</span> <span class="n">_unused</span><span class="p">;</span>
+    <span class="n">volatile</span> <span class="n">_per_run_data</span> <span class="o">*</span><span class="n">_perRunData</span><span class="p">;</span>              <span class="c1">// reset for runs of the run loop</span>
+    <span class="n">pthread_t</span> <span class="n">_pthread</span><span class="p">;</span>
+    <span class="n">uint32_t</span> <span class="n">_winthread</span><span class="p">;</span>
+    
+    <span class="c1">// modes:</span>
+    
+    <span class="kt">CFMutableSetRef</span> <span class="n">_commonModes</span><span class="p">;</span>
+    <span class="kt">CFMutableSetRef</span> <span class="n">_commonModeItems</span><span class="p">;</span>
+    <span class="kt">CFRunLoopModeRef</span> <span class="n">_currentMode</span><span class="p">;</span>
+    <span class="kt">CFMutableSetRef</span> <span class="n">_modes</span><span class="p">;</span>
+    
+    <span class="o">...</span>
+<span class="p">};</span>   </code></pre></figure>
+
+<p>As was mention previously, <code class="language-plaintext highlighter-rouge">commonMode</code> is pseudo mode - you can see from source code that this implemented via few props in the structure that defines <code class="language-plaintext highlighter-rouge">__CFRunLoop</code>. What does this mean from a practical point of view?</p>
+
+<p>Main thread has 2 mode: <code class="language-plaintext highlighter-rouge">kCFRunLoopDefaultMode</code> <code class="language-plaintext highlighter-rouge">UITrackingRunLoopMode</code> and both of them marked as <code class="language-plaintext highlighter-rouge">common</code>.</p>
+
+<blockquote>
+  <p>check other <a href="https://developer.apple.com/documentation/foundation/runloop/mode">modes</a> and <a href="https://developer.apple.com/documentation/foundation/nsrunloop/run_loop_modes">here</a></p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">Default</code> - this one in which application is running, but for example when u touch screen and scroll and mode switched to <code class="language-plaintext highlighter-rouge">tracking</code> mode, this mean that if u have a timer attached to default mode and u actively touch (for example scroll table view such as news feed), the timer will not be called. This guarantees that scroll operation will be not affected by other sources, in our case timer.</p>
+
+<p>What to do so both timer and scrolling work without any delay or freeze?. You need to register a timer within multiply modes. Yes, the timer can be added to <strong>ONLY</strong> one <code class="language-plaintext highlighter-rouge">RunLoop</code> but for few modes (as was mention above). To do so - simple use <code class="language-plaintext highlighter-rouge">common</code> mode - thus is <em>pseudo</em> mode and as we already know, share a resource.</p>
+
+<p>You can find a lot of posts regarding this “problem” (that is correct by design selected by Apple).</p>
+
+<blockquote>
+  <p>for example <a href="https://www.pixeldock.com/blog/how-to-avoid-blocked-downloads-during-scrolling/">here</a> or <a href="https://stackoverflow.com/questions/7222449/nsdefaultrunloopmode-vs-nsrunloopcommonmodes">here</a> or <a href="https://programmer.ink/think/ios-development-runloop-understanding.html">here</a></p>
+</blockquote>
+
+<blockquote>
+  <p>Check this post for more info about <a href="https://www.programmersought.com/article/23684546929/">runLoop and timers</a></p>
+</blockquote>
+
+<p>So what modes do we have from Apple?</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Default</td>
+      <td>NSDefaultRunLoopMode(Cocoa) kCFRunLoopDefaultMode (Core Foundation)</td>
+      <td>The default mode is the one used for most operations. Most of the time, you should use this mode to start your run loop and configure your input sources.</td>
+    </tr>
+    <tr>
+      <td>Connection</td>
+      <td>NSConnectionReplyMode(Cocoa)</td>
+      <td>Cocoa uses this mode in conjunction with NSConnection objects to monitor replies. You should rarely need to use this mode yourself.</td>
+    </tr>
+    <tr>
+      <td>Modal</td>
+      <td>NSModalPanelRunLoopMode(Cocoa)</td>
+      <td>Cocoa uses this mode to identify events intended for modal panels.</td>
+    </tr>
+    <tr>
+      <td>Event tracking</td>
+      <td>NSEventTrackingRunLoopMode(Cocoa)</td>
+      <td>Cocoa uses this mode to restrict incoming events during mouse-dragging loops and other sorts of user interface tracking loops.</td>
+    </tr>
+    <tr>
+      <td>Common modes</td>
+      <td>NSRunLoopCommonModes(Cocoa) kCFRunLoopCommonModes (Core Foundation)</td>
+      <td>This is a configurable group of commonly used modes. Associating an input source with this mode also associates it with each of the modes in the group. For Cocoa applications, this set includes the default, modal, and event tracking modes by default. Core Foundation includes just the default mode initially. You can add custom modes to the set using the CFRunLoopAddCommonMode function.</td>
+    </tr>
+    <tr>
+      <td>com.apple.securityd.runloop</td>
+      <td>Communication with security. Used by SpringBoard only.</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>FigPlayerBlockingRunLoopMode</td>
+      <td>QuickTime related.</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>just grab this from <a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html">official doc</a></p>
+</blockquote>
+
+<p>To get even more info - we can check private mode’s:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Mode</th>
+      <th>Purpose</th>
+      <th>Part of common modes?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>kCFRunLoopDefaultMode</td>
+      <td>The default run loop mode, almost encompasses every sources. You should always add sources and timers to this mode if there’s no special reasons. Can be accessed with the symbol kCFRunLoopDefaultModeand NSDefaultRunLoopMode.</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>NSTaskDeathCheckMode</td>
+      <td>Used by NSTask to check if the task is still running.</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>_kCFHostBlockingMode _kCFNetServiceMonitorBlockingMode _kCFNetServiceBrowserBlockingMode _kCFNetServiceBlockingMode _kCFStreamSocketReadPrivateMode _kCFStreamSocketCanReadPrivateMode _kCFStreamSocketWritePrivateMode _kCFStreamSocketCanWritePrivateMode _kCFStreamSocketSecurityClosePrivateMode _kCFStreamSocketBogusPrivateMode _kCFURLConnectionPrivateRunLoopMode _kProxySupportLoadingPacPrivateMode _kProxySupportSyncPACExecutionRunLoopMode _kCFStreamSocketSecurityClosePrivateMode</td>
+      <td>Various private run loop modes used by CFNetwork for blocking operations</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>UITrackingRunLoopMode</td>
+      <td>UI tracking.</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>GSEventReceiveRunLoopMode</td>
+      <td>Receiving system events.</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>com.apple.securityd.runloop</td>
+      <td>Communication with securityd. Used by SpringBoard only.</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>FigPlayerBlockingRunLoopMode</td>
+      <td>QuickTime related.</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="implementation">implementation</h3>
+
+<p>If we check implementation of Apple’s EventLoop, we will find code that in general - <code class="language-plaintext highlighter-rouge">do while</code> cycle (as also described <a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html#//apple_ref/doc/uid/10000057i-CH16-SW23">here</a>):</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">void</span> <span class="kt">CFRunLoopRun</span><span class="p">(</span><span class="n">void</span><span class="p">)</span> <span class="p">{</span>	<span class="cm">/* DOES CALLOUT */</span>
+    <span class="n">int32_t</span> <span class="n">result</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kt">CFRunLoopRunSpecific</span><span class="p">(</span><span class="kt">CFRunLoopGetCurrent</span><span class="p">(),</span> <span class="n">kCFRunLoopDefaultMode</span><span class="p">,</span> <span class="mf">1.0e10</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+        <span class="kt">CHECK_FOR_FORK</span><span class="p">();</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">kCFRunLoopRunStopped</span> <span class="o">!=</span> <span class="n">result</span> <span class="o">&amp;&amp;</span> <span class="n">kCFRunLoopRunFinished</span> <span class="o">!=</span> <span class="n">result</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>I grab only a small amount of code from CFRunLoop.c, but if u check it - u will be able to find all steps in the process that Apple mention in their doc:</p>
+
+  <ol>
+    <li>Notify observers that the run loop has been entered.
+      <ul>
+        <li>Notify observers that any ready timers are about to fire.</li>
+        <li>Notify observers that any input sources that are not port based are about to fire.</li>
+        <li>Fire any non-port-based input sources that are ready to fire.</li>
+        <li>If a port-based input source is ready and waiting to fire, process the event immediately. Go to step 9.</li>
+        <li>Notify observers that the thread is about to sleep.</li>
+        <li>Put the thread to sleep until one of the following events occurs:
+          <ul>
+            <li>An event arrives for a port-based input source.</li>
+            <li>A timer fires.</li>
+            <li>The timeout value set for the run loop expires.</li>
+            <li>The run loop is explicitly woken up.</li>
+          </ul>
+        </li>
+        <li>Notify observers that the thread just woke up.</li>
+        <li>Process the pending event.
+          <ul>
+            <li>If a user-defined timer is fired, process the timer event and restart the loop. Go to step 2.</li>
+            <li>If an input source is fired, deliver the event.</li>
+            <li>If the run loop was explicitly woken up but has not yet timed out, restart the loop. Go to step 2.</li>
+          </ul>
+        </li>
+        <li>Notify observers that the run loop has exited.</li>
+      </ul>
+    </li>
+  </ol>
+</blockquote>
+
+<p>If go deeper, we can find that Apple divided the whole system into 4 component:</p>
+
+<ol>
+  <li>Application layer</li>
+  <li>Application framework layer (Cocoa, CocoaTouch, etc)</li>
+  <li>Core framework layer</li>
+  <li>Darwin</li>
+</ol>
+
+<p>If we go to Darwin and check how it works, we will find that everything is done using Mach’s API, via messaging.</p>
+
+<blockquote>
+  <p>Message definition from &lt;mach/message.h&gt;</p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">typedef</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="n">mach_msg_header_t</span> <span class="n">header</span><span class="p">;</span>
+  <span class="n">mach_msg_body_t</span> <span class="n">body</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">mach_msg_base_t</span><span class="p">;</span>
+<span class="o">&gt;</span>
+<span class="n">typedef</span> <span class="kd">struct</span> <span class="p">{</span>
+  <span class="n">mach_msg_bits_t</span> <span class="n">msgh_bits</span><span class="p">;</span>
+  <span class="n">mach_msg_size_t</span> <span class="n">msgh_size</span><span class="p">;</span>
+  <span class="n">mach_port_t</span> <span class="n">msgh_remote_port</span><span class="p">;</span>
+  <span class="n">mach_port_t</span> <span class="n">msgh_local_port</span><span class="p">;</span>
+  <span class="n">mach_port_name_t</span> <span class="n">msgh_voucher_port</span><span class="p">;</span>
+  <span class="n">mach_msg_id_t</span> <span class="n">msgh_id</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">mach_msg_header_t</span><span class="p">;</span></code></pre></figure>
+
+<p>If talking about RunLoop - the core concept is using these messages mach_msg()</p>
+
+<blockquote>
+  <p>from an above-mentioned sequence of work</p>
+
+  <ul>
+    <li>An event arrives for a port-based input source.</li>
+  </ul>
+</blockquote>
+
+<p>So RunLoop keeps calls function to receive a message and if no-one responds, kernel push Thread into sleep, while new message becomes available or Thread ends up due to some reason.</p>
+
+<h3 id="functionality">functionality</h3>
+
+<p><strong>autorelease pool</strong> - after the start of the app, few observers registered within the main thread RunLoop.</p>
+
+<p>One is monitors RunLoop enter (<code class="language-plaintext highlighter-rouge">_objc_autoreleasePoolPush()</code>), used for creating atoreleasePool withi highest priority <em>-2147483647</em>, before anything else.</p>
+
+<p>Another observer monitors 2 more event - moment when thread ready to sleep (<code class="language-plaintext highlighter-rouge">_objc_autoreleasePoolPop()</code>) and moment when pool should be recreated (<code class="language-plaintext highlighter-rouge">_objc_autoreleasePoolPush()</code>). These observers come with the lowest priority - <em>2147483647</em> - to make sure that it’s will be done after any operations.</p>
+
+<blockquote>
+  <p>The code executed in the main thread is usually written in such things as event callbacks and Timer callbacks. These callbacks are wrapped around the AutoreleasePool created by RunLoop, so there is no memory leak and the developer does not have to display the Create Pool.</p>
+</blockquote>
+
+<p><strong>system events</strong> - one more functionality registered using <em>Version 1</em> source (<code class="language-plaintext highlighter-rouge">__IOHIDEventSystemClientQueueCallback()</code>).</p>
+
+<p>Events such as shake, touch, volume, screen lock generate <a href="https://opensource.apple.com/source/IOHIDFamily/IOHIDFamily-421.6/IOHIDFamily/IOHIDEventTypes.h.auto.html">IOHIDEvent</a> and sent to <strong>SpringBoard</strong>. The registered observer then calls <code class="language-plaintext highlighter-rouge">_UIApplicationHandleEventQueue()</code> to proceed next steps within it.</p>
+
+<p><strong>gestures</strong> - as was mention above RunLoop responsible for processing gestures using <code class="language-plaintext highlighter-rouge">_UIApplicationHandleEventQueue()</code> call.</p>
+
+<p>In general, Apple firstly registers pending gestures. Later all these pending gestures will proceed within one more observer on RunLoop <code class="language-plaintext highlighter-rouge">_UIGestureRecognizerUpdateObserver()</code>.</p>
+
+<p><strong>interface update</strong> - all UI related changes (layout, constraints, layer change, drawing, etc) firstly also marked as pending and send to a special observer-container. Later observer call <code class="language-plaintext highlighter-rouge">_ZN2CA11Transaction17observer_callbackEP19__CFRunLoopObservermPv()</code> that iterate over all pending data.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="nf">_ZN2CA11Transaction17observer_callbackEP19__CFRunLoopObservermPv</span><span class="p">()</span>
+    <span class="kt">QuartzCore</span><span class="p">:</span><span class="kt">CA</span><span class="p">::</span><span class="kt">Transaction</span><span class="p">::</span><span class="nv">observer_callback</span><span class="p">:</span>
+        <span class="kt">CA</span><span class="p">::</span><span class="kt">Transaction</span><span class="p">::</span><span class="nf">commit</span><span class="p">();</span>
+            <span class="kt">CA</span><span class="p">::</span><span class="kt">Context</span><span class="p">::</span><span class="nf">commit_transaction</span><span class="p">();</span>
+                <span class="kt">CA</span><span class="p">::</span><span class="kt">Layer</span><span class="p">::</span><span class="nf">layout_and_display_if_needed</span><span class="p">();</span>
+                    <span class="kt">CA</span><span class="p">::</span><span class="kt">Layer</span><span class="p">::</span><span class="nf">layout_if_needed</span><span class="p">();</span>
+                        <span class="p">[</span><span class="kt">CALayer</span> <span class="n">layoutSublayers</span><span class="p">];</span>
+                            <span class="p">[</span><span class="kt">UIView</span> <span class="n">layoutSubviews</span><span class="p">];</span>
+                    <span class="kt">CA</span><span class="p">::</span><span class="kt">Layer</span><span class="p">::</span><span class="nf">display_if_needed</span><span class="p">();</span>
+                        <span class="p">[</span><span class="kt">CALayer</span> <span class="n">display</span><span class="p">];</span>
+                            <span class="p">[</span><span class="kt">UIView</span> <span class="n">drawRect</span><span class="p">];</span></code></pre></figure>
+
+<blockquote>
+  <p>source <a href="https://gist.github.com/zhangkn/3ac0767931c69b7831cdb20e61f93ed8">here</a></p>
+</blockquote>
+
+<p><strong>timer</strong> - as was mention above about <code class="language-plaintext highlighter-rouge">CFRunLoopTimerRef</code> - <code class="language-plaintext highlighter-rouge">NSTimer/Timer</code> it’s toll-free bridged, so RunLoop control how it works also. <code class="language-plaintext highlighter-rouge">CADisplayLink</code> also use sources from RunLoop interface</p>
+
+<blockquote>
+  <p>check <a href="https://github.com/facebookarchive/AsyncDisplayKit">AsyncDisplayLink</a> from Facebook for alternative implementation - it\s allow to execute UI related task on non-main threads</p>
+</blockquote>
+
+<p><strong>perform selector</strong> - this is a family of functions from NSObject, under the hood it creates Timer and so also uses RunLoop.</p>
+
+<p>That’s the reason why sometimes it may fail - this means that calling Thread does not have RunLoop.</p>
+
+<p><strong>GCD</strong> - RunLoop use <code class="language-plaintext highlighter-rouge">GCD</code> and <code class="language-plaintext highlighter-rouge">GCD</code> use RunLoop.</p>
+
+<p>When <code class="language-plaintext highlighter-rouge">dispatch_async(dispatch_get_main_queue(), block)</code> is called, <code class="language-plaintext highlighter-rouge">libDispatch</code> will send a message to the main thread’s RunLoop, RunLoop will wake up, get the block from the message, and callback <code class="language-plaintext highlighter-rouge">CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUEE</code> execute this block in (). But this logic is limited to dispatch to the main thread, and dispatch to other threads is still handled by libDispatch.</p>
+
+<p><strong>networking</strong> - on iOS there are few layers for work with network:</p>
+
+<ul>
+  <li><a href="https://developer.apple.com/documentation/corefoundation/cfsocket-rg7">CFSocket</a></li>
+  <li><a href="https://developer.apple.com/documentation/cfnetwork">CFNetwork</a></li>
+  <li><a href="https://developer.apple.com/documentation/foundation/nsurlconnection">NSURLConnection</a></li>
+  <li><a href="https://developer.apple.com/documentation/foundation/nsurlsession">NSURLSession</a></li>
+</ul>
+
+<p>I believe we all saw that response from the network request come to us from a different thread. This means that underlying Thread uses RunLoop for messaging between different sources/observers/timers.</p>
+
+<p><strong>swiftUI/Combine</strong> - if you are already faced with this new technology u probably already create <code class="language-plaintext highlighter-rouge">Timer</code> or use <code class="language-plaintext highlighter-rouge">receive(on: options)</code> for various publishers.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">timer</span> <span class="o">=</span> <span class="kt">Timer</span>
+	<span class="o">.</span><span class="nf">publish</span><span class="p">(</span><span class="nv">every</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">on</span><span class="p">:</span> <span class="o">.</span><span class="n">main</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">.</span><span class="n">common</span><span class="p">)</span> <span class="c1">// last param is RunLoop mode</span>
+	<span class="o">.</span><span class="nf">autoconnect</span><span class="p">()</span></code></pre></figure>
+
+<p>This means that RunLoop is deeply integrated even within new coding approaches provided by Apple.</p>
+
+<blockquote>
+  <p>check <a href="https://forums.swift.org/t/runloop-main-or-dispatchqueue-main-when-using-combine-scheduler/26635">interesting thread</a> on Swift forum about Runloop and DispatchQeueu</p>
+</blockquote>
+
+<h3 id="implementation-1">implementation</h3>
+
+<p>When we start the application now we know that the main Thread should auto initialize RunLoop. To check this we can simply check the backtrace of the stack during a simple app launch for iOS.</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-29-runloop-in-depth/runLoop_action_1.png" alt="debug backtrace" width="650" />
+</div>
+
+<p>As u can see, the backtrace contains</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">frame</span> <span class="err">#</span><span class="mi">22</span><span class="p">:</span> <span class="mh">0x00007fff25acc950</span> <span class="kt">FrontBoardServices</span><span class="err">`</span><span class="o">-</span><span class="p">[</span><span class="kt">FBSSerialQueue</span> <span class="n">_performNextFromRunLoopSource</span><span class="p">]</span> <span class="o">+</span> <span class="mi">22</span>
+<span class="n">frame</span> <span class="err">#</span><span class="mi">23</span><span class="p">:</span> <span class="mh">0x00007fff2038c37a</span> <span class="kt">CoreFoundation</span><span class="err">`</span><span class="n">__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__</span> <span class="o">+</span> <span class="mi">17</span>
+<span class="n">frame</span> <span class="err">#</span><span class="mi">24</span><span class="p">:</span> <span class="mh">0x00007fff2038c272</span> <span class="kt">CoreFoundation</span><span class="err">`</span><span class="n">__CFRunLoopDoSource0</span> <span class="o">+</span> <span class="mi">180</span>
+<span class="n">frame</span> <span class="err">#</span><span class="mi">25</span><span class="p">:</span> <span class="mh">0x00007fff2038b7b6</span> <span class="kt">CoreFoundation</span><span class="err">`</span><span class="n">__CFRunLoopDoSources0</span> <span class="o">+</span> <span class="mi">346</span>
+<span class="n">frame</span> <span class="err">#</span><span class="mi">26</span><span class="p">:</span> <span class="mh">0x00007fff20385f1f</span> <span class="kt">CoreFoundation</span><span class="err">`</span><span class="n">__CFRunLoopRun</span> <span class="o">+</span> <span class="mi">878</span>
+<span class="n">frame</span> <span class="err">#</span><span class="mi">27</span><span class="p">:</span> <span class="mh">0x00007fff203856c6</span> <span class="kt">CoreFoundation</span><span class="err">`</span><span class="kt">CFRunLoopRunSpecific</span> <span class="o">+</span> <span class="mi">567</span></code></pre></figure>
+
+<blockquote>
+  <p>note - latest call at the top</p>
+</blockquote>
+
+<p>call to <code class="language-plaintext highlighter-rouge">CFRunLoopRunSpecific</code>. And next action - creating Source 0 / Version 0 and awaiting for next action.</p>
+
+<blockquote>
+  <p>to check this on your side - just put breakpoint on <code class="language-plaintext highlighter-rouge">viewDidLoad</code> during app launch for the very first <code class="language-plaintext highlighter-rouge">ViewController</code>.</p>
+</blockquote>
+
+<p>If we check <code class="language-plaintext highlighter-rouge">CFRunLoop.c</code>, we can easily find this function</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">SInt32</span> <span class="kt">CFRunLoopRunSpecific</span><span class="p">(</span><span class="kt">CFRunLoopRef</span> <span class="n">rl</span><span class="p">,</span> <span class="kt">CFStringRef</span> <span class="n">modeName</span><span class="p">,</span> <span class="kt">CFTimeInterval</span> <span class="n">seconds</span><span class="p">,</span> <span class="kt">Boolean</span> <span class="n">returnAfterSourceHandled</span><span class="p">)</span> <span class="p">{</span>     <span class="cm">/* DOES CALLOUT */</span>
+    <span class="kt">CHECK_FOR_FORK</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nf">__CFRunLoopIsDeallocating</span><span class="p">(</span><span class="n">rl</span><span class="p">))</span> <span class="k">return</span> <span class="n">kCFRunLoopRunFinished</span><span class="p">;</span>
+    <span class="nf">__CFRunLoopLock</span><span class="p">(</span><span class="n">rl</span><span class="p">);</span>
+    <span class="kt">CFRunLoopModeRef</span> <span class="n">currentMode</span> <span class="o">=</span> <span class="nf">__CFRunLoopFindMode</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">modeName</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="kt">NULL</span> <span class="o">==</span> <span class="n">currentMode</span> <span class="o">||</span> <span class="nf">__CFRunLoopModeIsEmpty</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">currentMode</span><span class="p">,</span> <span class="n">rl</span><span class="o">-&gt;</span><span class="n">_currentMode</span><span class="p">))</span> <span class="p">{</span>
+	<span class="kt">Boolean</span> <span class="n">did</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">currentMode</span><span class="p">)</span> <span class="nf">__CFRunLoopModeUnlock</span><span class="p">(</span><span class="n">currentMode</span><span class="p">);</span>
+	<span class="nf">__CFRunLoopUnlock</span><span class="p">(</span><span class="n">rl</span><span class="p">);</span>
+	<span class="k">return</span> <span class="n">did</span> <span class="p">?</span> <span class="nv">kCFRunLoopRunHandledSource</span> <span class="p">:</span> <span class="n">kCFRunLoopRunFinished</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="n">volatile</span> <span class="n">_per_run_data</span> <span class="o">*</span><span class="n">previousPerRun</span> <span class="o">=</span> <span class="nf">__CFRunLoopPushPerRunData</span><span class="p">(</span><span class="n">rl</span><span class="p">);</span>
+    <span class="kt">CFRunLoopModeRef</span> <span class="n">previousMode</span> <span class="o">=</span> <span class="n">rl</span><span class="o">-&gt;</span><span class="n">_currentMode</span><span class="p">;</span>
+    <span class="n">rl</span><span class="o">-&gt;</span><span class="n">_currentMode</span> <span class="o">=</span> <span class="n">currentMode</span><span class="p">;</span>
+    <span class="n">int32_t</span> <span class="n">result</span> <span class="o">=</span> <span class="n">kCFRunLoopRunFinished</span><span class="p">;</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">currentMode</span><span class="o">-&gt;</span><span class="n">_observerMask</span> <span class="o">&amp;</span> <span class="n">kCFRunLoopEntry</span> <span class="p">)</span> <span class="nf">__CFRunLoopDoObservers</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">currentMode</span><span class="p">,</span> <span class="n">kCFRunLoopEntry</span><span class="p">);</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="nf">__CFRunLoopRun</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">currentMode</span><span class="p">,</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">returnAfterSourceHandled</span><span class="p">,</span> <span class="n">previousMode</span><span class="p">);</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">currentMode</span><span class="o">-&gt;</span><span class="n">_observerMask</span> <span class="o">&amp;</span> <span class="n">kCFRunLoopExit</span> <span class="p">)</span> <span class="nf">__CFRunLoopDoObservers</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">currentMode</span><span class="p">,</span> <span class="n">kCFRunLoopExit</span><span class="p">);</span>
+
+        <span class="nf">__CFRunLoopModeUnlock</span><span class="p">(</span><span class="n">currentMode</span><span class="p">);</span>
+        <span class="nf">__CFRunLoopPopPerRunData</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">previousPerRun</span><span class="p">);</span>
+	<span class="n">rl</span><span class="o">-&gt;</span><span class="n">_currentMode</span> <span class="o">=</span> <span class="n">previousMode</span><span class="p">;</span>
+    <span class="nf">__CFRunLoopUnlock</span><span class="p">(</span><span class="n">rl</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>We can easely inspect what’s going on using source and backtrace, like:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">result</span> <span class="o">=</span> <span class="nf">__CFRunLoopRun</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">currentMode</span><span class="p">,</span> <span class="n">seconds</span><span class="p">,</span> <span class="n">returnAfterSourceHandled</span><span class="p">,</span> <span class="n">previousMode</span><span class="p">);</span></code></pre></figure>
+
+<blockquote>
+  <p>frame #25: 0x00007fff2038b7b6 CoreFoundation`__CFRunLoopDoSources0 + 346</p>
+</blockquote>
+
+<p>and so on.</p>
+
+<p>Another option to check how RunLoop works - is to check backtrace for event starts.</p>
+
+<p>To do so - just override for example <code class="language-plaintext highlighter-rouge">touchesBegan</code> and add a breakpoint. After entering the bt command in the print area, you can see the complete execution flow</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-29-runloop-in-depth/runLoop_action_2.png" alt="debug backtrace" width="650" />
+</div>
+
+<p>Viewed from bottom to top, the approximate flow of the relevant functions executed is:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">UIApplicationMain</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CFRunLoopRunSpecific</code></li>
+  <li><code class="language-plaintext highlighter-rouge">__CFRunLoopRun</code></li>
+  <li><code class="language-plaintext highlighter-rouge">__CFRunLoopDoSources0</code></li>
+  <li>Finally,<code class="language-plaintext highlighter-rouge"> touchesBegan:withEvent:</code></li>
+</ul>
+
+<p>How RunLoop works we can check in actual implementation of this function <code class="language-plaintext highlighter-rouge">static int32_t __CFRunLoopRun(CFRunLoopRef rl, CFRunLoopModeRef rlm, CFTimeInterval seconds, Boolean stopAfterHandle, CFRunLoopModeRef previousMode)</code>. The implementation is complicated and require some time to understand, but we can use simlified version from <a href="https://www.programmersought.com/article/59784547646/">this source</a>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">static</span> <span class="n">int32_t</span> <span class="nf">__CFRunLoopRun</span><span class="p">(</span><span class="kt">CFRunLoopRef</span> <span class="n">rl</span><span class="p">,</span> <span class="kt">CFRunLoopModeRef</span> <span class="n">rlm</span><span class="p">,</span> <span class="kt">CFTimeInterval</span> <span class="n">seconds</span><span class="p">,</span> <span class="kt">Boolean</span> <span class="n">stopAfterHandle</span><span class="p">,</span> <span class="kt">CFRunLoopModeRef</span> <span class="n">previousMode</span><span class="p">)</span> 
+<span class="p">{</span>
+    <span class="n">int32_t</span> <span class="n">retVal</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="c1">// Notify Observers that Timers will be processed soon</span>
+        <span class="nf">__CFRunLoopDoObservers</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">,</span> <span class="n">kCFRunLoopBeforeTimers</span><span class="p">);</span>
+        <span class="c1">// Notify Observers: Sources will be processed soon</span>
+        <span class="nf">__CFRunLoopDoObservers</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">,</span> <span class="n">kCFRunLoopBeforeSources</span><span class="p">);</span>
+        <span class="c1">// Process Blocks</span>
+    	<span class="nf">__CFRunLoopDoBlocks</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">);</span>
+        <span class="c1">// Process Sources0</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nf">__CFRunLoopDoSources0</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">,</span> <span class="n">stopAfterHandle</span><span class="p">))</span> <span class="p">{</span>
+            <span class="c1">// Process Blocks</span>
+            <span class="nf">__CFRunLoopDoBlocks</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">);</span>
+	    <span class="p">}</span>
+        <span class="c1">// Determine if there is Source1</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nf">__CFRunLoopServiceMachPort</span><span class="p">(</span><span class="n">dispatchPort</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span> <span class="nf">sizeof</span><span class="p">(</span><span class="n">msg_buffer</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">livePort</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">voucherState</span><span class="p">,</span> <span class="kt">NULL</span><span class="p">))</span> <span class="p">{</span>
+            <span class="c1">// If there is Source1, jump to handle_msg</span>
+            <span class="n">goto</span> <span class="n">handle_msg</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">// Notify Observers: going to sleep soon</span>
+	    <span class="nf">__CFRunLoopDoObservers</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">,</span> <span class="n">kCFRunLoopBeforeWaiting</span><span class="p">);</span>
+    	<span class="nf">__CFRunLoopSetSleeping</span><span class="p">(</span><span class="n">rl</span><span class="p">);</span>
+        <span class="c1">// ⚠️sleep, wait for a message to wake up the thread</span>
+        <span class="nf">__CFRunLoopServiceMachPort</span><span class="p">(</span><span class="n">waitSet</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">msg</span><span class="p">,</span> <span class="nf">sizeof</span><span class="p">(</span><span class="n">msg_buffer</span><span class="p">),</span> <span class="o">&amp;</span><span class="n">livePort</span><span class="p">,</span> <span class="n">poll</span> <span class="p">?</span> <span class="mi">0</span> <span class="p">:</span> <span class="kt">TIMEOUT_INFINITY</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">voucherState</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">voucherCopy</span><span class="p">);</span>
+    	<span class="nf">__CFRunLoopUnsetSleeping</span><span class="p">(</span><span class="n">rl</span><span class="p">);</span>
+        <span class="c1">// Notify Observers: Just wake up from sleep</span>
+	    <span class="nf">__CFRunLoopDoObservers</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">,</span> <span class="n">kCFRunLoopAfterWaiting</span><span class="p">);</span>
+
+<span class="nv">handle_msg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="kt">Waking</span> <span class="n">up</span> <span class="n">by</span> <span class="kt">Timer</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Processing Timer</span>
+            <span class="nf">__CFRunLoopDoTimers</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">,</span> <span class="nf">mach_absolute_time</span><span class="p">())</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="kt">Waking</span> <span class="n">up</span> <span class="n">by</span> <span class="kt">GCD</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Process GCD </span>
+            <span class="nf">__CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__</span><span class="p">(</span><span class="n">msg</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>  <span class="c1">// Waking up by Source1   </span>
+            <span class="c1">// Process Source1</span>
+            <span class="nf">__CFRunLoopDoSource1</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">,</span> <span class="n">rls</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">msg</span><span class="o">-&gt;</span><span class="n">msgh_size</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">reply</span><span class="p">)</span> <span class="o">||</span> <span class="n">sourceHandledThisLoop</span><span class="p">;</span>  
+        <span class="p">}</span>
+
+       <span class="c1">// Process Blocks</span>
+       <span class="nf">__CFRunLoopDoBlocks</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">);</span>
+        
+       <span class="c1">// Set the return value</span>
+	   <span class="k">if</span> <span class="p">(</span><span class="n">sourceHandledThisLoop</span> <span class="o">&amp;&amp;</span> <span class="n">stopAfterHandle</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// When entering the loop, the parameter returns after processing the event</span>
+	       <span class="n">retVal</span> <span class="o">=</span> <span class="n">kCFRunLoopRunHandledSource</span><span class="p">;</span>
+       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">timeout_context</span><span class="o">-&gt;</span><span class="n">termTSR</span> <span class="o">&lt;</span> <span class="nf">mach_absolute_time</span><span class="p">())</span> <span class="p">{</span>  <span class="c1">// Exceed the timeout period of the passed parameter mark</span>
+               <span class="n">retVal</span> <span class="o">=</span> <span class="n">kCFRunLoopRunTimedOut</span><span class="p">;</span>
+	   <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nf">__CFRunLoopIsStopped</span><span class="p">(</span><span class="n">rl</span><span class="p">))</span> <span class="p">{</span>  <span class="c1">// Forced to stop by an external caller</span>
+               <span class="nf">__CFRunLoopUnsetStopped</span><span class="p">(</span><span class="n">rl</span><span class="p">);</span>
+	       <span class="n">retVal</span> <span class="o">=</span> <span class="n">kCFRunLoopRunStopped</span><span class="p">;</span>
+	   <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">rlm</span><span class="o">-&gt;</span><span class="n">_stopped</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// Automatic stop</span>
+	       <span class="n">rlm</span><span class="o">-&gt;</span><span class="n">_stopped</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+	       <span class="n">retVal</span> <span class="o">=</span> <span class="n">kCFRunLoopRunStopped</span><span class="p">;</span>
+	   <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nf">__CFRunLoopModeIsEmpty</span><span class="p">(</span><span class="n">rl</span><span class="p">,</span> <span class="n">rlm</span><span class="p">,</span> <span class="n">previousMode</span><span class="p">))</span> <span class="p">{</span>  <span class="c1">// There is no Source0/Source1/Timer/Observer in mode</span>
+	       <span class="n">retVal</span> <span class="o">=</span> <span class="n">kCFRunLoopRunFinished</span><span class="p">;</span>
+	   <span class="p">}</span>
+    
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="n">retVal</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">retVal</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>According to this, we can see that main functions are:</p>
+
+<ol>
+  <li><strong><code class="language-plaintext highlighter-rouge">__CFRunLoopDoObservers</code></strong>: NotificationObserversWhat to do next</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">__CFRunLoopDoBlocks</code></strong>: ProcessingBlocks</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">__CFRunLoopDoSources0</code></strong>: processingSources0</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">__CFRunLoopDoSources1</code></strong>: ProcessingSources1</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">__CFRunLoopDoTimers</code></strong>: processingTimers</li>
+  <li>Handling GCD related:<code class="language-plaintext highlighter-rouge">dispatch_async(dispatch_get_main_queue(), ^{ });</code></li>
+  <li><strong><code class="language-plaintext highlighter-rouge">__CFRunLoopSetSleeping/__CFRunLoopUnsetSleeping</code></strong>: sleep waiting/end sleep</li>
+  <li><strong><code class="language-plaintext highlighter-rouge">__CFRunLoopServiceMachPort -&gt; mach-msg()</code></strong>: transfer control of the current thread</li>
+</ol>
+
+<blockquote>
+  <p>check out the source link above if you would like to dive into more details, thus I just grab a few moments from that</p>
+</blockquote>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-29-runloop-in-depth/runLoop_scheme.pdf" alt="debug backtrace" width="650" />
+</div>
+
+<blockquote>
+  <p>here u can see all 6 functions that is called by CFRunLoop and defined in <code class="language-plaintext highlighter-rouge">CFRunLoop.c</code>:</p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">static</span> <span class="n">void</span> <span class="nf">__CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__</span><span class="p">();</span>
+<span class="kd">static</span> <span class="n">void</span> <span class="nf">__CFRUNLOOP_IS_CALLING_OUT_TO_A_BLOCK__</span><span class="p">();</span>
+<span class="kd">static</span> <span class="n">void</span> <span class="nf">__CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__</span><span class="p">();</span>
+<span class="kd">static</span> <span class="n">void</span> <span class="nf">__CFRUNLOOP_IS_CALLING_OUT_TO_A_TIMER_CALLBACK_FUNCTION__</span><span class="p">();</span>
+<span class="kd">static</span> <span class="n">void</span> <span class="nf">__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__</span><span class="p">();</span>
+<span class="kd">static</span> <span class="n">void</span> <span class="nf">__CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE1_PERFORM_FUNCTION__</span><span class="p">();</span></code></pre></figure>
+
+<h3 id="practice-usage">practice (usage)</h3>
+
+<p>Well, for now, it was almost only theory (except few samples within <code class="language-plaintext highlighter-rouge">Timer</code>), how about practice? Where this all information can be used?.</p>
+
+<p>First of all, understanding how something works is very useful if u can be faced with some unexpected behavior or when u faced with the limitation of the existing implementation. But, to make this all information even more useful, let’s review a few practical approaches.</p>
+
+<p><strong><code class="language-plaintext highlighter-rouge">RunLoop API.</code></strong>.</p>
+
+<p>The most used stuff:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">currentThreadRunloop</span> <span class="o">=</span> <span class="kt">RunLoop</span><span class="o">.</span><span class="n">current</span>
+<span class="k">let</span> <span class="nv">mainRunLoop</span> <span class="o">=</span> <span class="kt">RunLoop</span><span class="o">.</span><span class="n">main</span>
+<span class="k">let</span> <span class="nv">mode</span> <span class="o">=</span> <span class="n">currentThreadRunloop</span><span class="o">.</span><span class="n">currentMode</span></code></pre></figure>
+
+<p>API to manipulate <code class="language-plaintext highlighter-rouge">RunLoop</code> is not very rich:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-29-runloop-in-depth/availableRunLoop_actions.png" alt="debug backtrace" width="250" />
+</div>
+
+<p>It’s possible to run <code class="language-plaintext highlighter-rouge">RunLoop</code> in our custom mode, like:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">newRunLoop</span> <span class="o">=</span> <span class="kt">RunLoop</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">customRunLoopMode</span> <span class="o">=</span> <span class="kt">RunLoop</span><span class="o">.</span><span class="kt">Mode</span><span class="p">(</span><span class="s">"someMode"</span><span class="p">)</span>
+<span class="n">newRunLoop</span><span class="o">.</span><span class="nf">run</span><span class="p">(</span><span class="nv">mode</span><span class="p">:</span> <span class="n">customRunLoopMode</span><span class="p">,</span> <span class="nv">before</span><span class="p">:</span> <span class="kt">Date</span><span class="o">.</span><span class="n">distantFuture</span><span class="p">)</span>
+<span class="n">newRunLoop</span><span class="o">.</span><span class="nf">run</span><span class="p">()</span></code></pre></figure>
+
+<p>But note, that without a timer or port <code class="language-plaintext highlighter-rouge">RunLoop</code> will not run</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">newRunLoop</span><span class="o">.</span><span class="nf">add</span><span class="p">(</span><span class="kt">NSMachPort</span><span class="p">(),</span> <span class="nv">forMode</span><span class="p">:</span> <span class="n">customRunLoopMode</span><span class="p">)</span></code></pre></figure>
+
+<blockquote>
+  <p>A run loop must have at least one input source or timer to monitor. If one is not attached, the run loop exits immediately. (Apple)</p>
+
+  <p><code class="language-plaintext highlighter-rouge">CFRunLoopAddSource(runLoop, runLoopSource, kCFRunLoopDefaultMode)</code>
+or
+<code class="language-plaintext highlighter-rouge">CFRunLoopAddTimer(runLoop, timer, kCFRunLoopCommonModes)</code></p>
+</blockquote>
+
+<p>Even with this code, nothing will work. Why? Check result of <code class="language-plaintext highlighter-rouge">RunLoop.init()</code> - it’s return nil. <code class="language-plaintext highlighter-rouge">RunLoop</code> should be associated with <code class="language-plaintext highlighter-rouge">Thread</code>, and normally shouldn’t be created manually.</p>
+
+<p>So, how to attach <code class="language-plaintext highlighter-rouge">RunLoop</code> to <code class="language-plaintext highlighter-rouge">Thread</code>?. Well, each we can create <code class="language-plaintext highlighter-rouge">Thread</code> object and access to <code class="language-plaintext highlighter-rouge">RunLoop.current</code> - if no <code class="language-plaintext highlighter-rouge">RunLoop</code> exist, the one will be autocreated for us:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">thread</span> <span class="o">=</span> <span class="kt">Thread</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">customRunLoop</span> <span class="o">=</span> <span class="kt">RunLoop</span><span class="o">.</span><span class="n">current</span>
+<span class="p">}</span>
+
+<span class="n">thread</span><span class="o">.</span><span class="nf">start</span><span class="p">()</span></code></pre></figure>
+
+<p>As was mention previously, RunLoop should have at least one source or timer to monitor or it’s will exit. How to add them?
+We can use one of provided functions for this purpose:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">CFFileDescriptorCreateRunLoopSource</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CFSocketCreateRunLoopSource</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CFMachPortCreateRunLoopSource</code></li>
+  <li><code class="language-plaintext highlighter-rouge">CFMessagePortCreateRunLoopSource</code></li>
+</ul>
+
+<blockquote>
+  <p>Check <a href="https://rderik.com/blog/understanding-the-runloop-model-by-creating-a-basic-shell/">this post</a> if you are interested in more details or <a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html">official doc</a>. And <a href="https://www.programmersought.com/article/8650683889/">this one</a> about source/observer/timer</p>
+</blockquote>
+
+<p>Add <strong><code class="language-plaintext highlighter-rouge">custom observer</code></strong> to RunLoop for heavy work on the main thread. 
+this option allows us to execute some heavy computation out of the main thread but change UI when needed on the main thread.</p>
+
+<p>So the idea is quite simple - we just create an observer on the thread which RunLoop we want to use, execute work, and remove the observer when works are done.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// RunLoop observer allows creating additional process on RunLoop that will be executed after all other processes ended</span>
+<span class="c1">// so the process will be like this: runLoop (1) -&gt; events (2) -&gt; observer (3) -&gt; runLoop (1) ....</span>
+<span class="c1">// if this is main RunLoop, runLoop from the main thread, this observer can safely update UI then, without any freeze (if the process if expensive)</span>
+
+<span class="c1">// create queue for executing expensive operation</span>
+<span class="k">let</span> <span class="nv">queue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"runLoop.sample"</span><span class="p">,</span> <span class="nv">qos</span><span class="p">:</span> <span class="o">.</span><span class="n">background</span><span class="p">)</span>
+<span class="k">var</span> <span class="nv">hasResult</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span>
+
+<span class="c1">// this function should be called whenever u need to do an expensive operation, then this will be executed asynchronously. This observer will be added to the current runLoop</span>
+<span class="kd">func</span> <span class="nf">onTrigger</span><span class="p">()</span> <span class="p">{</span>
+    
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Trigger"</span><span class="p">)</span>
+    
+    <span class="c1">// A runloop observer is added to the current runloop to check for the availability of results. That observer will keep observing until a result is found and then dismiss itself.</span>
+    
+    <span class="n">queue</span><span class="o">.</span><span class="nf">asyncAfter</span><span class="p">(</span><span class="nv">deadline</span><span class="p">:</span> <span class="o">.</span><span class="nf">now</span><span class="p">()</span> <span class="o">+</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Work done"</span><span class="p">)</span>
+        <span class="n">hasResult</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="p">}</span>
+    
+    <span class="k">let</span> <span class="nv">runLoopObserver</span> <span class="o">=</span> <span class="kt">CFRunLoopObserverCreateWithHandler</span><span class="p">(</span><span class="n">kCFAllocatorDefault</span><span class="p">,</span> <span class="kt">CFRunLoopActivity</span><span class="o">.</span><span class="n">beforeWaiting</span><span class="o">.</span><span class="n">rawValue</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">{</span> <span class="p">(</span><span class="nv">observer</span><span class="p">:</span> <span class="kt">CFRunLoopObserver</span><span class="p">?,</span> <span class="nv">activity</span><span class="p">:</span> <span class="kt">CFRunLoopActivity</span><span class="p">)</span> <span class="k">in</span>
+        <span class="c1">// execute work on separate thread and here check whenever this work is don, then remove observer</span>
+        <span class="k">if</span> <span class="o">!</span><span class="n">hasResult</span> <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Checked Status - </span><span class="se">\(</span><span class="n">hasResult</span><span class="se">)</span><span class="s">, Thread </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="kt">CFRunLoopRemoveObserver</span><span class="p">(</span><span class="kt">CFRunLoopGetCurrent</span><span class="p">(),</span> <span class="n">observer</span><span class="p">,</span> <span class="kt">CFRunLoopMode</span><span class="o">.</span><span class="n">commonModes</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Status - </span><span class="se">\(</span><span class="n">hasResult</span><span class="se">)</span><span class="s">, Thread </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="kt">CFRunLoopAddObserver</span><span class="p">(</span><span class="kt">CFRunLoopGetCurrent</span><span class="p">(),</span> <span class="n">runLoopObserver</span><span class="p">,</span> <span class="kt">CFRunLoopMode</span><span class="o">.</span><span class="n">commonModes</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p><a href="https://developer.apple.com/documentation/corefoundation/cfrunloopactivity">RunLopp activities</a></p>
+</blockquote>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-29-runloop-in-depth/demo_customObserver.gif" alt="debug backtrace" width="650" />
+</div>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://opensource.apple.com/">Apple open source</a></li>
+  <li><a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Multithreading/RunLoopManagement/RunLoopManagement.html">RunLoop official doc</a></li>
+  <li><a href="https://www.programmersought.com/article/2452697082/">Principles of RunLoop</a></li>
+  <li><a href="https://www.programmersought.com/article/59784547646/">Understanding RunLoop</a></li>
+  <li><a href="https://www.programmersought.com/article/23684546929/">RunLoop and timers</a></li>
+  <li><a href="https://www.programmersought.com/article/3798833564/">NSTimer in RunLoop</a></li>
+  <li><a href="http://yangchao0033.github.io/blog/2016/01/06/runloopshen-du-tan-jiu/">Great article about RunLoop</a></li>
+  <li><a href="http://mirror.informatimago.com/next/developer.apple.com/documentation/CoreFoundation/Reference/CFRunLoopTimerRef/CFRunLoopTimerRef.pdf">CFRunLoopTimerRef</a></li>
+  <li><a href="http://mirror.informatimago.com/next/developer.apple.com/documentation/CoreFoundation/Reference/CFRunLoopSourceRef/CFRunLoopSourceRef.pdf">CFRunLoopSourceRef</a></li>
+  <li><a href="http://mirror.informatimago.com/next/developer.apple.com/documentation/CoreFoundation/Reference/CFRunLoopRef/CFRunLoopRef.pdf">CFRunLoopRef</a></li>
+  <li><a href="http://mirror.informatimago.com/next/developer.apple.com/documentation/CoreFoundation/Reference/CFRunLoopObserverRef/CFRunLoopObserverRef.pdf">CFRunLoopObserverRef</a></li>
+  <li><a href="http://iphonedevwiki.net/index.php/CFRunLoop">RunLoop modes</a></li>
+  <li><a href="https://rderik.com/blog/understanding-the-runloop-model-by-creating-a-basic-shell/">Understanding RunLoop model</a></li>
+  <li><a href="https://nshipster.com/inter-process-communication/">Mach communication</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/System_call">System call</a></li>
+  <li><a href="http://iphonedevwiki.net/index.php/IOHIDFamily">IOHIDFamily</a></li>
+  <li><a href="https://developer.apple.com/documentation/corefoundation/cfrunloopactivity">RunLopp activities</a></li>
+  <li><a href="https://academy.realm.io/posts/realm-notifications-on-background-threads-with-swift/">Realm background Thread with custom RunLoop</a></li>
+  <li><a href="https://bou.io/RunRunLoopRun.html">RunLoop</a></li>
+  <li><a href="https://github.com/wuyunfeng/LightWeightRunLoop-A-Reactor-Style-NSRunLoop">Custom implementation of RunLoop</a></li>
+  <li><a href="https://shinesolutions.com/2009/06/02/run-loops-vs-threads-in-cocoa/">RunLoop with Threads</a></li>
+</ul>
+:ET
