@@ -25,6 +25,11 @@ In this article we will cover next:
 - main functionality
 - ImmediateScheduler
 
+
+**Related articles:**
+
+* [Schedulers in Combine. Part 2: RunLoop Scheduler]({% post_url 2020-12-01-schedulers-in-combine-runLoop %})
+
 ## intro
 
 First aff all - is usage, thanks to Apple, it's can be done within minimal work from our side - only one call for both subscription and for receiving event:
@@ -192,4 +197,9 @@ One more moment to know - this scheduler haven't any options to use, and if we c
 typealias SchedulerOptions = Never
 {% endhighlight %}
 
-In next part i will cover `RunLoop Scheduler`.
+In next part I will cover `RunLoop Scheduler`.
+
+
+**Related articles:**
+
+* [Schedulers in Combine. Part 2: RunLoop Scheduler]({% post_url 2020-12-01-schedulers-in-combine-runLoop %})
