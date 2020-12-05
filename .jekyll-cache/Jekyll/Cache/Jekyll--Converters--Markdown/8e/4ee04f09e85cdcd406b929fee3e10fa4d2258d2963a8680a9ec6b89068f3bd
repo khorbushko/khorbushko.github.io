@@ -1,0 +1,283 @@
+I"Ƅ<p>This is 3rd article in my mini-series dedicated to <code class="language-plaintext highlighter-rouge">Schedulers</code> in <code class="language-plaintext highlighter-rouge">Combine</code>. And this one is about the most powerfull one - <code class="language-plaintext highlighter-rouge">DispatchQueue</code> <code class="language-plaintext highlighter-rouge">Scheduler</code>.</p>
+
+<p>Yet to his power, the usage is still prety simple. In same moment, it allow us to perform a lot of various operations with full controll of how and when it will be done. So simplicity and functionality is what <code class="language-plaintext highlighter-rouge">DispatchQueue</code> <code class="language-plaintext highlighter-rouge">Scheduler</code> brings into <code class="language-plaintext highlighter-rouge">Combine</code> for us.
+<!--more--></p>
+
+<p>Before we go to the details of this <code class="language-plaintext highlighter-rouge">Scheduler</code>, I believe we need to recap <code class="language-plaintext highlighter-rouge">CGD</code> and <code class="language-plaintext highlighter-rouge">DispatchQueue</code>. This is very powerfull component of <code class="language-plaintext highlighter-rouge">Foundation</code> framework, that do all heavy and error-prune work with <code class="language-plaintext highlighter-rouge">Thread</code>s for us.</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">CGD</code> is just a name of <strong><code class="language-plaintext highlighter-rouge">Dispatch</code></strong> framework that provide for us this object within set of very usefull friends. I won’t cover this topic fully here, instead, just check <a href="https://developer.apple.com/documentation/dispatch">officical documentation</a> for details.</p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">DispatchQueue</code> is object that helps manage execution of code using serial or concurent approach within different <code class="language-plaintext highlighter-rouge">Threads</code>. U probably use <code class="language-plaintext highlighter-rouge">DispatchQueue.main</code> every day and already know that this simple line bring enormous power in to our code. <code class="language-plaintext highlighter-rouge">DispatchQueue</code> has it’s own area of responsibility, including pool of <code class="language-plaintext highlighter-rouge">Threads</code> in which u’r code can be executed.</p>
+
+<blockquote>
+  <p>Using <code class="language-plaintext highlighter-rouge">DispatchQueue</code>, we may be sure that <code class="language-plaintext highlighter-rouge">main Thread</code> - always main, and if we work within background queue we <strong>can`t</strong> be sure that Thread is the same, but we can be sure that priority at which task will be executed - will be correct.</p>
+</blockquote>
+
+<p><strong>Related articles:</strong></p>
+
+<ul>
+  <li><a href="/article/2020/11/26/schedulers-in-combine.html">Schedulers in Combine. Part 1: ImmediateScheduler</a></li>
+  <li><a href="/article/2020/12/01/schedulers-in-combine-runLoop.html">Schedulers in Combine. Part 2: RunLoop Scheduler</a></li>
+</ul>
+
+<h2 id="dispatchqueue-scheduler">DispatchQueue Scheduler</h2>
+
+<p>As it was done in previous articles, we will review both aspects of current <code class="language-plaintext highlighter-rouge">Scheduler</code> - <strong>HOW</strong> and <strong>WHEN</strong> oparation can be executed.</p>
+
+<p>Let’s start with <strong>HOW</strong> approach. To do so, we may create simple example as following:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">subscriptions</span> <span class="o">=</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">AnyCancellable</span><span class="o">&gt;</span><span class="p">()</span>
+
+<span class="k">let</span> <span class="nv">publisher</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">publisher</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Current thread </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+
+<span class="n">publisher</span>
+    <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">sink</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Recevied in </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s"> - </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">store</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">subscriptions</span><span class="p">)</span></code></pre></figure>
+
+<p>Output will be pretty simple and as we expect, everything will be executed on same <code class="language-plaintext highlighter-rouge">Thread</code> - the mainThread:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-05-schedulers-in-combine-DispatchQueue/schedulers_sample_1.png" alt="schedulers_sample_1" width="550" />
+</div>
+
+<p>But, as I mention previously - this is the most simple case of usage. Instead, usually this <code class="language-plaintext highlighter-rouge">Scheduler</code> used for switching context <code class="language-plaintext highlighter-rouge">Thread</code>. For example in case when u have started heavy computation on the main Thread and u won’t block it but whant to receive result on it, <code class="language-plaintext highlighter-rouge">DispatchQueue</code> is the most elegant way to do so:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">publisher</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">publisher</span>
+<span class="k">let</span> <span class="nv">backgroundQueue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"com.schedulers.dispatch.sample"</span><span class="p">,</span> <span class="nv">qos</span><span class="p">:</span> <span class="o">.</span><span class="n">background</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Current thread </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+
+<span class="n">publisher</span>
+    <span class="o">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="n">backgroundQueue</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">handleEvents</span><span class="p">(</span><span class="nv">receiveSubscription</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">subscription</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Receive thread </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">, </span><span class="se">\(</span><span class="n">subscriptions</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">sink</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Recevied in </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s"> - </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">store</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">subscriptions</span><span class="p">)</span></code></pre></figure>
+
+<p>Output will be exectly as we would like to have - subscription, work are done on backgroundQueue, but ouptut - on main:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-05-schedulers-in-combine-DispatchQueue/schedulers_sample_2.png" alt="schedulers_sample_2" width="550" />
+</div>
+
+<p>The good point here is that combination of <code class="language-plaintext highlighter-rouge">subscribe(on:)</code> and <code class="language-plaintext highlighter-rouge">receive(on:)</code> can be anyone - u may do this as u needed.</p>
+
+<blockquote>
+  <p>As we remember from pres articles, subscription is done on current Thread, so in case if u subscribe on some background Thread, u may ommit <code class="language-plaintext highlighter-rouge">subscribe(on:)</code> call or use is explicitly.</p>
+</blockquote>
+
+<p>In general, thanks to DispatchQueue Scheduler we may simplify our code and instead</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">sink</span> <span class="p">{</span>
+	<span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span>
+	   <span class="c1">// do something with data</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>we can simply do it like this:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">publisher</span>
+	<span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+	<span class="o">.</span><span class="n">sink</span> <span class="p">{</span>
+		<span class="c1">// do something with data</span>
+	<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>If u prefer to use <code class="language-plaintext highlighter-rouge">GCD</code> approach - it’s also allowed and nobody can’t forbit do that. As we all know - every problem have at least 2 solution, so it’s up to u decide which one is more suitable ;] .</p>
+</blockquote>
+
+<h2 id="scheduleroptions">SchedulerOptions</h2>
+
+<p>As u may notice, when we create <code class="language-plaintext highlighter-rouge">DispatchQueue</code>, we may specify a lot of parameters:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">backgroundQueue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span>
+    <span class="nv">label</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span>
+    <span class="nv">qos</span><span class="p">:</span> <span class="kt">DispatchQoS</span><span class="p">,</span>  <span class="c1">// &lt;--</span>
+    <span class="nv">attributes</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="kt">Attributes</span><span class="p">,</span> <span class="c1">// &lt;--</span>
+    <span class="nv">autoreleaseFrequency</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="kt">AutoreleaseFrequency</span><span class="p">,</span> <span class="c1">// &lt;--</span>
+    <span class="nv">target</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span>
+<span class="p">)</span></code></pre></figure>
+
+<p>All of them allow us to modify different aspects of queue, so we may configure priority (<code class="language-plaintext highlighter-rouge">DispatchQoS</code>), execution approach (<code class="language-plaintext highlighter-rouge">DispatchQueue.Attributes</code>) or even contol lifecycle event’s a bit (<code class="language-plaintext highlighter-rouge">DispatchQueue.AutoreleaseFrequency</code>). All of them is prety usefull, so we expect that some of them will be available for change/configuration during usage of <code class="language-plaintext highlighter-rouge">DispatchQueue Scheduler</code>.</p>
+
+<p>As expected, Apple indeed provide few options for <code class="language-plaintext highlighter-rouge">DispatchQueue Scheduler</code>, making   this Scheduler even more powerfull. So, what are the options? To check it we may simply dive in to <code class="language-plaintext highlighter-rouge">API</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">DispatchQueue</span><span class="o">.</span><span class="kt">SchedulerOptions</span><span class="p">(</span>
+    <span class="nv">qos</span><span class="p">:</span> <span class="kt">DispatchQoS</span><span class="p">,</span>
+    <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">,</span>
+    <span class="nv">group</span><span class="p">:</span> <span class="kt">DispatchGroup</span>
+<span class="p">)</span></code></pre></figure>
+
+<ul>
+  <li><a href="https://developer.apple.com/documentation/dispatch/dispatchqos"><code class="language-plaintext highlighter-rouge">DispatchQoS</code></a> - control quality of service. For example we may specify that work shoyld be done on <code class="language-plaintext highlighter-rouge">.utility</code> priority. Default - <code class="language-plaintext highlighter-rouge">.unspecified</code></li>
+  <li><a href="https://developer.apple.com/documentation/dispatch/dispatchworkitemflags"><code class="language-plaintext highlighter-rouge">DispatchWorkItemFlags</code></a> - allow us to control behavior of work item (for example do we need to add barrier for it or should we spawn this task on separate thread or copy attributes of current context in to it’s thread) Default = <code class="language-plaintext highlighter-rouge">[]</code></li>
+</ul>
+
+<blockquote>
+  <p>more about flags <a href="https://developer.apple.com/documentation/dispatch/dispatch_block_flags_t">here</a></p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"> <span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">barrier</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span>
+ <span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">detached</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span>
+ <span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">assignCurrentContext</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span>
+ <span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">noQoS</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span>
+ <span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">inheritQoS</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span>
+ <span class="kd">public</span> <span class="kd">static</span> <span class="k">let</span> <span class="nv">enforceQoS</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span></code></pre></figure>
+
+<ul>
+  <li><a href="https://developer.apple.com/documentation/dispatch/dispatchgroup"><code class="language-plaintext highlighter-rouge">DispatchGroup</code></a> - specify to which group of task this task should be added. Default - <code class="language-plaintext highlighter-rouge">nil</code>.</li>
+</ul>
+
+<p>To demonstrate this example we may create something like:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">firstPublisher</span> <span class="o">=</span> <span class="kt">PassthroughSubject</span><span class="o">&lt;</span><span class="kt">Int</span><span class="p">,</span> <span class="kt">Never</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">secondPublisher</span> <span class="o">=</span> <span class="kt">PassthroughSubject</span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">Never</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">thirdPublisher</span> <span class="o">=</span> <span class="kt">PassthroughSubject</span><span class="o">&lt;</span><span class="kt">Int</span><span class="p">,</span> <span class="kt">Never</span><span class="o">&gt;</span><span class="p">()</span>
+
+<span class="k">let</span> <span class="nv">workQueue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"com.testQueue"</span><span class="p">,</span> <span class="nv">qos</span><span class="p">:</span> <span class="o">.</span><span class="n">background</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="nv">group</span> <span class="o">=</span> <span class="kt">DispatchGroup</span><span class="p">()</span>
+<span class="n">group</span><span class="o">.</span><span class="nf">notify</span><span class="p">(</span><span class="nv">queue</span><span class="p">:</span> <span class="o">.</span><span class="n">main</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Comple all work at thread </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">firstPublisher</span>
+    <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="n">workQueue</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">group</span><span class="p">:</span> <span class="n">group</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">sink</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"The thread is </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">, and value: </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">store</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">subscriptions</span><span class="p">)</span>
+
+<span class="n">secondPublisher</span>
+    <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="nf">global</span><span class="p">(),</span> <span class="nv">options</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">group</span><span class="p">:</span> <span class="n">group</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">sink</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"The thread is </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">, and value: </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">store</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">subscriptions</span><span class="p">)</span>
+
+<span class="n">firstPublisher</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">secondPublisher</span><span class="o">.</span><span class="nf">send</span><span class="p">(</span><span class="s">"hi there!"</span><span class="p">)</span></code></pre></figure>
+
+<blockquote>
+  <p>This is equilalent to similar code:</p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">dispatchGroup</span> <span class="o">=</span> <span class="kt">DispatchGroup</span><span class="p">()</span>
+<span class="n">workQueue</span><span class="o">.</span><span class="nf">async</span><span class="p">(</span><span class="nv">group</span><span class="p">:</span> <span class="n">dispatchGroup</span><span class="p">,</span> <span class="nv">execute</span><span class="p">:</span> <span class="p">{</span>
+    <span class="c1">// work 1</span>
+<span class="p">})</span>
+<span class="kt">DispatchQueue</span><span class="o">.</span><span class="nf">global</span><span class="p">()</span><span class="o">.</span><span class="nf">async</span><span class="p">(</span><span class="nv">group</span><span class="p">:</span> <span class="n">dispatchGroup</span><span class="p">,</span> <span class="nv">execute</span><span class="p">:</span> <span class="p">{</span>
+    <span class="c1">// work 2</span>
+<span class="p">})</span>
+<span class="n">dispatchGroup</span><span class="o">.</span><span class="nf">notify</span><span class="p">(</span><span class="nv">queue</span><span class="p">:</span> <span class="n">dispatchQueueGlobal</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// done</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>And result is:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-05-schedulers-in-combine-DispatchQueue/schedulers_sample_3.png" alt="schedulers_sample_3" width="550" />
+</div>
+
+<blockquote>
+  <p>Under the hood group works in same way as <a href="https://developer.apple.com/documentation/dispatch/dispatchqueue/2016098-async"><code class="language-plaintext highlighter-rouge">async(group:qos:flags:execute)</code></a></p>
+
+  <p>To check how everything is done - u can follow this <a href="https://github.com/apple/swift/blob/b5570a1aa923d18f5b7a28b06ea2a7424ba65e3b/stdlib/public/Darwin/Dispatch/Schedulers+DispatchQueue.swift">link to open source DispatchQueue+Scheduler</a></p>
+</blockquote>
+
+<h2 id="schedulertimetype">SchedulerTimeType</h2>
+
+<p>The next point to review is possibility to control <strong>WHEN</strong> this scheduler will execute task. To do so, we may use as and within alredy discussed Schedulers, <code class="language-plaintext highlighter-rouge">SchedulerTimeType</code>.</p>
+
+<p>As we alsready checked, this type is created for configuring when in future we may execute task. The best things we can do before testing is to check <a href="https://github.com/apple/swift/blob/b5570a1aa923d18f5b7a28b06ea2a7424ba65e3b/stdlib/public/Darwin/Dispatch/Schedulers%2BDispatchQueue.swift#L126">sorce code</a> or API:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">/// Creates a dispatch queue time interval from the given dispatch time interval.</span>
+<span class="c1">///</span>
+<span class="c1">/// - Parameter timeInterval: A dispatch time interval.</span>
+<span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">timeInterval</span><span class="p">:</span> <span class="kt">DispatchTimeInterval</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">magnitude</span> <span class="o">=</span> <span class="kt">Int</span><span class="p">(</span><span class="n">timeInterval</span><span class="o">.</span><span class="n">nanoseconds</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>As we can see now, under the hood this type works with <code class="language-plaintext highlighter-rouge">DispatchTimeInterval</code>. This type is pretty know from <code class="language-plaintext highlighter-rouge">GCD</code>, so no mistery here.</p>
+
+<p>Let’s check functionality with code:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">queue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"sample.scheduler.dispatchQueue"</span><span class="p">)</span>
+<span class="n">queue</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Create on </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">source</span> <span class="o">=</span> <span class="kt">Timer</span>
+        <span class="o">.</span><span class="nf">publish</span><span class="p">(</span><span class="nv">every</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">on</span><span class="p">:</span> <span class="o">.</span><span class="n">main</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">.</span><span class="n">common</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">autoconnect</span><span class="p">()</span>
+        <span class="o">.</span><span class="nf">scan</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">{</span> <span class="n">counter</span><span class="p">,</span> <span class="n">_</span>  <span class="k">in</span>
+            <span class="k">let</span> <span class="nv">value</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"tick "</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="p">})</span>
+    
+    <span class="n">source</span>
+        <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">sink</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"The value is </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s"> in </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s"> at </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">store</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">subscriptions</span><span class="p">)</span>
+    
+    <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span>
+        <span class="o">.</span><span class="nf">schedule</span><span class="p">(</span>
+            <span class="nv">after</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="o">.</span><span class="nf">now</span><span class="p">()</span> <span class="o">+</span> <span class="mi">5</span><span class="p">),</span>
+            <span class="nv">tolerance</span><span class="p">:</span> <span class="o">.</span><span class="nf">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+            <span class="nv">options</span><span class="p">:</span> <span class="kc">nil</span>
+        <span class="p">)</span> <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"cancelation"</span><span class="p">)</span>
+            <span class="n">subscriptions</span><span class="o">.</span><span class="nf">removeAll</span><span class="p">()</span>
+        <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Result:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-05-schedulers-in-combine-DispatchQueue/schedulers_sample_4.png" alt="schedulers_sample_4" width="550" />
+</div>
+
+<blockquote>
+  <p>Alternative <a href="https://github.com/OpenCombine/OpenCombine/blob/master/Sources/OpenCombineDispatch/DispatchQueue+Scheduler.swift">implementation of DispatchQueue Scheduler in openSource OpenCombine</a></p>
+</blockquote>
+
+<h2 id="notes">Notes</h2>
+
+<p>I believe u already reaised a question - what’s the difference between <code class="language-plaintext highlighter-rouge">DispatchQueue.main</code> Scheduler and <code class="language-plaintext highlighter-rouge">RunLoop.main</code>?</p>
+
+<blockquote>
+  <p>From technical point of view - almost <em>.none</em>, but (we always have some <em>but</em>), if u check how <code class="language-plaintext highlighter-rouge">RunLoop</code> dispatch work from inputSources (I wrote article about it - <a href="/article/2020/11/29/runloop-in-depth.html">here</a>) and what’s done within <code class="language-plaintext highlighter-rouge">DispatchQueue's</code> async function, u may observe, that <code class="language-plaintext highlighter-rouge">RunLoop</code> will execute this task within next loop (so with some minimal delay) and <code class="language-plaintext highlighter-rouge">DispatchQueue</code> may/or may mot optimize this call and execute it immidiately (check <a href="https://forums.swift.org/t/runloop-main-or-dispatchqueue-main-when-using-combine-scheduler/26635/2">this</a>).</p>
+</blockquote>
+
+<ul>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">DispatchQueue</code> may execute task for a bit faster than <code class="language-plaintext highlighter-rouge">RunLoop.main</code>, but for real-world example this is almost always nothing.</p>
+  </li>
+  <li>
+    <p><code class="language-plaintext highlighter-rouge">DispatchQueue.main</code> runs callbacks in all of the <code class="language-plaintext highlighter-rouge">.common</code> modes, which include the modes used when tracking touch and mouse events. (check <a href="https://stackoverflow.com/a/61107764">this link</a> and <a href="https://stackoverflow.com/a/58849015/77567">this link</a> for more).</p>
+  </li>
+</ul>
+
+<p>In next article I will cover <code class="language-plaintext highlighter-rouge">OperationQueue Scheduler</code>.</p>
+
+<p><a href="/assets/posts/images/2020-12-05-schedulers-in-combine-DispatchQueue/playground/schedulers_dispatchQueue.playground.zip">download source playground</a></p>
+
+<p><strong>Related articles:</strong></p>
+
+<ul>
+  <li><a href="/article/2020/11/26/schedulers-in-combine.html">Schedulers in Combine. Part 1: ImmediateScheduler</a></li>
+  <li><a href="/article/2020/12/01/schedulers-in-combine-runLoop.html">Schedulers in Combine. Part 2: RunLoop Scheduler</a></li>
+</ul>
+:ET

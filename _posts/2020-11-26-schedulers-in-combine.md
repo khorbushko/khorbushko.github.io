@@ -29,6 +29,7 @@ In this article we will cover next:
 **Related articles:**
 
 * [Schedulers in Combine. Part 2: RunLoop Scheduler]({% post_url 2020-12-01-schedulers-in-combine-runLoop %})
+* [Schedulers in Combine. Part 3: DispatchQueue Scheduler]({% post_url 2020-12-05-schedulers-in-combine-DispatchQueue %})
 
 ## intro
 
@@ -36,6 +37,14 @@ First aff all - is usage, thanks to Apple, it's can be done within minimal work 
 
 * [subscribe(on:options:)](https://developer.apple.com/documentation/combine/publisher/subscribe(on:options:))
 * [receive(on:options:)](https://developer.apple.com/documentation/combine/publisher/receive(on:options:))
+
+In addition to this 2, `Combine` also provide few additional:
+
+* [debounce(for:scheduler:options:)](https://developer.apple.com/documentation/combine/future/debounce(for:scheduler:options:))
+* [delay(for:tolerance:scheduler:options:)](https://developer.apple.com/documentation/combine/record/delay(for:tolerance:scheduler:options:))
+* [measureInterval(using:options:)](https://developer.apple.com/documentation/combine/future/measureinterval(using:options:))
+* [throttle(for:scheduler:latest:)](https://developer.apple.com/documentation/combine/just/throttle(for:scheduler:latest:))
+* [timeout(_:scheduler:options:customError:)](https://developer.apple.com/documentation/combine/future/timeout(_:scheduler:options:customerror:))
 
 Scheduler exist just to simplify everything. And instead of doing something like:
 
@@ -47,7 +56,7 @@ sink {
 }
 {% endhighlight %}
 
-we can simple use it like this:
+with `Scheduler` we can simply do it like this:
 
 {% highlight swift %}
 publisher
@@ -197,9 +206,12 @@ One more moment to know - this scheduler haven't any options to use, and if we c
 typealias SchedulerOptions = Never
 {% endhighlight %}
 
+[download source playground]({% link assets/posts/images/2020-11-26-schedulers-in-combine/playground/schedulers-immediate.playground.zip %})
+
 In next part I will cover `RunLoop Scheduler`.
 
 
 **Related articles:**
 
 * [Schedulers in Combine. Part 2: RunLoop Scheduler]({% post_url 2020-12-01-schedulers-in-combine-runLoop %})
+* [Schedulers in Combine. Part 3: DispatchQueue Scheduler]({% post_url 2020-12-05-schedulers-in-combine-DispatchQueue %})
