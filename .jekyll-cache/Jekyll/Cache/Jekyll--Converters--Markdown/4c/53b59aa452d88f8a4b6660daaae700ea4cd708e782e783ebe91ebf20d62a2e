@@ -1,0 +1,206 @@
+I"�J<p>When we start dealing with <code class="language-plaintext highlighter-rouge">Combine</code>, soon we realize that threads and task managing between them are essential. Luckily for us, Combine has a build-in realization of this routine called <code class="language-plaintext highlighter-rouge">Scheduler</code> - <em>” a protocol that defines when and how to execute a closure”</em> (Apple).</p>
+
+<p>So today I would like to tell you about <code class="language-plaintext highlighter-rouge">Scheduler</code> and how to use it.</p>
+
+<p>I’m going to cover all schedulers for <code class="language-plaintext highlighter-rouge">Combine</code> in this series.
+<!--more--></p>
+
+<p>In this article we will cover next:</p>
+
+<ul>
+  <li>introduction</li>
+  <li>main functionality</li>
+  <li>ImmediateScheduler</li>
+</ul>
+
+<p><strong>Related articles:</strong></p>
+
+<ul>
+  <li><a href="/article/2020/12/01/schedulers-in-combine-runLoop.html">Schedulers in Combine. Part 2: RunLoop Scheduler</a></li>
+  <li><a href="/article/2020/12/05/schedulers-in-combine-DispatchQueue.html">Schedulers in Combine. Part 3: DispatchQueue Scheduler</a></li>
+</ul>
+
+<h2 id="intro">intro</h2>
+
+<p>First aff all - is usage, thanks to Apple, it’s can be done within minimal work from our side - only one call for both subscription and for receiving event:</p>
+
+<ul>
+  <li><a href="https://developer.apple.com/documentation/combine/publisher/subscribe(on:options:)">subscribe(on:options:)</a></li>
+  <li><a href="https://developer.apple.com/documentation/combine/publisher/receive(on:options:)">receive(on:options:)</a></li>
+</ul>
+
+<p>In addition to this 2, <code class="language-plaintext highlighter-rouge">Combine</code> also provide few additional:</p>
+
+<ul>
+  <li><a href="https://developer.apple.com/documentation/combine/future/debounce(for:scheduler:options:)">debounce(for:scheduler:options:)</a></li>
+  <li><a href="https://developer.apple.com/documentation/combine/record/delay(for:tolerance:scheduler:options:)">delay(for:tolerance:scheduler:options:)</a></li>
+  <li><a href="https://developer.apple.com/documentation/combine/future/measureinterval(using:options:)">measureInterval(using:options:)</a></li>
+  <li><a href="https://developer.apple.com/documentation/combine/just/throttle(for:scheduler:latest:)">throttle(for:scheduler:latest:)</a></li>
+  <li><a href="https://developer.apple.com/documentation/combine/future/timeout(_:scheduler:options:customerror:)">timeout(:scheduler:options:customError:)</a></li>
+</ul>
+
+<p>Scheduler exist just to simplify everything. And instead of doing something like:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">sink</span> <span class="p">{</span>
+	<span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span>
+	   <span class="c1">// do something with data</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>with <code class="language-plaintext highlighter-rouge">Scheduler</code> we can simply do it like this:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">publisher</span>
+	<span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+	<span class="o">.</span><span class="n">sink</span> <span class="p">{</span>
+		<span class="c1">// do something with data</span>
+	<span class="p">}</span></code></pre></figure>
+
+<p>So, how about <code class="language-plaintext highlighter-rouge">Scheduler</code> itself? <code class="language-plaintext highlighter-rouge">Scheduler</code> is simply an abstraction that helps you to define how and when performing some amount of work.</p>
+
+<p>So as we all can imagine there are a lot of work types and purposes, and keeping this in mind <code class="language-plaintext highlighter-rouge">Combine</code> provide for us a few predefined types of <code class="language-plaintext highlighter-rouge">Schedulers</code> implementation via different types. Here they are:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">ImmediateScheduler</code></li>
+  <li><code class="language-plaintext highlighter-rouge">RunLoop</code></li>
+  <li><code class="language-plaintext highlighter-rouge">DispatchQueue</code></li>
+  <li><code class="language-plaintext highlighter-rouge">OperationQueue</code></li>
+</ul>
+
+<p>If this is not enough, we can also provide your implementation of this abstraction and handle this in your way.</p>
+
+<p>So, as I mentioned before, usage is quite simple and limited to a few functions within 2 main parameters - the type of <code class="language-plaintext highlighter-rouge">Scheduler</code> and the options.</p>
+
+<p>Let’s dive into details of each <code class="language-plaintext highlighter-rouge">Scheduler</code> and review the pros/cons of each one and also check their use cases.</p>
+
+<h2 id="scheduler">Scheduler</h2>
+
+<p>Before we review each type, it’s good to understand what this abstraction can do for us. To do so, we can simply inspect the <code class="language-plaintext highlighter-rouge">Scheduler</code> type, and as result, we will find that that using abstraction we can:</p>
+
+<ul>
+  <li>execute code immediately</li>
+  <li>schedule code execution in future</li>
+  <li>add options to control how they execute the actions passed to them</li>
+</ul>
+
+<p>Helper types for delivering functionality above are:</p>
+
+<ul>
+  <li><a href="https://developer.apple.com/documentation/combine/scheduler/schedulertimetype">SchedulerTimeType</a> (Describes an instant in time for this scheduler)</li>
+  <li><a href="https://developer.apple.com/documentation/combine/scheduler/scheduleroptions">SchedulerOptions</a> (A type that defines options accepted by the scheduler)</li>
+</ul>
+
+<p>So, so far so good :]. Moving forward.</p>
+
+<h2 id="immediatescheduler">ImmediateScheduler</h2>
+
+<p>Let’s start with the simplest one - <code class="language-plaintext highlighter-rouge">ImmediateScheduler</code>. This type of scheduler as u can see from the name used for <em>immediate</em> execution.</p>
+
+<p>If u check <a href="https://developer.apple.com/documentation/combine/immediatescheduler">official doc</a>, u can find next - <em>“A scheduler for performing synchronous actions”</em>. So, simply saying it’s just a sync operation on the same thread where u create some task. Indeed this is the default scheduler.</p>
+
+<p>This is quite a good option in case u want to execute the operation as is, without any delay (in the future).</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-26-schedulers-in-combine/immediate_sample_1.png" alt="preview_1" width="550" />
+</div>
+
+<p>U should also note, that if u even try to schedule execution on a future date - this scheduler will ignore it and execute your code immediately. If u check the <code class="language-plaintext highlighter-rouge">ImmediateScheduler.SchedulerTimeType</code> - parameter that can be used to schedule some work in the future, u can see that this struct has no available initialization, so it’s simply blocking us from performing and future work within it. So u can’t use any <code class="language-plaintext highlighter-rouge">schedule(after:)</code> variant from the <code class="language-plaintext highlighter-rouge">Schedule</code> protocol.</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-26-schedulers-in-combine/immediate_sample_2.png" alt="preview_1" width="550" />
+</div>
+
+<blockquote>
+  <p>Try to create instance of this struct like <code class="language-plaintext highlighter-rouge">ImmediateScheduler.SchedulerTimeType()</code> - and u will get error from compiler - <em>‘ImmediateScheduler.SchedulerTimeType’ cannot be constructed because it has no accessible initializers</em></p>
+</blockquote>
+
+<p>But, we can check available API and may found:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">/// The immediate scheduler’s definition of the current moment in time.</span>
+<span class="kd">public</span> <span class="k">var</span> <span class="nv">now</span><span class="p">:</span> <span class="kt">ImmediateScheduler</span><span class="o">.</span><span class="kt">SchedulerTimeType</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre></figure>
+
+<p>This means that in theory, we can set up some future date using <code class="language-plaintext highlighter-rouge">now</code> that is <code class="language-plaintext highlighter-rouge">ImmediateScheduler.SchedulerTimeType</code> and some of protocol required functions that <code class="language-plaintext highlighter-rouge">SchedulerTimeType</code> <strong>should</strong> implement, for example:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">/// Returns the distance to another immediate scheduler time; this distance is always `0` in the context of an immediate scheduler.</span>
+<span class="c1">///</span>
+<span class="c1">/// - Parameter other: The other scheduler time.</span>
+<span class="c1">/// - Returns: `0`, as a `Stride`.</span>
+<span class="kd">public</span> <span class="kd">func</span> <span class="nf">distance</span><span class="p">(</span><span class="n">to</span> <span class="nv">other</span><span class="p">:</span> <span class="kt">ImmediateScheduler</span><span class="o">.</span><span class="kt">SchedulerTimeType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ImmediateScheduler</span><span class="o">.</span><span class="kt">SchedulerTimeType</span><span class="o">.</span><span class="kt">Stride</span></code></pre></figure>
+
+<p>Let’s test this. Firstly let’s check normal behaviour:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">queue</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="p">(</span><span class="nv">label</span><span class="p">:</span> <span class="s">"sample.queue"</span><span class="p">)</span>
+<span class="k">var</span> <span class="nv">subscriptions</span> <span class="o">=</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">AnyCancellable</span><span class="o">&gt;</span><span class="p">()</span>
+
+<span class="n">queue</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Create on </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    
+    <span class="k">let</span> <span class="nv">source</span> <span class="o">=</span> <span class="kt">Timer</span>
+        <span class="o">.</span><span class="nf">publish</span><span class="p">(</span><span class="nv">every</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">on</span><span class="p">:</span> <span class="o">.</span><span class="n">main</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">.</span><span class="n">common</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">autoconnect</span><span class="p">()</span>
+        <span class="o">.</span><span class="nf">scan</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">{</span> <span class="n">counter</span><span class="p">,</span> <span class="n">_</span>  <span class="k">in</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">})</span>
+    
+    <span class="n">source</span>
+        <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">ImmediateScheduler</span><span class="o">.</span><span class="n">shared</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">sink</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"The value is </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s"> in </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s"> at </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">store</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">subscriptions</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-26-schedulers-in-combine/immediate_normal.png" alt="preview_1" width="550" />
+</div>
+
+<p>In the log, we can see that events are coming as expected.</p>
+
+<p>Well let’s check now that we can’t schedule ImmediateScheduler for future, as it mention in docs:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">queue</span><span class="o">.</span><span class="n">async</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Create on </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    
+    <span class="k">let</span> <span class="nv">source</span> <span class="o">=</span> <span class="kt">Timer</span>
+        <span class="o">.</span><span class="nf">publish</span><span class="p">(</span><span class="nv">every</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">on</span><span class="p">:</span> <span class="o">.</span><span class="n">main</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">.</span><span class="n">common</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">autoconnect</span><span class="p">()</span>
+        <span class="o">.</span><span class="nf">scan</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">{</span> <span class="n">counter</span><span class="p">,</span> <span class="n">_</span>  <span class="k">in</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span><span class="p">})</span>
+    
+    <span class="n">subscription</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">ImmediateScheduler</span><span class="o">.</span><span class="n">shared</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">sink</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"The value is </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s"> in </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s"> at </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+        <span class="p">}</span>
+    
+    <span class="kt">ImmediateScheduler</span><span class="o">.</span><span class="n">shared</span>
+        <span class="o">.</span><span class="nf">schedule</span><span class="p">(</span>
+                  <span class="nv">after</span><span class="p">:</span> <span class="kt">ImmediateScheduler</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">now</span>
+                    <span class="o">.</span><span class="nf">advanced</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">ImmediateScheduler</span><span class="o">.</span><span class="kt">SchedulerTimeType</span><span class="o">.</span><span class="kt">Stride</span><span class="p">(</span><span class="kt">Int</span><span class="o">.</span><span class="n">max</span><span class="p">)</span>
+                    <span class="p">)</span>
+        <span class="p">)</span> <span class="p">{</span>
+        <span class="n">subscription</span><span class="p">?</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Canceled at </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>And result is:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-11-26-schedulers-in-combine/immediate_future cancel.png" alt="preview_1" width="550" />
+</div>
+
+<p>Here u can see that <strong>cancel</strong> operation is <strong><em>immediate</em></strong>. As expected. It’s a bit strange for me, that we didn’t receive any warning or assertion from Apple, but ok, this is can be improved in the future, and we already know it.</p>
+
+<p>One more moment to know - this scheduler haven’t any options to use, and if we check API, we will find that</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// ImmediateScheduler.SchedulerOptions</span>
+<span class="kd">typealias</span> <span class="kt">SchedulerOptions</span> <span class="o">=</span> <span class="kt">Never</span></code></pre></figure>
+
+<p><a href="/assets/posts/images/2020-11-26-schedulers-in-combine/playground/schedulers-immediate.playground.zip">download source playground</a></p>
+
+<p>In next part I will cover <code class="language-plaintext highlighter-rouge">RunLoop Scheduler</code>.</p>
+
+<p><strong>Related articles:</strong></p>
+
+<ul>
+  <li><a href="/article/2020/12/01/schedulers-in-combine-runLoop.html">Schedulers in Combine. Part 2: RunLoop Scheduler</a></li>
+  <li><a href="/article/2020/12/05/schedulers-in-combine-DispatchQueue.html">Schedulers in Combine. Part 3: DispatchQueue Scheduler</a></li>
+</ul>
+:ET

@@ -44,7 +44,7 @@ In addition to this 2, `Combine` also provide few additional:
 * [delay(for:tolerance:scheduler:options:)](https://developer.apple.com/documentation/combine/record/delay(for:tolerance:scheduler:options:))
 * [measureInterval(using:options:)](https://developer.apple.com/documentation/combine/future/measureinterval(using:options:))
 * [throttle(for:scheduler:latest:)](https://developer.apple.com/documentation/combine/just/throttle(for:scheduler:latest:))
-* [timeout(_:scheduler:options:customError:)](https://developer.apple.com/documentation/combine/future/timeout(_:scheduler:options:customerror:))
+* [timeout(_ :scheduler:options:customError:)](https://developer.apple.com/documentation/combine/future/timeout(_:scheduler:options:customerror:))
 
 Scheduler exist just to simplify everything. And instead of doing something like:
 
