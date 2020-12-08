@@ -1,0 +1,532 @@
+I"�<p>Rich animations and some cool effects - it’s always something that I try to add when dealing with UI.</p>
+
+<p>In my opinion, a nicely animated transition is much better than just “blink” and simple state change. Off-cause, this requires a bit more time and sometimes no-one didn’t expect to get this animation effect or even didn’t notice that state is changed without animating <code class="language-plaintext highlighter-rouge">View</code>, but the process of creating animation bring some inner satisfaction for me, and as u know <em>“dress for success”</em>.
+<!--more--></p>
+
+<p>Today I would like to tell u about transformation in 2D coordinate space and how it can be done in iOS.</p>
+
+<h2 id="transformation">Transformation</h2>
+
+<blockquote>
+  <p>Transformation is a process of modifying and re-positioning the existing graphics</p>
+</blockquote>
+
+<p>The process of changing something in some coordinate space is called transformation. we may apply different rules of this change, and when we do the same operation we always receive the same result. Transformation in 2D is called 2D transformation.</p>
+
+<p>What can be done in 2D space? Well, the list is next:</p>
+
+<ul>
+  <li>translation</li>
+  <li>rotation</li>
+  <li>scaling</li>
+  <li>reflection</li>
+  <li>shear</li>
+  <li>combination of these effects</li>
+</ul>
+
+<p>We may imagine this all operations as a simple XY transformation (in Cartesian space).</p>
+
+<blockquote>
+  <p>There is 3 main transformation - translate, rotate, scale, all other transformation may be done using a combination of them or by using specific value as input.</p>
+</blockquote>
+
+<h3 id="the-problem">The problem</h3>
+
+<p>If we think a bit about transformation and projective space, we may be faced with an issue - 2 parallel lines can be intersected (in infinity point). The best sample - is a view of the railroad - near the horizont rails meet each other, and so Cartesian or <code class="language-plaintext highlighter-rouge">Euclidian</code> space is not working for us anymore…</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/train.jpg" alt="projection" width="250" />
+</div>
+
+<blockquote>
+  <p><span>Photo by <a href="https://unsplash.com/@tiagogerken?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Tiago Gerken</a> on <a href="https://unsplash.com/s/photos/train?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span></p>
+</blockquote>
+
+<p>This problem is quite old (more than a few centuries), but luckily for us, mathematicians found the <a href="https://en.wikipedia.org/wiki/Homogeneous_coordinates">solution</a>.</p>
+
+<blockquote>
+  <p>This is the point where matrix plays a very important role. If someone from my teachers in school or university tells me the purpose of matrix and how they actually can be used, I think I spend way more time learning this theme.</p>
+</blockquote>
+
+<p>When lines meet at the infinity point, in the play comes <code class="language-plaintext highlighter-rouge">Homogeneous</code> coordinates. <code class="language-plaintext highlighter-rouge">Cartesian</code> is a subset of this coordinate space. Homogeneous coordinates are created to express points within N-dimensional coordinates. How? Simply by adding a variable, so</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">X</span> <span class="o">=</span> <span class="kt">X</span><span class="o">/</span><span class="n">variable</span>
+<span class="kt">Y</span> <span class="o">=</span> <span class="kt">Y</span><span class="o">/</span><span class="n">variable</span></code></pre></figure>
+
+<p>A real example would be like next</p>
+
+<p>if we have a point</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">P</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">}</span></code></pre></figure>
+
+<p>in Homogeneous coordinates we get</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">P</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">1</span><span class="p">}</span> <span class="c1">// because X = X/1 and Y = Y/1</span></code></pre></figure>
+
+<p>and for infinity point</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">P</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">}</span> <span class="c1">// because X = X/0 (=∞) and Y = Y/1 (=∞)</span></code></pre></figure>
+
+<h4 id="homogeneous-because">Homogeneous because…</h4>
+
+<p>It’s always good to know why something is called in such a way and not in another. So If u wondering why the name is <code class="language-plaintext highlighter-rouge">Homogeneous</code> and not something else, we may review a simple sample of coordinate transformation to discover this as described <a href="http://robotics.stanford.edu/~birch/projective/node4.html">here</a>.</p>
+
+<p>So to make things a bit simpler and easier, let’s review a simple sample</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">P1</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">5</span><span class="p">}</span>
+<span class="kt">P2</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">50</span><span class="p">}</span>
+<span class="kt">P3</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">500</span><span class="p">}</span></code></pre></figure>
+
+<p>and representation will be</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">P1</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span><span class="p">;</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span> <span class="p">}</span>
+<span class="kt">P2</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">10</span><span class="o">/</span><span class="mi">50</span><span class="p">;</span> <span class="mi">10</span><span class="o">/</span><span class="mi">50</span> <span class="p">}</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span><span class="p">;</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span> <span class="p">}</span>
+<span class="kt">P3</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">100</span><span class="o">/</span><span class="mi">500</span><span class="p">;</span> <span class="mi">100</span><span class="o">/</span><span class="mi">500</span> <span class="p">}</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span><span class="p">;</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span> <span class="p">}</span></code></pre></figure>
+
+<p>so the rule is</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">P1</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="n">a</span><span class="o">/</span><span class="mi">5</span><span class="n">a</span><span class="p">;</span> <span class="mi">1</span><span class="n">a</span><span class="o">/</span><span class="mi">5</span><span class="n">a</span> <span class="p">}</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="n">a</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">5</span><span class="n">a</span><span class="p">}</span></code></pre></figure>
+
+<p>This means that 1 point in <code class="language-plaintext highlighter-rouge">Cartesian</code> space may be represented by a few points. This means that these points are <em>“homogeneous”</em> which according to <a href="https://www.merriam-webster.com/dictionary/homogeneous">dictinary</a> means <em>: of the same or a similar kind or nature</em>.</p>
+
+<p>Now, when we know how this transformation in a 2D system can be done, let’s review each variant in detail.</p>
+
+<blockquote>
+  <p>The proof that 2 lines can intersect can be found <a href="http://www.songho.ca/math/homogeneous/homogeneous.html">here</a></p>
+</blockquote>
+
+<h3 id="performingchanges">PerformingChanges</h3>
+
+<p>Good - now we know how everything works in terms of each point in coordinate space. it’s time to review each transformation one-by-one, to make sure that we understood every operation.</p>
+
+<h4 id="translation">Translation</h4>
+
+<blockquote>
+  <p>Transformation is a process of modifying and re-positioning the existing graphics.</p>
+</blockquote>
+
+<p>To translate the point we simply should add <code class="language-plaintext highlighter-rouge">X'</code> and <code class="language-plaintext highlighter-rouge">Y'</code> to the original coordinate:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Xnew</span> <span class="o">=</span> <span class="kt">Xold</span> <span class="o">+</span> <span class="kt">Tx</span>
+<span class="kt">Ynew</span> <span class="o">=</span> <span class="kt">Yold</span> <span class="o">+</span> <span class="kt">Ty</span></code></pre></figure>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/translation.pdf" alt="translation_2d" width="350" />
+</div>
+
+<p>and if we move this to <code class="language-plaintext highlighter-rouge">Homogeneous</code> coordinate space:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/translation_matrix.pdf" alt="translation_matrix" width="350" />
+</div>
+
+<blockquote>
+  <p>if u wondering why we should use 3x3 matrix <a href="https://stackoverflow.com/a/10701960/2012219">here is good and simple exeplanation</a>, but making a long story short - for simplicity</p>
+</blockquote>
+
+<p>So we use matrix 3x3 for modification. As u can see, by modifying diff values of the matrix we may achieve a different result.</p>
+
+<h5 id="how-read-the-matrix-data">How read the matrix data</h5>
+
+<p>Before we contrinue, it’s good to mention, that matrix that contains no changes is <strong>Identity</strong> matrix - and this matrix contains 1 in diagonal from top left corner to bottom:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/identity_matrix.pdf" alt="identity_matrix" width="200" />
+</div>
+
+<p>As u maybe already think, “from the top left corner to the bottom” is not a quite good explanation. Indeed, each component has its name.</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/matrix_name_of_components.pdf" alt="matrix_name_of_components" width="200" />
+</div>
+
+<p>Another alternative may be simply named elements with “m” following index of row and column: m11, m12… etc.</p>
+
+<p>How this all data represented in <code class="language-plaintext highlighter-rouge">CocoaTouch</code>? Well, for this purpose we have a slightly simplified version of matrix - called <code class="language-plaintext highlighter-rouge">CGAffineTransform</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">CGAffineTransform</span> <span class="p">{</span>
+   <span class="kd">public</span> <span class="k">var</span> <span class="nv">a</span><span class="p">:</span> <span class="kt">CGFloat</span>
+   <span class="kd">public</span> <span class="k">var</span> <span class="nv">b</span><span class="p">:</span> <span class="kt">CGFloat</span>
+   <span class="kd">public</span> <span class="k">var</span> <span class="nv">c</span><span class="p">:</span> <span class="kt">CGFloat</span>
+   <span class="kd">public</span> <span class="k">var</span> <span class="nv">d</span><span class="p">:</span> <span class="kt">CGFloat</span>
+   <span class="kd">public</span> <span class="k">var</span> <span class="nv">tx</span><span class="p">:</span> <span class="kt">CGFloat</span>
+   <span class="kd">public</span> <span class="k">var</span> <span class="nv">ty</span><span class="p">:</span> <span class="kt">CGFloat</span>
+   
+   <span class="kd">public</span> <span class="nf">init</span><span class="p">()</span>
+   <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="nv">a</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">b</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">c</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">d</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">tx</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">ty</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>As u can see, this is a simple struct, and as mention in <a href="https://developer.apple.com/documentation/coregraphics/cgaffinetransform">docs</a> - <em>“because the third column is always (0,0,1), the <code class="language-plaintext highlighter-rouge">CGAffineTransform</code> data structure contains values for only the first two columns.”</em></p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/CGAffineTransform_matrix.pdf" alt="CGAffineTransform_matrix" width="200" />
+</div>
+
+<p>If we look at both matrix - from theory and <code class="language-plaintext highlighter-rouge">CGAffineTransform</code> provided by Apple, it’s not so hard to see, Apple’s variant it’s something that should be read downstairs.</p>
+
+<p>So, let’s compare how calculation is done:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/calculation.pdf" alt="calculation" width="400" />
+</div>
+
+<p>So Apple’s matrix is read downstairs instead of by row, 3rd column not important because it’s always 001 and the result does nothing.</p>
+
+<blockquote>
+  <p>Good sample of how the calculation is done can be found <a href="https://sketchytech.blogspot.com/2014/12/explaining-cgaffinetransform-matrix.html">here</a></p>
+</blockquote>
+
+<p>This means that u can’t change index m13; m23 and m33 - these items responsible for factor scale in <code class="language-plaintext highlighter-rouge">Homogeneous</code> space.</p>
+
+<blockquote>
+  <p>Because the third column is always (0,0,1), the CGAffineTransform data structure contains values for only the first two <a href="https://developer.apple.com/documentation/coregraphics/cgaffinetransform">columns</a>.</p>
+</blockquote>
+
+<h4 id="rotation">Rotation</h4>
+
+<blockquote>
+  <p>2D Rotation is a process of rotating an object with respect to an angle in a two-dimensional plane.</p>
+</blockquote>
+
+<p>Rotation is a bit hardener operation than translation, and to do this, we should generate new coordinates of point using rotation angle and basic math operation:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/rotation.pdf" alt="rotation" width="400" />
+</div>
+
+<blockquote>
+  <p>for simplicity Apple provides a convenient way to perform each operation - like <a href="https://developer.apple.com/documentation/coregraphics/cgaffinetransform/1455666-init"><code class="language-plaintext highlighter-rouge">init(rotationAngle:)</code></a> that perform the same operation as described above:</p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">X</span><span class="err">'</span> <span class="o">=</span> <span class="kt">X</span> <span class="n">x</span> <span class="n">cosθ</span> <span class="err">–</span> <span class="kt">Y</span> <span class="n">x</span> <span class="n">sinθ</span>
+<span class="kt">Y</span><span class="err">'</span> <span class="o">=</span> <span class="kt">X</span> <span class="n">x</span> <span class="n">sinθ</span> <span class="o">+</span> <span class="kt">Y</span> <span class="n">x</span> <span class="n">cosθ</span></code></pre></figure>
+
+<h4 id="scaling">Scaling</h4>
+
+<blockquote>
+  <p>Scaling is a process of modifying or altering the size of objects</p>
+</blockquote>
+
+<p>To make scale operation we only need scale koef. Scale operation described below:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/scale.pdf" alt="scale" width="400" />
+</div>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">X</span><span class="err">'</span> <span class="o">=</span> <span class="kt">X</span> <span class="n">x</span> <span class="kt">Sx</span>
+<span class="kt">Y</span><span class="err">'</span> <span class="o">=</span> <span class="kt">Y</span> <span class="n">x</span> <span class="kt">Sy</span></code></pre></figure>
+
+<blockquote>
+  <p>If scaling factor &gt; 1, then the object size is increased.
+If scaling factor &lt; 1, then the object size is reduced.</p>
+</blockquote>
+
+<h4 id="reflection">Reflection</h4>
+
+<blockquote>
+  <p>Reflection is a kind of <strong>rotation</strong> where the angle of rotation is <strong>180</strong> degree</p>
+</blockquote>
+
+<p>As was mention at the very beginning of this article - the 3 main transformations are translated, rotate, and scale. This one is marked as separate because it’s quite often used.</p>
+
+<p>As u probably already know - reflection can be done within 2 axis - <code class="language-plaintext highlighter-rouge">X</code> and <code class="language-plaintext highlighter-rouge">Y</code>. This means that we simply rotate the point. To do so, we need to multiply the coordinate value by <code class="language-plaintext highlighter-rouge">-1</code>:</p>
+
+<p>for reflection over X:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">X</span><span class="err">'</span> <span class="o">=</span> <span class="kt">X</span> <span class="n">x</span> <span class="mi">1</span>
+<span class="kt">Y</span><span class="err">'</span> <span class="o">=</span> <span class="kt">Y</span> <span class="n">x</span> <span class="o">-</span><span class="mi">1</span></code></pre></figure>
+
+<p>for reflection over Y:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">X</span><span class="err">'</span> <span class="o">=</span> <span class="kt">X</span> <span class="n">x</span> <span class="o">-</span><span class="mi">1</span>
+<span class="kt">Y</span><span class="err">'</span> <span class="o">=</span> <span class="kt">Y</span> <span class="n">x</span> <span class="mi">1</span></code></pre></figure>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/reflection.pdf" alt="reflection" width="400" />
+</div>
+
+<h4 id="shear">Shear</h4>
+
+<blockquote>
+  <p>Shearing is an ideal technique to change the shape of an existing object in a two-dimensional plane</p>
+</blockquote>
+
+<p>Shear can be done in 2 <code class="language-plaintext highlighter-rouge">X</code> and <code class="language-plaintext highlighter-rouge">Y</code> axis. To perform shear we need to define shearing parameter toward <code class="language-plaintext highlighter-rouge">X</code> direction and <code class="language-plaintext highlighter-rouge">Y</code> direction:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">X</span><span class="err">'</span> <span class="o">=</span> <span class="kt">Xold</span> <span class="o">+</span> <span class="kt">Shx</span> <span class="n">x</span> <span class="kt">Y</span>
+<span class="kt">Y</span><span class="err">'</span> <span class="o">=</span> <span class="kt">Yold</span> <span class="o">+</span> <span class="kt">Shy</span> <span class="n">x</span> <span class="kt">X</span></code></pre></figure>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/shear.pdf" alt="shear" width="400" />
+</div>
+
+<p>Now we know all the needed thoery and ready to start coding. But before we continue, here is perfect image that desceibe all <a href="https://en.wikipedia.org/wiki/Affine_transformation">common trnasformation in 2D space</a>:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/2D_affine_transformation_matrix.png" alt="2D_affine_transformation_matrix" width="300" />
+</div>
+
+<h4 id="composition">composition</h4>
+
+<blockquote>
+  <p>Composing Transformation – the process of applying several transformations in succession to form one overall transformation</p>
+</blockquote>
+
+<p>As was mention above, we may also use a combination of these effects. But we can be faced with some pitfall - <strong>the order of computation is important</strong>: as standard in GDI the order is Scale, Rotate and Translate (<strong>SRT</strong>). If u perform the same operation in another order (for example TRS) - the result will be different. This is because all changes are done with respect to the origin of coordinates.</p>
+
+<p>Thus u can achieve the same result within non SRT order and different matrix, but it’s always better to use standardized order of operation, so everyone who works within u’r code has the same idea of how it works.</p>
+
+<blockquote>
+  <p>check <a href="https://docs.microsoft.com/en-us/dotnet/desktop/winforms/advanced/why-transformation-order-is-significant?view=netframeworkdesktop-4.8">this explanation</a> for more, also this <a href="https://gamedev.stackexchange.com/a/16721">discussion</a> about same topic and <a href="https://bobobobo.wordpress.com/2011/12/20/rotation-translation-vs-translation-rotation/">comparison of result</a></p>
+</blockquote>
+
+<p>So the Rule is:</p>
+
+<p>When we write transformations using standard math notation, the closest transformation to the point is applied first:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">T</span> <span class="kt">R</span> <span class="kt">S</span> <span class="o">=</span> <span class="kt">T</span><span class="p">(</span><span class="kt">R</span><span class="p">(</span><span class="kt">S</span><span class="p">))</span></code></pre></figure>
+
+<p>first, the object is scaled, then rotated, then translated</p>
+
+<blockquote>
+  <p>check <a href="https://mrl.cs.nyu.edu/~dzorin/ig04/lecture05/lecture05.pdf">this lecture</a> for additional explanation</p>
+</blockquote>
+
+<p>Affine transformation – transformed point <code class="language-plaintext highlighter-rouge">P’ { x’, y’ }</code> is a linear combination of the original point <code class="language-plaintext highlighter-rouge">P { x, y }</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="o">|</span> <span class="n">x</span><span class="err">’</span><span class="o">|</span>   <span class="o">|</span> <span class="n">m11</span> <span class="n">m12</span> <span class="n">m13</span> <span class="o">|</span>  <span class="n">x</span> 
+<span class="o">|</span> <span class="n">y</span><span class="err">’</span><span class="o">|</span> <span class="o">=</span> <span class="o">|</span> <span class="n">m21</span> <span class="n">m22</span> <span class="n">m23</span> <span class="o">|</span>  <span class="n">y</span>
+<span class="o">|</span> <span class="n">y</span> <span class="o">|</span>   <span class="o">|</span> <span class="mi">1</span>   <span class="mi">0</span>    <span class="mi">0</span>  <span class="o">|</span>  <span class="mi">1</span></code></pre></figure>
+
+<p>And remember - any 2D affine transformation can be decomposed into a rotation, followed by scaling, followed by shearing, and followed a translation. (<a href="https://web.cse.ohio-state.edu/~shen.94/681/Site/Slides_files/transformation_review.pdf">source</a>)</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Affine</span> <span class="n">matrix</span> <span class="o">=</span> <span class="n">translation</span> <span class="n">x</span> <span class="n">shearing</span> <span class="n">x</span> <span class="n">scaling</span> <span class="n">x</span> <span class="n">rotation</span></code></pre></figure>
+
+<h2 id="practice">Practice</h2>
+
+<p>It’s time to go from theory to practice and <em>get your hands dirty.</em></p>
+
+<h3 id="uikit">UIKit</h3>
+
+<p>Let’s create a simple app, that modifies <code class="language-plaintext highlighter-rouge">CGAffineTransform</code> value in <code class="language-plaintext highlighter-rouge">UIImageView</code>.</p>
+
+<p>So, UI will be simple one:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/uikit.png" alt="uikit_sample_ui" width="300" />
+</div>
+
+<p>Code, that under the hood will change this behavior is just modify property <code class="language-plaintext highlighter-rouge">transform</code> of <code class="language-plaintext highlighter-rouge">UIView</code> (<code class="language-plaintext highlighter-rouge">UIImageView</code>):</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">changeAndDisplayAffineTransform</span><span class="p">(</span>
+											<span class="nv">a</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+											<span class="nv">b</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> 
+											<span class="nv">c</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+											<span class="nv">d</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+											<span class="nv">tx</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> 
+											<span class="nv">ty</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+											<span class="p">)</span> <span class="p">{</span>
+	<span class="k">let</span> <span class="nv">current</span> <span class="o">=</span> <span class="n">targetImageView</span><span class="o">.</span><span class="n">transform</span>
+	<span class="k">let</span> <span class="nv">new</span> <span class="o">=</span> <span class="kt">CGAffineTransform</span><span class="p">(</span><span class="nv">a</span><span class="p">:</span> <span class="n">a</span> <span class="p">??</span> <span class="n">current</span><span class="o">.</span><span class="n">a</span><span class="p">,</span>
+	                            <span class="nv">b</span><span class="p">:</span> <span class="n">b</span> <span class="p">??</span> <span class="n">current</span><span class="o">.</span><span class="n">b</span><span class="p">,</span>
+	                            <span class="nv">c</span><span class="p">:</span> <span class="n">c</span> <span class="p">??</span> <span class="n">current</span><span class="o">.</span><span class="n">c</span><span class="p">,</span>
+	                            <span class="nv">d</span><span class="p">:</span> <span class="n">d</span> <span class="p">??</span> <span class="n">current</span><span class="o">.</span><span class="n">d</span><span class="p">,</span>
+	                            <span class="nv">tx</span><span class="p">:</span> <span class="n">tx</span> <span class="p">??</span> <span class="n">current</span><span class="o">.</span><span class="n">tx</span><span class="p">,</span>
+	                            <span class="nv">ty</span><span class="p">:</span> <span class="n">ty</span> <span class="p">??</span> <span class="n">current</span><span class="o">.</span><span class="n">ty</span><span class="p">)</span>
+	<span class="n">targetImageView</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="k">new</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Now we can test and observe all transormation, that was discussed earlier:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/demo_uiKit_transform.gif" alt="demo_uiKit_transform" width="300" />
+</div>
+
+<p>Thanks to Apple’s engineers we even may not think about each of these values in the matrix and use convenience functions to change translation, scale, or rotation:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">func</span> <span class="nf">rotated</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGAffineTransform</span>
+<span class="kd">func</span> <span class="nf">scaledBy</span><span class="p">(</span><span class="nv">x</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">y</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGAffineTransform</span>
+<span class="kd">func</span> <span class="nf">translatedBy</span><span class="p">(</span><span class="nv">x</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">,</span> <span class="nv">y</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">CGAffineTransform</span></code></pre></figure>
+
+<blockquote>
+  <p>Composition can be done, using <a href="https://developer.apple.com/documentation/coregraphics/cgaffinetransform/1455996-concatenating"><code class="language-plaintext highlighter-rouge">concatenating(_:)</code></a> function.</p>
+</blockquote>
+
+<h3 id="swiftui">SwiftUI</h3>
+
+<p>To make testing easier. let’s build the same UI as we build for <code class="language-plaintext highlighter-rouge">UIKit</code>.</p>
+
+<p>The code for such screen may be as follow:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">@State</span> <span class="kd">private</span> <span class="k">var</span> <span class="nv">aTransform</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="kd">@State</span> <span class="kd">private</span> <span class="k">var</span> <span class="nv">bTransform</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="kd">@State</span> <span class="kd">private</span> <span class="k">var</span> <span class="nv">cTransform</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="kd">@State</span> <span class="kd">private</span> <span class="k">var</span> <span class="nv">dTransform</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="kd">@State</span> <span class="kd">private</span> <span class="k">var</span> <span class="nv">txTransform</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="kd">@State</span> <span class="kd">private</span> <span class="k">var</span> <span class="nv">tyTransform</span><span class="p">:</span> <span class="kt">CGFloat</span> <span class="o">=</span> <span class="mi">0</span>
+        
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">VStack</span> <span class="p">{</span>
+            <span class="kt">Image</span><span class="p">(</span><span class="s">"cat"</span><span class="p">)</span>
+                <span class="o">.</span><span class="nf">resizable</span><span class="p">()</span>
+                <span class="o">.</span><span class="nf">aspectRatio</span><span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="nv">contentMode</span><span class="p">:</span> <span class="o">.</span><span class="n">fit</span><span class="p">)</span>
+                <span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="mi">250</span><span class="p">,</span> <span class="nv">alignment</span><span class="p">:</span> <span class="o">.</span><span class="n">center</span><span class="p">)</span>
+                <span class="o">.</span><span class="nf">animation</span><span class="p">(</span><span class="o">.</span><span class="n">linear</span><span class="p">)</span>
+            
+            <span class="kt">VStack</span> <span class="p">{</span>
+                <span class="kt">VStack</span> <span class="p">{</span>
+                    <span class="kt">Slider</span><span class="o">.</span><span class="nf">buildFor</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="err">$</span><span class="n">aTransform</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="o">...</span><span class="mi">1</span><span class="p">,</span> <span class="nv">text</span><span class="p">:</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"a"</span><span class="p">)</span> <span class="p">})</span>
+                    <span class="kt">Slider</span><span class="o">.</span><span class="nf">buildFor</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="err">$</span><span class="n">bTransform</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="o">...</span><span class="mi">1</span><span class="p">,</span> <span class="nv">text</span><span class="p">:</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"b"</span><span class="p">)</span> <span class="p">})</span>
+                    <span class="kt">Slider</span><span class="o">.</span><span class="nf">buildFor</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="err">$</span><span class="n">cTransform</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="o">...</span><span class="mi">1</span><span class="p">,</span> <span class="nv">text</span><span class="p">:</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"c"</span><span class="p">)</span> <span class="p">})</span>
+                    <span class="kt">Slider</span><span class="o">.</span><span class="nf">buildFor</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="err">$</span><span class="n">dTransform</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="o">...</span><span class="mi">1</span><span class="p">,</span> <span class="nv">text</span><span class="p">:</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"d"</span><span class="p">)</span> <span class="p">})</span>
+                    <span class="kt">Slider</span><span class="o">.</span><span class="nf">buildFor</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="err">$</span><span class="n">txTransform</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">-</span><span class="mi">1000</span><span class="o">...</span><span class="mi">1000</span><span class="p">,</span> <span class="nv">text</span><span class="p">:</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"tx"</span><span class="p">)</span> <span class="p">})</span>
+                    <span class="kt">Slider</span><span class="o">.</span><span class="nf">buildFor</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="err">$</span><span class="n">tyTransform</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">-</span><span class="mi">1000</span><span class="o">...</span><span class="mi">1000</span><span class="p">,</span> <span class="nv">text</span><span class="p">:</span> <span class="p">{</span> <span class="kt">Text</span><span class="p">(</span><span class="s">"ty"</span><span class="p">)</span> <span class="p">})</span>
+                <span class="p">}</span>
+                <span class="kt">Spacer</span><span class="p">()</span>
+                <span class="kt">HStack</span> <span class="p">{</span>
+                    <span class="kt">Text</span><span class="p">(</span>
+<span class="s">"""
+|  a:  </span><span class="se">\(</span><span class="kt">String</span><span class="p">(</span><span class="nv">format</span><span class="p">:</span><span class="s">"%.02f"</span><span class="p">,</span> <span class="n">aTransform</span><span class="p">)</span><span class="se">)</span><span class="s">   b: </span><span class="se">\(</span><span class="kt">String</span><span class="p">(</span><span class="nv">format</span><span class="p">:</span><span class="s">"%.02f"</span><span class="p">,</span> <span class="n">bTransform</span><span class="p">)</span><span class="se">)</span><span class="s">  0.00 |
+|  c:  </span><span class="se">\(</span><span class="kt">String</span><span class="p">(</span><span class="nv">format</span><span class="p">:</span><span class="s">"%.02f"</span><span class="p">,</span> <span class="n">cTransform</span><span class="p">)</span><span class="se">)</span><span class="s">   d: </span><span class="se">\(</span><span class="kt">String</span><span class="p">(</span><span class="nv">format</span><span class="p">:</span><span class="s">"%.02f"</span><span class="p">,</span> <span class="n">dTransform</span><span class="p">)</span><span class="se">)</span><span class="s">  0.00 |
+|  tx: </span><span class="se">\(</span><span class="kt">String</span><span class="p">(</span><span class="nv">format</span><span class="p">:</span><span class="s">"%.02f"</span><span class="p">,</span> <span class="n">txTransform</span><span class="p">)</span><span class="se">)</span><span class="s">  ty: </span><span class="se">\(</span><span class="kt">String</span><span class="p">(</span><span class="nv">format</span><span class="p">:</span><span class="s">"%.02f"</span><span class="p">,</span> <span class="n">tyTransform</span><span class="p">)</span><span class="se">)</span><span class="s">  1.00 |
+"""</span>
+                    <span class="p">)</span>
+                    <span class="o">.</span><span class="nf">lineLimit</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+                    <span class="o">.</span><span class="nf">minimumScaleFactor</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+                    
+                    <span class="kt">Spacer</span><span class="p">()</span>
+                    <span class="kt">Button</span><span class="p">(</span><span class="nv">action</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="n">withAnimation</span> <span class="p">{</span>
+                            <span class="nf">makeIdentityTransform</span><span class="p">()</span>
+                        <span class="p">}</span>
+                    <span class="p">},</span> <span class="nv">label</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="kt">Text</span><span class="p">(</span><span class="s">"Identity"</span><span class="p">)</span>
+                    <span class="p">})</span>
+                    <span class="o">.</span><span class="nf">padding</span><span class="p">()</span>
+                <span class="p">}</span>
+                <span class="kt">Spacer</span><span class="p">()</span>
+            <span class="p">}</span>
+            <span class="o">.</span><span class="nf">padding</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">padding</span><span class="p">()</span>
+    <span class="p">}</span>
+    
+    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">makeIdentityTransform</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">aTransform</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">bTransform</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">cTransform</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">dTransform</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">txTransform</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">tyTransform</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">Slider</span> <span class="k">where</span> <span class="kt">Label</span> <span class="o">==</span> <span class="kt">EmptyView</span><span class="p">,</span> <span class="kt">ValueLabel</span> <span class="o">==</span> <span class="kt">EmptyView</span> <span class="p">{</span>
+    
+    <span class="kd">static</span> <span class="kd">func</span> <span class="n">buildFor</span><span class="o">&lt;</span><span class="kt">V</span><span class="p">,</span> <span class="kt">C</span><span class="o">&gt;</span><span class="p">(</span>
+        <span class="nv">value</span><span class="p">:</span> <span class="kt">Binding</span><span class="o">&lt;</span><span class="kt">V</span><span class="o">&gt;</span><span class="p">,</span>
+        <span class="k">in</span> <span class="nv">bounds</span><span class="p">:</span> <span class="kt">ClosedRange</span><span class="o">&lt;</span><span class="kt">V</span><span class="o">&gt;</span> <span class="o">=</span> <span class="mi">0</span><span class="o">...</span><span class="mi">1</span><span class="p">,</span>
+        <span class="nv">text</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">C</span><span class="p">,</span>
+        <span class="nv">onEditingChanged</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span> <span class="o">=</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span> <span class="p">}</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="k">where</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt">BinaryFloatingPoint</span><span class="p">,</span>
+                         <span class="kt">V</span><span class="o">.</span><span class="kt">Stride</span> <span class="p">:</span> <span class="kt">BinaryFloatingPoint</span><span class="p">,</span>
+                         <span class="kt">C</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">HStack</span> <span class="p">{</span>
+            <span class="c1">// swift UI bug workaround https://stackoverflow.com/a/64821300/2012219</span>
+            <span class="nf">text</span><span class="p">()</span>
+            <span class="kt">Slider</span><span class="p">(</span>
+                <span class="nv">value</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
+                <span class="nv">in</span><span class="p">:</span> <span class="n">bounds</span><span class="p">,</span>
+                <span class="nv">onEditingChanged</span><span class="p">:</span> <span class="n">onEditingChanged</span><span class="p">,</span>
+                <span class="nv">label</span><span class="p">:</span> <span class="p">{</span> <span class="kt">EmptyView</span><span class="p">()</span> <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Thats produce for us:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/swiftUI.png" alt="swiftUI_UI" width="300" />
+</div>
+
+<p>Now, let’s add <code class="language-plaintext highlighter-rouge">transform</code> modification for <code class="language-plaintext highlighter-rouge">Image</code>. To do so, we should use special <code class="language-plaintext highlighter-rouge">GeometryEffect</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift">    <span class="o">.</span><span class="nf">transformEffect</span><span class="p">(</span>
+        <span class="o">.</span><span class="nf">init</span><span class="p">(</span>
+            <span class="nv">a</span><span class="p">:</span> <span class="n">aTransform</span><span class="p">,</span>
+            <span class="nv">b</span><span class="p">:</span> <span class="n">bTransform</span><span class="p">,</span>
+            <span class="nv">c</span><span class="p">:</span> <span class="n">cTransform</span><span class="p">,</span>
+            <span class="nv">d</span><span class="p">:</span> <span class="n">dTransform</span><span class="p">,</span>
+            <span class="nv">tx</span><span class="p">:</span> <span class="n">txTransform</span><span class="p">,</span>
+            <span class="nv">ty</span><span class="p">:</span> <span class="n">tyTransform</span>
+        <span class="p">)</span>
+    <span class="p">)</span></code></pre></figure>
+
+<blockquote>
+  <p>add this after <code class="language-plaintext highlighter-rouge">.frame(height: 250, alignment: .center)</code> line applied to image.</p>
+</blockquote>
+
+<p>Run and observer the result:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-08-affineTransformation/demo_swiftUI_transform.gif" alt="demo_swiftUI_transform" width="300" />
+</div>
+
+<p>The <code class="language-plaintext highlighter-rouge">API</code> for <code class="language-plaintext highlighter-rouge">SwiftUI</code> also contains similar functions for modification of the <code class="language-plaintext highlighter-rouge">transform</code> property from the <code class="language-plaintext highlighter-rouge">View</code>. Under the hood, it’s using the<code class="language-plaintext highlighter-rouge"> GeometryEffect</code> protocol - a mechanism for changing the appearance of the <code class="language-plaintext highlighter-rouge">View</code>.</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">GeometryEffect</code> - An effect that changes the visual appearance of a view, largely without changing its ancestors or descendants.</p>
+</blockquote>
+
+<p>If u wondering how <code class="language-plaintext highlighter-rouge">GeometryEffect</code> works, we may create our modification for affine transformation. The effect should return <code class="language-plaintext highlighter-rouge">ProjectionTransform</code> (matrix 3x3) with the result at the end of the transform and for any “transitioned point” of transformation (e.g if all change if 1 and identity are 0, the transition from 0 to 1 can contain few steps).</p>
+
+<p>The simplest version of Effect can be next:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">AffineTransformEffect</span><span class="p">:</span> <span class="kt">GeometryEffect</span> <span class="p">{</span>
+    
+    <span class="k">var</span> <span class="nv">transform</span><span class="p">:</span> <span class="kt">CGAffineTransform</span>
+    
+    <span class="nf">init</span><span class="p">(</span>
+        <span class="nv">a</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+        <span class="nv">b</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+        <span class="nv">c</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+        <span class="nv">d</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+        <span class="nv">tx</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span>
+        <span class="nv">ty</span><span class="p">:</span> <span class="kt">CGFloat</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span>
+    <span class="p">)</span> <span class="p">{</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="kt">CGAffineTransform</span><span class="p">(</span>
+            <span class="nv">a</span><span class="p">:</span> <span class="n">a</span> <span class="p">??</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="nv">b</span><span class="p">:</span> <span class="n">b</span> <span class="p">??</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nv">c</span><span class="p">:</span> <span class="n">c</span> <span class="p">??</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nv">d</span><span class="p">:</span> <span class="n">d</span> <span class="p">??</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="nv">tx</span><span class="p">:</span> <span class="n">tx</span> <span class="p">??</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="nv">ty</span><span class="p">:</span> <span class="n">ty</span> <span class="p">??</span> <span class="mi">0</span>
+        <span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="kd">func</span> <span class="nf">effectValue</span><span class="p">(</span><span class="nv">size</span><span class="p">:</span> <span class="kt">CGSize</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">ProjectionTransform</span> <span class="p">{</span>
+        <span class="kt">ProjectionTransform</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>than, replace <code class="language-plaintext highlighter-rouge">transformEffect</code> to :</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift">	<span class="o">.</span><span class="nf">modifier</span><span class="p">(</span>
+	    <span class="kt">AffineTransformEffect</span><span class="p">(</span>
+	        <span class="nv">a</span><span class="p">:</span> <span class="n">aTransform</span><span class="p">,</span>
+	        <span class="nv">b</span><span class="p">:</span> <span class="n">bTransform</span><span class="p">,</span>
+	        <span class="nv">c</span><span class="p">:</span> <span class="n">cTransform</span><span class="p">,</span>
+	        <span class="nv">d</span><span class="p">:</span> <span class="n">dTransform</span><span class="p">,</span>
+	        <span class="nv">tx</span><span class="p">:</span> <span class="n">txTransform</span><span class="p">,</span>
+	        <span class="nv">ty</span><span class="p">:</span> <span class="n">tyTransform</span>
+	    <span class="p">)</span>
+	<span class="p">)</span></code></pre></figure>
+
+<p>build and run the project - the result is the same.</p>
+
+<p><a href="/assets/posts/images/2020-12-08-affineTransformation/sources/sources.zip">Download source here</a></p>
+:ET
