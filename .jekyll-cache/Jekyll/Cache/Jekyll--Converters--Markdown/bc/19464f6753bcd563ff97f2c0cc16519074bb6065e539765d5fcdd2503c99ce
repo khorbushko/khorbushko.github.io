@@ -1,4 +1,0 @@
-I"=<p>This is 3rd article in my mini-series dedicated to <code class="language-plaintext highlighter-rouge">Schedulers</code> in <code class="language-plaintext highlighter-rouge">Combine</code>. And this one is about the most powerfull one - <code class="language-plaintext highlighter-rouge">DispatchQueue</code> <code class="language-plaintext highlighter-rouge">Scheduler</code>.</p>
-
-<p>Yet to his power, the usage is still prety simple. In same moment, it allow us to perform a lot of various operations with full controll of how and when it will be done. So simplicity and functionality is what <code class="language-plaintext highlighter-rouge">DispatchQueue</code> <code class="language-plaintext highlighter-rouge">Scheduler</code> brings into <code class="language-plaintext highlighter-rouge">Combine</code> for us.</p>
-:ET

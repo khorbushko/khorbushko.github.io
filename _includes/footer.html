@@ -9,8 +9,15 @@
           <a href="{{ 'feed.xml' | relative_url }}">
             <svg class="svg-icon orange">
               <use xlink:href="{{ 'assets/minima-social-icons.svg#rss' | relative_url }}"></use>
-            </svg><span>Subscribe</span>
+            </svg><span>RSS</span>      
           </a>
+          &nbsp;&nbsp;
+          <a href="https://feedrabbit.com/?url=http://khorbushko.github.io">
+            <svg class="svg-icon black">
+              <use xlink:href="{{ 'assets/minima-social-icons.svg#rss' | relative_url }}"></use>
+            </svg><span>Newsletter</span>      
+          </a>
+
         </p>
       {%- if site.author %}
         <ul class="contact-list">
