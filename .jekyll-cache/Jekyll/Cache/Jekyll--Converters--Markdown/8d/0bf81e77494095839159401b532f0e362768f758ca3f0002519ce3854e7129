@@ -1,0 +1,421 @@
+I"�<p>In this article we review last, but not least (in the list of available schedulers for <code class="language-plaintext highlighter-rouge">Combine</code> framework), scheduler - <code class="language-plaintext highlighter-rouge">OperationQueue</code>.</p>
+
+<p>As u remember from previous articles, <code class="language-plaintext highlighter-rouge">Scheduler</code> it’s just a protocol that requires from type define <strong>WHEN</strong> and <strong>HOW</strong> execute a selected task. 
+<!--more--></p>
+
+<p><code class="language-plaintext highlighter-rouge">OperationQueue</code> functionality and purpose - it’s another quite interesting mechanism. I will not cover the full possibilities of it in this article, instead, u can jump <a href="https://developer.apple.com/documentation/foundation/operationqueue">here</a> to refresh the knowledge about it.</p>
+
+<p>In 2 words, <code class="language-plaintext highlighter-rouge">OperationQueue</code> it’s a queue that controls how operations can be executed.</p>
+
+<blockquote>
+  <p>An operation queue executes its queued Operation objects based on their priority and readiness. After being added to an operation queue, the operation remains in its queue until it reports that it is finished with its task. You can’t directly remove an operation from a queue after it has been added.</p>
+</blockquote>
+
+<p>It’s also good to know, that under the hood <code class="language-plaintext highlighter-rouge">OperationQueue</code> use <code class="language-plaintext highlighter-rouge">GCD</code>, but provide an additional level of control for each task that can be executed.</p>
+
+<p><strong>Related articles:</strong></p>
+
+<ul>
+  <li><a href="/article/2020/11/26/schedulers-in-combine.html">Schedulers in Combine. Part 1: ImmediateScheduler</a></li>
+  <li><a href="/article/2020/12/01/schedulers-in-combine-runLoop.html">Schedulers in Combine. Part 2: RunLoop Scheduler</a></li>
+  <li><a href="/article/2020/12/05/schedulers-in-combine-DispatchQueue.html">Schedulers in Combine. Part 3: DispatchQueue Scheduler</a></li>
+  <li>Schedulers in Combine. Part 4: OperationQueue Scheduler</li>
+</ul>
+
+<h2 id="operationqueue-scheduler">OperationQueue Scheduler</h2>
+
+<p>As we did in previous articles from this series, we start to review <code class="language-plaintext highlighter-rouge">OperationQueue</code> as a Scheduler from the checking <strong>HOW</strong> approach. And this can be done within simple code:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">subscription</span> <span class="o">=</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="kt">AnyCancellable</span><span class="o">&gt;</span><span class="p">()</span>
+
+<span class="k">let</span> <span class="nv">operation</span> <span class="o">=</span> <span class="kt">OperationQueue</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">publisher</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">publisher</span>
+
+<span class="n">publisher</span>
+    <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="n">operation</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">sink</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Recevied value </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s"> on </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">store</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">subscription</span><span class="p">)</span></code></pre></figure>
+
+<p>If u expect to receive output like:</p>
+
+<blockquote>
+  <p>Recevied value 1 on &lt;NSThread: 0x600000b01000&gt;{number = 1, name = (null)}</p>
+
+  <p>Recevied value 2 on &lt;NSThread: 0x600000b00b80&gt;{number = 1, name = (null)}</p>
+
+  <p>Recevied value 3 on &lt;NSThread: 0x600000b1a140&gt;{number = 1, name = (null)}</p>
+
+  <p>Recevied value 4 on &lt;NSThread: 0x600000b16c40&gt;{number = 1, name = (null)}</p>
+
+  <p>Recevied value 5 on &lt;NSThread: 0x600000b04b40&gt;{number = 1, name = (null)}</p>
+</blockquote>
+
+<p>u will be surprised. The real output is like</p>
+
+<blockquote>
+  <p>Recevied value 2 on &lt;NSThread: 0x600000b01000&gt;{number = 5, name = (null)}</p>
+
+  <p>Recevied value 5 on &lt;NSThread: 0x600000b00b80&gt;{number = 3, name = (null)}</p>
+
+  <p>Recevied value 4 on &lt;NSThread: 0x600000b1a140&gt;{number = 8, name = (null)}</p>
+
+  <p>Recevied value 3 on &lt;NSThread: 0x600000b16c40&gt;{number = 9, name = (null)}</p>
+
+  <p>Recevied value 1 on &lt;NSThread: 0x600000b04b40&gt;{number = 6, name = (null)}</p>
+</blockquote>
+
+<p>First of all, u may notice, that values come in <em>different order</em>. Also - on <em>different <code class="language-plaintext highlighter-rouge">Threads</code></em>.</p>
+
+<p>Why? As was mention above, <code class="language-plaintext highlighter-rouge">OperationQueue</code> works under <code class="language-plaintext highlighter-rouge">GCD</code>, and so, to deliver these values it may use different <code class="language-plaintext highlighter-rouge">Threads</code>, so the order is not guaranteed at all.</p>
+
+<p>If u want to check how it’s work under the hood, then we may refer to <a href="https://github.com/apple/swift/blob/b5570a1aa923d18f5b7a28b06ea2a7424ba65e3b/stdlib/public/Darwin/Foundation/Schedulers%2BOperationQueue.swift#L181">open-source code</a>, and we may found:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">public</span> <span class="kd">func</span> <span class="nf">schedule</span><span class="p">(</span><span class="nv">options</span><span class="p">:</span> <span class="kt">OperationQueue</span><span class="o">.</span><span class="kt">SchedulerOptions</span><span class="p">?,</span>
+                     <span class="n">_</span> <span class="nv">action</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">op</span> <span class="o">=</span> <span class="kt">BlockOperation</span><span class="p">(</span><span class="nv">block</span><span class="p">:</span> <span class="n">action</span><span class="p">)</span>
+    <span class="nf">addOperation</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>As u can see, <a href="https://developer.apple.com/documentation/foundation/blockoperation"><code class="language-plaintext highlighter-rouge">BlockOperation</code></a> is used. This means that any of the available <code class="language-plaintext highlighter-rouge">global()</code> <code class="language-plaintext highlighter-rouge">Thread</code> is used. And this explains the output.</p>
+
+<blockquote>
+  <p>definition:</p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">@available</span><span class="p">(</span><span class="n">iOS</span> <span class="mf">4.0</span><span class="p">,</span> <span class="o">*</span><span class="p">)</span>
+<span class="kd">class</span> <span class="kt">BlockOperation</span> <span class="p">:</span> <span class="kt">Operation</span> <span class="p">{</span>    
+    <span class="kd">public</span> <span class="kd">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">block</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span>
+    <span class="kd">open</span> <span class="kd">func</span> <span class="nf">addExecutionBlock</span><span class="p">(</span><span class="n">_</span> <span class="nv">block</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span>
+    <span class="kd">open</span> <span class="k">var</span> <span class="nv">executionBlocks</span><span class="p">:</span> <span class="p">[</span><span class="kd">@convention</span><span class="p">(</span><span class="n">block</span><span class="p">)</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>But remember, <code class="language-plaintext highlighter-rouge">OperationQueue</code> provide few additional points of control in comparison to <code class="language-plaintext highlighter-rouge">GCD</code>. One of them - <a href="https://developer.apple.com/documentation/foundation/nsoperationqueue/1414982-maxconcurrentoperationcount"><code class="language-plaintext highlighter-rouge">maxConcurrentOperationCount</code></a> (allow to determine max task executed in concurency).</p>
+
+<blockquote>
+  <p>The default maximum number of operations to be executed concurrently in a queue equal to maxPossibleCount. If u print this value (default) u will see <code class="language-plaintext highlighter-rouge">-1</code>, that’s indicated as much as possible.</p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="nf">print</span><span class="p">(</span><span class="n">operation</span><span class="o">.</span><span class="n">maxConcurrentOperationCount</span><span class="p">)</span> <span class="c1">// -1</span></code></pre></figure>
+
+<p>To fix <code class="language-plaintext highlighter-rouge">random</code> execution of tasks we may modify operation by adding</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">operation</span><span class="o">.</span><span class="n">maxConcurrentOperationCount</span> <span class="o">=</span> <span class="mi">1</span></code></pre></figure>
+
+<p>Output now - is ordered, as we want, but note the <code class="language-plaintext highlighter-rouge">Thread</code>:</p>
+
+<blockquote>
+  <p>Recevied value 1 on &lt;NSThread: 0x6000026f0d40&gt;{number = 5, name = (null)}</p>
+
+  <p>Recevied value 2 on &lt;NSThread: 0x6000026f0d40&gt;{number = 5, name = (null)}</p>
+
+  <p>Recevied value 3 on &lt;NSThread: 0x6000026f0d40&gt;{number = 5, name = (null)}</p>
+
+  <p>Recevied value 4 on &lt;NSThread: 0x6000026f9c00&gt;{number = 3, name = (null)}</p>
+
+  <p>Recevied value 5 on &lt;NSThread: 0x6000026f9c00&gt;{number = 3, name = (null)}</p>
+</blockquote>
+
+<p>So, even we got an order, but the <code class="language-plaintext highlighter-rouge">Thread</code> is still - any available as before. To get the <strong><code class="language-plaintext highlighter-rouge">main</code></strong> <code class="language-plaintext highlighter-rouge">Thread</code> using <code class="language-plaintext highlighter-rouge">OperationQueue</code> we may do next:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">OperationQueue</span><span class="o">.</span><span class="n">main</span><span class="p">)</span></code></pre></figure>
+
+<p>or even</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">operation</span><span class="o">.</span><span class="n">underlyingQueue</span> <span class="o">=</span> <span class="o">.</span><span class="n">main</span></code></pre></figure>
+
+<p>The result will be ordered and on the <code class="language-plaintext highlighter-rouge">main Thread</code>.</p>
+
+<p>We also can modify other properties of <code class="language-plaintext highlighter-rouge">OperationQueue</code> such as <code class="language-plaintext highlighter-rouge">qualityOfService</code> or <code class="language-plaintext highlighter-rouge">underlyingQueue</code>.</p>
+
+<p>Another moment that we should think about when using <code class="language-plaintext highlighter-rouge">OperationQueue</code> as a scheduler is the <code class="language-plaintext highlighter-rouge">priority</code> of operations.</p>
+
+<p>Priority defined as:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">Operation</span> <span class="p">{</span>
+    <span class="kd">public</span> <span class="kd">enum</span> <span class="kt">QueuePriority</span> <span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="n">veryLow</span> <span class="o">=</span> <span class="o">-</span><span class="mi">8</span>
+        <span class="k">case</span> <span class="n">low</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span>
+        <span class="k">case</span> <span class="n">normal</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">case</span> <span class="n">high</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="k">case</span> <span class="n">veryHigh</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The <strong>default</strong> value is <code class="language-plaintext highlighter-rouge">normal = 0</code>. This means, that if u have <code class="language-plaintext highlighter-rouge">OperationQueue</code> with the operation of highest priority and try to publish some other values - the result may surprise u.</p>
+
+<p>To test this approach, let’s create a custom AsyncOperation that may take some time to process. To do so we may create something like this:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">public</span> <span class="kd">class</span> <span class="kt">AsyncOperation</span><span class="p">:</span> <span class="kt">Operation</span> <span class="p">{</span>
+    
+    <span class="c1">// MARK: - AsyncOperation</span>
+    
+    <span class="kd">public</span> <span class="kd">enum</span> <span class="kt">State</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        
+        <span class="k">case</span> <span class="n">ready</span>
+        <span class="k">case</span> <span class="n">executing</span>
+        <span class="k">case</span> <span class="n">finished</span>
+        
+        <span class="kd">fileprivate</span> <span class="k">var</span> <span class="nv">keyPath</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="s">"is"</span> <span class="o">+</span> <span class="n">rawValue</span><span class="o">.</span><span class="n">capitalized</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kd">public</span> <span class="k">var</span> <span class="nv">state</span> <span class="o">=</span> <span class="kt">State</span><span class="o">.</span><span class="n">ready</span> <span class="p">{</span>
+        <span class="k">willSet</span> <span class="p">{</span>
+            <span class="nf">willChangeValue</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="n">newValue</span><span class="o">.</span><span class="n">keyPath</span><span class="p">)</span>
+            <span class="nf">willChangeValue</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">keyPath</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="k">didSet</span> <span class="p">{</span>
+            <span class="nf">didChangeValue</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="n">oldValue</span><span class="o">.</span><span class="n">keyPath</span><span class="p">)</span>
+            <span class="nf">didChangeValue</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">keyPath</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">public</span> <span class="kd">extension</span> <span class="kt">AsyncOperation</span> <span class="p">{</span>
+    
+    <span class="c1">// MARK: - AsyncOperation+Addition</span>
+    
+    <span class="k">override</span> <span class="k">var</span> <span class="nv">isReady</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">super</span><span class="o">.</span><span class="n">isReady</span> <span class="o">&amp;&amp;</span> <span class="n">state</span> <span class="o">==</span> <span class="o">.</span><span class="n">ready</span>
+    <span class="p">}</span>
+    
+    <span class="k">override</span> <span class="k">var</span> <span class="nv">isExecuting</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">state</span> <span class="o">==</span> <span class="o">.</span><span class="n">executing</span>
+    <span class="p">}</span>
+    
+    <span class="k">override</span> <span class="k">var</span> <span class="nv">isFinished</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">state</span> <span class="o">==</span> <span class="o">.</span><span class="n">finished</span>
+    <span class="p">}</span>
+    
+    <span class="k">override</span> <span class="k">var</span> <span class="nv">isAsynchronous</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">true</span>
+    <span class="p">}</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">start</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">isFinished</span> <span class="p">{</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        
+        <span class="k">if</span> <span class="n">isCancelled</span> <span class="p">{</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="o">.</span><span class="n">finished</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        
+        <span class="nf">main</span><span class="p">()</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="o">.</span><span class="n">executing</span>
+    <span class="p">}</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">cancel</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="o">.</span><span class="n">finished</span>
+    <span class="p">}</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nf">preconditionFailure</span><span class="p">(</span><span class="s">"Subclasses must implement `main`."</span>
+	 <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// subclass </span>
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">AsyncLongAndHightPriorityOperation</span><span class="p">:</span> <span class="kt">AsyncOperation</span> <span class="p">{</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"started heavy operation"</span><span class="p">)</span>
+        
+        <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="nf">asyncAfter</span><span class="p">(</span><span class="nv">deadline</span><span class="p">:</span> <span class="o">.</span><span class="nf">now</span><span class="p">()</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="o">.</span><span class="n">finished</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"finished heavy operation"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>better AsyncOperation can be found <a href="https://gist.github.com/ole/5034ce19c62d248018581b1db0eabb2b">here</a></p>
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">heavyOperation</span> <span class="o">=</span> <span class="kt">AsyncLongAndHightPriorityOperation</span><span class="p">()</span>
+<span class="n">heavyOperation</span><span class="o">.</span><span class="n">queuePriority</span> <span class="o">=</span> <span class="o">.</span><span class="n">high</span>
+
+<span class="k">let</span> <span class="nv">queue</span> <span class="o">=</span> <span class="kt">OperationQueue</span><span class="p">()</span>
+<span class="n">queue</span><span class="o">.</span><span class="n">maxConcurrentOperationCount</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="s">"Started at date </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+<span class="n">queue</span><span class="o">.</span><span class="nf">addOperation</span><span class="p">(</span><span class="n">heavyOperation</span><span class="p">)</span>
+
+<span class="n">publisher</span>
+    <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="n">queue</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">sink</span><span class="p">(</span><span class="nv">receiveCompletion</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">completion</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Recevied completion </span><span class="se">\(</span><span class="n">completion</span><span class="se">)</span><span class="s"> on </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">, date </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">},</span> <span class="nv">receiveValue</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Recevied value </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s"> on </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">, date </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="o">.</span><span class="nf">store</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">subscription</span><span class="p">)</span></code></pre></figure>
+
+<p>The result - as u may expect has a delay between output:</p>
+
+<blockquote>
+  <p>Started at date 2020-12-13 10:39:58 +0000</p>
+
+  <p>started heavy operation</p>
+
+  <p>Recevied value 1 on &lt;NSThread: 0x600003f38dc0&gt;{number = 3, name = (null)}, date 2020-12-13 10:40:02 +0000</p>
+
+  <p>finished the heavy operation</p>
+
+  <p>Recevied value 2 on &lt;NSThread: 0x600003f3cb40&gt;{number = 5, name = (null)}, date 2020-12-13 10:40:02 +0000</p>
+
+  <p>Recevied value 3 on &lt;NSThread: 0x600003f38dc0&gt;{number = 3, name = (null)}, date 2020-12-13 10:40:02 +0000</p>
+
+  <p>Recevied value 4 on &lt;NSThread: 0x600003f0d100&gt;{number = 7, name = (null)}, date 2020-12-13 10:40:02 +0000</p>
+
+  <p>Recevied value 5 on &lt;NSThread: 0x600003f0d100&gt;{number = 7, name = (null)}, date 2020-12-13 10:40:02 +0000</p>
+
+  <p>Recevied completion finished on &lt;NSThread: 0x600003f0d100&gt;{number = 7, name = (null)}, date 2020-12-13 10:40:02 +0000</p>
+</blockquote>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-14-schedulers-in-combine-operationQueue/OperationQueue_test1.png" alt="OperationQueue_test1" width="550" />
+</div>
+
+<p>Think about it in cases when u haven’t specified <code class="language-plaintext highlighter-rouge">queue.maxConcurrentOperationCount = 1</code> or if u set non-concurrent target queue or even if u use <code class="language-plaintext highlighter-rouge">OperationQueue.main</code>. The result may surprise u.</p>
+
+<p>Such additional operation may even affect <code class="language-plaintext highlighter-rouge">sink</code> output. Try to do next:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">heavyOperation</span> <span class="o">=</span> <span class="kt">AsyncLongAndHightPriorityOperation</span><span class="p">()</span>
+<span class="n">heavyOperation</span><span class="o">.</span><span class="n">queuePriority</span> <span class="o">=</span> <span class="o">.</span><span class="n">high</span>
+
+<span class="k">let</span> <span class="nv">queue</span> <span class="o">=</span> <span class="kt">OperationQueue</span><span class="p">()</span>
+<span class="c1">//queue.maxConcurrentOperationCount = 1 // &lt;- comment this</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="s">"Started at date </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+<span class="n">queue</span><span class="o">.</span><span class="nf">addOperation</span><span class="p">(</span><span class="n">heavyOperation</span><span class="p">)</span>
+
+<span class="n">publisher</span>
+    <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="n">queue</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">sink</span><span class="p">(</span><span class="nv">receiveCompletion</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">completion</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Recevied completion </span><span class="se">\(</span><span class="n">completion</span><span class="se">)</span><span class="s"> on </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">, date </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">},</span> <span class="nv">receiveValue</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Recevied value </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s"> on </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s">, date </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="o">.</span><span class="nf">store</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">subscription</span><span class="p">)</span></code></pre></figure>
+
+<p>Output shows us, that few values are not received at all.</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-14-schedulers-in-combine-operationQueue/OperationQueue_test2.png" alt="OperationQueue_test2" width="550" />
+</div>
+
+<p>To resolve this, we may do next:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift">    <span class="o">.</span><span class="nf">subscribe</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="n">queue</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">OperationQueue</span><span class="o">.</span><span class="n">main</span><span class="p">)</span></code></pre></figure>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-14-schedulers-in-combine-operationQueue/OperationQueue_test3.png" alt="OperationQueue_test3" width="550" />
+</div>
+
+<p>As u can see, <code class="language-plaintext highlighter-rouge">OperationQueue</code> provides for us additional options of controlling task executing, but be careful within it and make sure u correctly configure <code class="language-plaintext highlighter-rouge">OperationQueue</code>.</p>
+
+<blockquote>
+  <p>by default <code class="language-plaintext highlighter-rouge">OperationQueue</code> execute task concurently</p>
+</blockquote>
+
+<h2 id="scheduleroptions">SchedulerOptions</h2>
+
+<p>If we check API, we may found that these options contain nothing, so nothing here to do.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">/// Options that affect the operation of the operation queue scheduler.</span>
+<span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SchedulerOptions</span> <span class="p">{</span> <span class="p">}</span></code></pre></figure>
+
+<h2 id="schedulertimetype">SchedulerTimeType</h2>
+
+<p><code class="language-plaintext highlighter-rouge">SchedulerTimeType</code> is <code class="language-plaintext highlighter-rouge">Date</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">public</span> <span class="kd">struct</span> <span class="kt">SchedulerTimeType</span><span class="p">:</span> <span class="kt">Strideable</span><span class="p">,</span> <span class="kt">Codable</span><span class="p">,</span> <span class="kt">Hashable</span> <span class="p">{</span>
+    <span class="c1">/// The date represented by this type.</span>
+    <span class="kd">public</span> <span class="k">var</span> <span class="nv">date</span><span class="p">:</span> <span class="kt">Date</span>
+    
+    <span class="c1">/// Initializes an operation queue scheduler time with the given date.</span>
+    <span class="c1">///</span>
+    <span class="c1">/// - Parameter date: The date to represent.</span>
+    <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">date</span><span class="p">:</span> <span class="kt">Date</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">date</span> <span class="o">=</span> <span class="n">date</span>
+    <span class="p">}</span>
+    
+    <span class="o">...</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p><a href="https://github.com/apple/swift/blob/b5570a1aa923d18f5b7a28b06ea2a7424ba65e3b/stdlib/public/Darwin/Foundation/Schedulers%2BOperationQueue.swift#L22">source</a></p>
+</blockquote>
+
+<p>To setup future work we may do as we alredy done within other Schedulers:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">source</span> <span class="o">=</span> <span class="kt">Timer</span>
+    <span class="o">.</span><span class="nf">publish</span><span class="p">(</span><span class="nv">every</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nv">on</span><span class="p">:</span> <span class="o">.</span><span class="n">main</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">.</span><span class="n">common</span><span class="p">)</span>
+    <span class="o">.</span><span class="nf">autoconnect</span><span class="p">()</span>
+    <span class="o">.</span><span class="nf">scan</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">{</span> <span class="n">counter</span><span class="p">,</span> <span class="n">_</span>  <span class="k">in</span>
+        <span class="k">let</span> <span class="nv">value</span> <span class="o">=</span> <span class="n">counter</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"tick "</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">value</span>
+    <span class="p">})</span>
+
+<span class="n">source</span>
+    <span class="o">.</span><span class="nf">receive</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">sink</span> <span class="p">{</span> <span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">in</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"The value is </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s"> in </span><span class="se">\(</span><span class="kt">Thread</span><span class="o">.</span><span class="n">current</span><span class="se">)</span><span class="s"> at </span><span class="se">\(</span><span class="kt">Date</span><span class="p">()</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="o">.</span><span class="nf">store</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">subscription</span><span class="p">)</span>
+    
+<span class="n">operation</span>
+    <span class="o">.</span><span class="nf">schedule</span><span class="p">(</span>
+        <span class="nv">after</span><span class="p">:</span> <span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="kt">Date</span><span class="p">(</span><span class="nv">timeIntervalSinceNow</span><span class="p">:</span> <span class="mf">4.5</span><span class="p">)),</span>
+        <span class="nv">tolerance</span><span class="p">:</span> <span class="o">.</span><span class="nf">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+        <span class="nv">options</span><span class="p">:</span> <span class="kc">nil</span>
+    <span class="p">)</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"cancelation"</span><span class="p">)</span>
+        <span class="n">subscription</span><span class="o">.</span><span class="nf">removeAll</span><span class="p">()</span>
+    <span class="p">}</span></code></pre></figure>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-14-schedulers-in-combine-operationQueue/operationQueue_future_test.png" alt="operationQueue_future_test" width="550" />
+</div>
+
+<p>Under the hood, schedule use serial queue and execute every task using <a href="https://github.com/apple/swift/blob/b5570a1aa923d18f5b7a28b06ea2a7424ba65e3b/stdlib/public/Darwin/Foundation/Schedulers%2BOperationQueue.swift#L155"><code class="language-plaintext highlighter-rouge">asyncAfter(deadline:)</code></a>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">action</span><span class="p">:</span> <span class="kd">@escaping</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">,</span> <span class="nv">after</span><span class="p">:</span> <span class="kt">OperationQueue</span><span class="o">.</span><span class="kt">SchedulerTimeType</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">action</span>
+    <span class="n">readyFromAfter</span> <span class="o">=</span> <span class="kc">false</span>
+    <span class="k">super</span><span class="o">.</span><span class="nf">init</span><span class="p">()</span>
+    <span class="k">let</span> <span class="nv">deadline</span> <span class="o">=</span> <span class="kt">DispatchTime</span><span class="o">.</span><span class="nf">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">after</span><span class="o">.</span><span class="n">date</span><span class="o">.</span><span class="n">timeIntervalSinceNow</span>            
+    <span class="kt">DelayReadyOperation</span><span class="o">.</span><span class="n">readySchedulingQueue</span><span class="o">.</span><span class="nf">asyncAfter</span><span class="p">(</span><span class="nv">deadline</span><span class="p">:</span> <span class="n">deadline</span><span class="p">)</span> <span class="p">{</span> <span class="p">[</span><span class="k">weak</span> <span class="k">self</span><span class="p">]</span> <span class="k">in</span>
+        <span class="k">self</span><span class="p">?</span><span class="o">.</span><span class="nf">becomeReady</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>note <a href="https://developer.apple.com/forums/thread/49361">the difference <code class="language-plaintext highlighter-rouge">asynchAfter(deadline:)</code> and <code class="language-plaintext highlighter-rouge">asynchAfter(wallDeadline:)</code></a></p>
+</blockquote>
+
+<h2 id="pitfalls">Pitfalls</h2>
+
+<ul>
+  <li>Be careful when use OperationQueue - make sure it’s available for dedicated tasks</li>
+  <li>Remember that every task by default will be executed async concurrently on available <code class="language-plaintext highlighter-rouge">Threads</code>, so the order is not guaranteed</li>
+</ul>
+
+<p><a href="/assets/posts/images/2020-12-14-schedulers-in-combine-operationQueue/source/operationQueue_scheduler.playground.zip">download source playground</a></p>
+
+<p><strong>Related articles:</strong></p>
+
+<ul>
+  <li><a href="/article/2020/11/26/schedulers-in-combine.html">Schedulers in Combine. Part 1: ImmediateScheduler</a></li>
+  <li><a href="/article/2020/12/01/schedulers-in-combine-runLoop.html">Schedulers in Combine. Part 2: RunLoop Scheduler</a></li>
+  <li><a href="/article/2020/12/05/schedulers-in-combine-DispatchQueue.html">Schedulers in Combine. Part 3: DispatchQueue Scheduler</a></li>
+  <li>Schedulers in Combine. Part 4: OperationQueue Scheduler</li>
+</ul>
+:ET

@@ -28,8 +28,10 @@ In this article we will cover next:
 
 **Related articles:**
 
+* Schedulers in Combine. Part 1: ImmediateScheduler
 * [Schedulers in Combine. Part 2: RunLoop Scheduler]({% post_url 2020-12-01-schedulers-in-combine-runLoop %})
 * [Schedulers in Combine. Part 3: DispatchQueue Scheduler]({% post_url 2020-12-05-schedulers-in-combine-DispatchQueue %})
+* [Schedulers in Combine. Part 4: OperationQueue Scheduler]({% post_url 2020-12-14-schedulers-in-combine-operationQueue %})
 
 ## intro
 
@@ -213,5 +215,7 @@ In next part I will cover `RunLoop Scheduler`.
 
 **Related articles:**
 
+* Schedulers in Combine. Part 1: ImmediateScheduler
 * [Schedulers in Combine. Part 2: RunLoop Scheduler]({% post_url 2020-12-01-schedulers-in-combine-runLoop %})
 * [Schedulers in Combine. Part 3: DispatchQueue Scheduler]({% post_url 2020-12-05-schedulers-in-combine-DispatchQueue %})
+* [Schedulers in Combine. Part 4: OperationQueue Scheduler]({% post_url 2020-12-14-schedulers-in-combine-operationQueue %})

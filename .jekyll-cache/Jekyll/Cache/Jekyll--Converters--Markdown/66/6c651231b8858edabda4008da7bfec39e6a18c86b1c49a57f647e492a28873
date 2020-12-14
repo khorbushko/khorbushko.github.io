@@ -1,4 +1,4 @@
-I"�J<p>When we start dealing with <code class="language-plaintext highlighter-rouge">Combine</code>, soon we realize that threads and task managing between them are essential. Luckily for us, Combine has a build-in realization of this routine called <code class="language-plaintext highlighter-rouge">Scheduler</code> - <em>” a protocol that defines when and how to execute a closure”</em> (Apple).</p>
+I"nL<p>When we start dealing with <code class="language-plaintext highlighter-rouge">Combine</code>, soon we realize that threads and task managing between them are essential. Luckily for us, Combine has a build-in realization of this routine called <code class="language-plaintext highlighter-rouge">Scheduler</code> - <em>” a protocol that defines when and how to execute a closure”</em> (Apple).</p>
 
 <p>So today I would like to tell you about <code class="language-plaintext highlighter-rouge">Scheduler</code> and how to use it.</p>
 
@@ -16,8 +16,10 @@
 <p><strong>Related articles:</strong></p>
 
 <ul>
+  <li>Schedulers in Combine. Part 1: ImmediateScheduler</li>
   <li><a href="/article/2020/12/01/schedulers-in-combine-runLoop.html">Schedulers in Combine. Part 2: RunLoop Scheduler</a></li>
   <li><a href="/article/2020/12/05/schedulers-in-combine-DispatchQueue.html">Schedulers in Combine. Part 3: DispatchQueue Scheduler</a></li>
+  <li><a href="/article/2020/12/14/schedulers-in-combine-operationQueue.html">Schedulers in Combine. Part 4: OperationQueue Scheduler</a></li>
 </ul>
 
 <h2 id="intro">intro</h2>
@@ -200,7 +202,9 @@
 <p><strong>Related articles:</strong></p>
 
 <ul>
+  <li>Schedulers in Combine. Part 1: ImmediateScheduler</li>
   <li><a href="/article/2020/12/01/schedulers-in-combine-runLoop.html">Schedulers in Combine. Part 2: RunLoop Scheduler</a></li>
   <li><a href="/article/2020/12/05/schedulers-in-combine-DispatchQueue.html">Schedulers in Combine. Part 3: DispatchQueue Scheduler</a></li>
+  <li><a href="/article/2020/12/14/schedulers-in-combine-operationQueue.html">Schedulers in Combine. Part 4: OperationQueue Scheduler</a></li>
 </ul>
 :ET

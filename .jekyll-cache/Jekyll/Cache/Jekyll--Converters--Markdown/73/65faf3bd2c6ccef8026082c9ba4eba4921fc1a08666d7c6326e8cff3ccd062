@@ -1,4 +1,4 @@
-I"U…<p>This is the 3rd article in my mini-series dedicated to <code class="language-plaintext highlighter-rouge">Schedulers</code> in <code class="language-plaintext highlighter-rouge">Combine</code>. And this one is about the most powerful one - <code class="language-plaintext highlighter-rouge">DispatchQueue</code> <code class="language-plaintext highlighter-rouge">Scheduler</code>.</p>
+I"÷†<p>This is the 3rd article in my mini-series dedicated to <code class="language-plaintext highlighter-rouge">Schedulers</code> in <code class="language-plaintext highlighter-rouge">Combine</code>. And this one is about the most powerful one - <code class="language-plaintext highlighter-rouge">DispatchQueue</code> <code class="language-plaintext highlighter-rouge">Scheduler</code>.</p>
 
 <p>Yet to his power, the usage is still pretty simple. At the same moment, it allows us to perform a lot of various operations with full control of how and when it will be done. So simplicity and functionality are what <code class="language-plaintext highlighter-rouge">DispatchQueue</code> <code class="language-plaintext highlighter-rouge">Scheduler</code> brings into <code class="language-plaintext highlighter-rouge">Combine</code> for us.
 <!--more--></p>
@@ -20,6 +20,8 @@
 <ul>
   <li><a href="/article/2020/11/26/schedulers-in-combine.html">Schedulers in Combine. Part 1: ImmediateScheduler</a></li>
   <li><a href="/article/2020/12/01/schedulers-in-combine-runLoop.html">Schedulers in Combine. Part 2: RunLoop Scheduler</a></li>
+  <li>Schedulers in Combine. Part 3: DispatchQueue Scheduler</li>
+  <li><a href="/article/2020/12/14/schedulers-in-combine-operationQueue.html">Schedulers in Combine. Part 4: OperationQueue Scheduler</a></li>
 </ul>
 
 <h2 id="dispatchqueue-scheduler">DispatchQueue Scheduler</h2>
@@ -279,5 +281,7 @@
 <ul>
   <li><a href="/article/2020/11/26/schedulers-in-combine.html">Schedulers in Combine. Part 1: ImmediateScheduler</a></li>
   <li><a href="/article/2020/12/01/schedulers-in-combine-runLoop.html">Schedulers in Combine. Part 2: RunLoop Scheduler</a></li>
+  <li>Schedulers in Combine. Part 3: DispatchQueue Scheduler</li>
+  <li><a href="/article/2020/12/14/schedulers-in-combine-operationQueue.html">Schedulers in Combine. Part 4: OperationQueue Scheduler</a></li>
 </ul>
 :ET

@@ -29,6 +29,8 @@ Before we go to the details of this `Scheduler`, I believe we need to recap `CGD
 
 * [Schedulers in Combine. Part 1: ImmediateScheduler]({% post_url 2020-11-26-schedulers-in-combine %})
 * [Schedulers in Combine. Part 2: RunLoop Scheduler]({% post_url 2020-12-01-schedulers-in-combine-runLoop %})
+* Schedulers in Combine. Part 3: DispatchQueue Scheduler
+* [Schedulers in Combine. Part 4: OperationQueue Scheduler]({% post_url 2020-12-14-schedulers-in-combine-operationQueue %})
 
 ## DispatchQueue Scheduler
 
@@ -284,3 +286,5 @@ In the next article, I will cover `OperationQueue Scheduler`.
 
 * [Schedulers in Combine. Part 1: ImmediateScheduler]({% post_url 2020-11-26-schedulers-in-combine %})
 * [Schedulers in Combine. Part 2: RunLoop Scheduler]({% post_url 2020-12-01-schedulers-in-combine-runLoop %})
+* Schedulers in Combine. Part 3: DispatchQueue Scheduler
+* [Schedulers in Combine. Part 4: OperationQueue Scheduler]({% post_url 2020-12-14-schedulers-in-combine-operationQueue %})

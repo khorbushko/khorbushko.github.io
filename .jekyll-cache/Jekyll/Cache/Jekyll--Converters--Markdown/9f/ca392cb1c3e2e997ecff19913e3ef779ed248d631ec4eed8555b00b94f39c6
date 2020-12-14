@@ -1,0 +1,4 @@
+I"ò<p>In this article we review last, but not least (in the list of available schedulers for <code class="language-plaintext highlighter-rouge">Combine</code> framework), scheduler - <code class="language-plaintext highlighter-rouge">OperationQueue</code>.</p>
+
+<p>As u remember from previous articles, <code class="language-plaintext highlighter-rouge">Scheduler</code> itâ€™s just a protocol that requires from type define <strong>WHEN</strong> and <strong>HOW</strong> execute a selected task.</p>
+:ET

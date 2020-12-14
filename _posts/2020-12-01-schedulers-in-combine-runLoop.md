@@ -23,7 +23,10 @@ Also, it's a good idea to remind ourselves about `RunLoop`, thus we will use it 
 **Related articles:**
 
 * [Schedulers in Combine. Part 1: ImmediateScheduler]({% post_url 2020-11-26-schedulers-in-combine %})
+* Schedulers in Combine: Part 2. RunLoop Scheduler
 * [Schedulers in Combine. Part 3: DispatchQueue Scheduler]({% post_url 2020-12-05-schedulers-in-combine-DispatchQueue %})
+* [Schedulers in Combine. Part 4: OperationQueue Scheduler]({% post_url 2020-12-14-schedulers-in-combine-operationQueue %})
+
 
 ## RunLoop Scheduler
 
@@ -235,4 +238,6 @@ In the next part, I will cover `DispatchQueue Scheduler`.
 Related articles:
 
 * [Schedulers in Combine. Part 1: ImmediateScheduler]({% post_url 2020-11-26-schedulers-in-combine %})
+* Schedulers in Combine: Part 2. RunLoop Scheduler
 * [Schedulers in Combine. Part 3: DispatchQueue Scheduler]({% post_url 2020-12-05-schedulers-in-combine-DispatchQueue %})
+* [Schedulers in Combine. Part 4: OperationQueue Scheduler]({% post_url 2020-12-14-schedulers-in-combine-operationQueue %})
