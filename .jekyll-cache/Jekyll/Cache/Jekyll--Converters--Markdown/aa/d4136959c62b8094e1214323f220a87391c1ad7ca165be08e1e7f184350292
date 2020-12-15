@@ -1,4 +1,4 @@
-I"ó(<div id="tags">
+I",<div id="tags">
 
     <h2>All tags</h2>
         <p>
@@ -12,6 +12,8 @@
             <a class="post-tag" href="/tags/#corefoundation">CoreFoundation</a>
         
             <a class="post-tag" href="/tags/#coregraphics">CoreGraphics</a>
+        
+            <a class="post-tag" href="/tags/#environnmentvalue">EnvironnmentValue</a>
         
             <a class="post-tag" href="/tags/#geometryeffect">GeometryEffect</a>
         
@@ -93,6 +95,15 @@
             
         </div>
     
+        <div id="environnmentvalue">
+            <h3>EnvironnmentValue</h3>
+            
+                <ul>
+                       <a class="post-link-tags" href="/article/2020/12/15/environment-values.html">Passing data down the view tree in SwiftUI</a>
+               </ul>
+            
+        </div>
+    
         <div id="geometryeffect">
             <h3>GeometryEffect</h3>
             
@@ -104,6 +115,10 @@
     
         <div id="swiftui">
             <h3>SwiftUI</h3>
+            
+                <ul>
+                       <a class="post-link-tags" href="/article/2020/12/15/environment-values.html">Passing data down the view tree in SwiftUI</a>
+               </ul>
             
                 <ul>
                        <a class="post-link-tags" href="/article/2020/12/10/swiftUIpropertyWrappers.html">SwiftUI property wrappers</a>
@@ -164,6 +179,10 @@
     
         <div id="ios">
             <h3>iOS</h3>
+            
+                <ul>
+                       <a class="post-link-tags" href="/article/2020/12/15/environment-values.html">Passing data down the view tree in SwiftUI</a>
+               </ul>
             
                 <ul>
                        <a class="post-link-tags" href="/article/2020/12/14/schedulers-in-combine-operationQueue.html">Schedulers in Combine: Part 4: OperationQueue Scheduler</a>
