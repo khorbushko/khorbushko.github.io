@@ -1,0 +1,247 @@
+I"�R<p><a href="https://developer.apple.com/documentation/swiftui/environmentvalues"><code class="language-plaintext highlighter-rouge">EnvironmentValues</code></a> is a set of values that may be used during interface and app functionality building.</p>
+
+<p>This is a simple and yet powerful addition from <code class="language-plaintext highlighter-rouge">SwiftUI</code>, that can improve any state and dataFlow in the app.
+<!--more--></p>
+
+<blockquote>
+  <p>A collection of environment values propagated through a view hierarchy. (<a href="https://developer.apple.com/documentation/swiftui/environmentvalues">Apple</a>)</p>
+</blockquote>
+
+<h2 id="environmentvalues">EnvironmentValues</h2>
+
+<p>By itself, <code class="language-plaintext highlighter-rouge">EnvironmentValues</code> is a struct with a collection of values. We may create an instance of this struct and check it out:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">values</span> <span class="o">=</span> <span class="kt">EnvironmentValues</span><span class="p">()</span></code></pre></figure>
+
+<p>simple <code class="language-plaintext highlighter-rouge">po</code> command gives us not to much info:</p>
+
+<blockquote>
+  <p>po values</p>
+
+  <p>▿ []</p>
+
+  <p>▿ plist : []</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- elements : nil
+</code></pre></div>  </div>
+
+  <ul>
+    <li>tracker : nil</li>
+  </ul>
+</blockquote>
+
+<p>But, according to <a href="https://developer.apple.com/documentation/swiftui/environmentvalues">official doc</a> - we may access thought <code class="language-plaintext highlighter-rouge">@Environment</code> and keypath to a lot of them. To figure out what if under the hood we may use <code class="language-plaintext highlighter-rouge">Mirror</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">Mirror</span><span class="p">(</span><span class="nv">reflecting</span><span class="p">:</span> <span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">children</span></code></pre></figure>
+
+<blockquote>
+  <p>▿ AnyCollection&lt;(label: Optional<String>, value: Any)&gt;</String></p>
+
+  <p>▿ _box : &lt;_RandomAccessCollectionBox&lt;LazyMapSequence&lt;Range<Int>, (label: Optional<String>, value: Any)&gt;&gt;: 0x600002314820&gt;</String></Int></p>
+</blockquote>
+
+<p>Aha, this is a struct that uses lazy collection within these values.</p>
+
+<p>The usage of these values is very important in <code class="language-plaintext highlighter-rouge">SwiftUI</code>. Values can be used implicitly by setting them for any of the view tree:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">VStack</span> <span class="p">{</span>
+            <span class="kt">Text</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">environment</span><span class="p">(\</span><span class="o">.</span><span class="n">font</span><span class="p">,</span> <span class="o">.</span><span class="n">headline</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">debug</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>where <code class="language-plaintext highlighter-rouge">debug</code> is extension to View that prints <code class="language-plaintext highlighter-rouge">Mirror(reflecting: self).subjectType</code>.</p>
+
+<blockquote>
+  <p>thanks to <a href="https://www.objc.io/books/thinking-in-swiftui/">objc.io</a> for this</p>
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">debug</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="k">Self</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="kt">Mirror</span><span class="p">(</span><span class="nv">reflecting</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span><span class="o">.</span><span class="n">subjectType</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">self</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The type will be next:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">ModifiedContent</span><span class="o">&lt;</span><span class="kt">VStack</span><span class="o">&lt;</span><span class="kt">Text</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">_EnvironmentKeyWritingModifier</span><span class="o">&lt;</span><span class="kt">Optional</span><span class="o">&lt;</span><span class="kt">Font</span><span class="o">&gt;&gt;&gt;</span></code></pre></figure>
+
+<p>We also know that we can apply modifiers to some stack, and then all nested children that can apply these settings should apply these values.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">VStack</span> <span class="p">{</span>
+            <span class="kt">Text</span><span class="p">(</span><span class="s">"Hello"</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">font</span><span class="p">(</span><span class="o">.</span><span class="n">headline</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">debug</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>And if we check the type</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">ModifiedContent</span><span class="o">&lt;</span><span class="kt">VStack</span><span class="o">&lt;</span><span class="kt">Text</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">_EnvironmentKeyWritingModifier</span><span class="o">&lt;</span><span class="kt">Optional</span><span class="o">&lt;</span><span class="kt">Font</span><span class="o">&gt;&gt;&gt;</span></code></pre></figure>
+
+<p>You can see, that Type is the same, so this is just a wrapper for environment values that can be used on our own.</p>
+
+<p>This means that we can use the environment to create custom modifiers and functions that can change the appearance of our view’s even on high-level view tree view’s.</p>
+
+<blockquote>
+  <p>there is an <a href="https://github.com/Cosmo/OpenSwiftUI/blob/master/Sources/OpenSwiftUI/Modifiers/EnvironmentKeyWritingModifier.swift">open-source WIP project</a> that tries to implement SwiftUI within <code class="language-plaintext highlighter-rouge">_EnvironmentKeyWritingModifier</code>, check it out for more.</p>
+</blockquote>
+
+<h2 id="custom-environment-value">Custom environment value</h2>
+
+<p>As mention on <a href="https://developer.apple.com/documentation/swiftui/environmentkey">official doc</a>, we can create a custom Environment value.</p>
+
+<p>The steps are very simple:</p>
+
+<ol>
+  <li>declare a new environment key type and specify a value for the required defaultValue property</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">private</span> <span class="kd">struct</span> <span class="kt">CheckmarkStrokeColorKey</span><span class="p">:</span> <span class="kt">EnvironmentKey</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="k">let</span> <span class="nv">defaultValue</span><span class="p">:</span> <span class="kt">Color</span> <span class="o">=</span> <span class="o">.</span><span class="n">green</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>here we will use this value for our own <code class="language-plaintext highlighter-rouge">View</code> with a checkmark shape inside</p>
+</blockquote>
+
+<ol>
+  <li>use the key to define a new environment value property</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">EnvironmentValues</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">checkmarkStrokeColor</span><span class="p">:</span> <span class="kt">Color</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">self</span><span class="p">[</span><span class="kt">CheckmarkStrokeColorKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span> <span class="p">}</span>
+        <span class="k">set</span> <span class="p">{</span> <span class="k">self</span><span class="p">[</span><span class="kt">CheckmarkStrokeColorKey</span><span class="o">.</span><span class="k">self</span><span class="p">]</span> <span class="o">=</span> <span class="n">newValue</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>This then can be used inside <code class="language-plaintext highlighter-rouge">View</code> using the <code class="language-plaintext highlighter-rouge">@Environment</code> variable:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">Checkmark</span><span class="p">:</span> <span class="kt">Shape</span> <span class="p">{</span>
+    
+    <span class="kd">func</span> <span class="nf">path</span><span class="p">(</span><span class="k">in</span> <span class="nv">rect</span><span class="p">:</span> <span class="kt">CGRect</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Path</span> <span class="p">{</span>
+        <span class="kt">Path</span> <span class="p">{</span> <span class="n">checkMarkBezierPath</span> <span class="k">in</span>
+            <span class="k">let</span> <span class="nv">origin</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">origin</span>
+            <span class="k">let</span> <span class="nv">diameter</span> <span class="o">=</span> <span class="n">rect</span><span class="o">.</span><span class="n">height</span>
+            <span class="k">let</span> <span class="nv">point1</span> <span class="o">=</span> <span class="kt">CGPoint</span><span class="p">(</span>
+                <span class="nv">x</span><span class="p">:</span> <span class="n">origin</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">diameter</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="nv">y</span><span class="p">:</span> <span class="n">origin</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">diameter</span> <span class="o">*</span> <span class="mf">0.4</span>
+            <span class="p">)</span>
+            <span class="k">let</span> <span class="nv">point2</span> <span class="o">=</span> <span class="kt">CGPoint</span><span class="p">(</span>
+                <span class="nv">x</span><span class="p">:</span> <span class="n">origin</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">diameter</span> <span class="o">*</span> <span class="mf">0.40</span><span class="p">,</span>
+                <span class="nv">y</span><span class="p">:</span> <span class="n">origin</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">diameter</span> <span class="o">*</span> <span class="mf">0.7</span>
+            <span class="p">)</span>
+            <span class="k">let</span> <span class="nv">point3</span> <span class="o">=</span> <span class="kt">CGPoint</span><span class="p">(</span>
+                <span class="nv">x</span><span class="p">:</span> <span class="n">origin</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">diameter</span> <span class="o">*</span> <span class="mf">0.95</span><span class="p">,</span>
+                <span class="nv">y</span><span class="p">:</span> <span class="n">origin</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">diameter</span> <span class="o">*</span> <span class="mf">0.2</span>
+            <span class="p">)</span>
+            
+            <span class="n">checkMarkBezierPath</span><span class="o">.</span><span class="nf">move</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="n">point1</span><span class="p">)</span>
+            <span class="n">checkMarkBezierPath</span><span class="o">.</span><span class="nf">addLine</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="n">point2</span><span class="p">)</span>
+            <span class="n">checkMarkBezierPath</span><span class="o">.</span><span class="nf">addLine</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="n">point3</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">AnimatedCheckMarkView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="kd">@Environment</span><span class="p">(\</span><span class="o">.</span><span class="n">checkmarkStrokeColor</span><span class="p">)</span> <span class="k">var</span> <span class="nv">strokeColor</span><span class="p">:</span> <span class="kt">Color</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">Checkmark</span><span class="p">()</span>
+            <span class="o">.</span><span class="nf">stroke</span><span class="p">(</span>
+                <span class="n">strokeColor</span><span class="p">,</span>
+                <span class="nv">style</span><span class="p">:</span> <span class="kt">StrokeStyle</span><span class="p">(</span>
+                    <span class="nv">lineWidth</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+                    <span class="nv">lineCap</span><span class="p">:</span> <span class="o">.</span><span class="n">round</span><span class="p">,</span>
+                    <span class="nv">lineJoin</span><span class="p">:</span> <span class="o">.</span><span class="n">round</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>And usage:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">AnimatedCheckMarkView</span><span class="p">()</span>
+            <span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="mi">150</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-15-environment-values/default.png" alt="default" width="350" />
+</div>
+
+<p>with changed environment:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">AnimatedCheckMarkView</span><span class="p">()</span>
+            <span class="o">.</span><span class="nf">environment</span><span class="p">(\</span><span class="o">.</span><span class="n">checkmarkStrokeColor</span><span class="p">,</span> <span class="o">.</span><span class="n">red</span><span class="p">)</span>
+            <span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="mi">150</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-15-environment-values/changed.png" alt="changed" width="350" />
+</div>
+
+<p>We may go futher and add View extension as done within font in saple above:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">func</span> <span class="nf">checkmarkStrokeColor</span><span class="p">(</span><span class="n">_</span> <span class="nv">color</span><span class="p">:</span> <span class="kt">Color</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="nf">environment</span><span class="p">(\</span><span class="o">.</span><span class="n">checkmarkStrokeColor</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Than apply to view tree:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">ContentView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">VStack</span> <span class="p">{</span>
+            <span class="kt">AnimatedCheckMarkView</span><span class="p">()</span>
+            <span class="kt">AnimatedCheckMarkView</span><span class="p">()</span>
+            <span class="kt">AnimatedCheckMarkView</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="o">.</span><span class="nf">checkmarkStrokeColor</span><span class="p">(</span><span class="o">.</span><span class="n">orange</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">frame</span><span class="p">(</span><span class="nv">width</span><span class="p">:</span> <span class="mi">150</span><span class="p">,</span> <span class="nv">height</span><span class="p">:</span> <span class="mi">450</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Result:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-15-environment-values/extension.png" alt="extension" width="350" />
+</div>
+
+<h2 id="pros-and-cons">Pros and Cons</h2>
+
+<p>Cons:</p>
+
+<ul>
+  <li>easy to forget to pass the <code class="language-plaintext highlighter-rouge">@Environment</code> variable and no error until we not use the actual screen where it uses. The good point here - <code class="language-plaintext highlighter-rouge">default</code> value will be used</li>
+  <li>easy to mismatch view-tree and set a variable in the wrong place</li>
+  <li>ease to forget to pass <code class="language-plaintext highlighter-rouge">@EnvironmentObject</code> - in comparison to <code class="language-plaintext highlighter-rouge">@Environment</code>, the default value is missed here, and do crash will be received.</li>
+</ul>
+
+<p>Pros:</p>
+
+<ul>
+  <li>easy customization</li>
+  <li>easy injection</li>
+</ul>
+
+<p><a href="/assets/posts/images/2020-12-15-environment-values/source/testEnvironment.zip">download source playground</a></p>
+:ET

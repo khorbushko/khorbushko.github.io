@@ -6,7 +6,7 @@ permalink: /about/
 
 
 <div style="text-aligh: left">
-<img src="assets/author.svg" alt="preview_1" width="200"/>
+<img src="{{site.baseurl}}/assets/author.svg" alt="preview_1" width="200"/>
 </div>
 
 <br>

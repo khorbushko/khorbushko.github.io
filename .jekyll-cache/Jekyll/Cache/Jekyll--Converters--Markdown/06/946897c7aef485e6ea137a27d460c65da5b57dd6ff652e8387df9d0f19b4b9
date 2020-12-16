@@ -1,0 +1,17 @@
+I"<p>I would like to keep here small notes/quotes from books, that may be usefull or just interesting.</p>
+
+<h2 id="advanced-swift">Advanced Swift</h2>
+
+<p><a href="https://www.amazon.com/dp/1070881392">Great book by Chris Eidhof</a></p>
+
+<ul>
+  <li>Iterator sample</li>
+</ul>
+
+<div style="text-align:left">
+<img src="/assets/books/advancedSwift/cover.jpg" alt="cover" width="100" />
+	<div style="text-align:center">
+	<img src="/assets/books/advancedSwift/screen1.jpg" alt="iterator_sample" width="350" />
+	</div>
+</div>
+:ET
