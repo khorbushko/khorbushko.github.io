@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "Passing data down the view tree in SwiftUI"
 categories: article
-tags: [iOS, SwiftUI, EnvironnmentValue]
+tags: [iOS, SwiftUI, EnvironmentValues, dataflow]
 excerpt_separator: <!--more-->
 comments_id: 14
 

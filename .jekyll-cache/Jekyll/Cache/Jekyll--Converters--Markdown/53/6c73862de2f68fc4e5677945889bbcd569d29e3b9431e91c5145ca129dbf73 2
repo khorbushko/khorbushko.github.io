@@ -1,4 +1,0 @@
-I"ž<p>Within <code class="language-plaintext highlighter-rouge">SwiftUI</code> we may have a lot of options on how to handle data. To help us out with this, Apple has introduced a few <code class="language-plaintext highlighter-rouge">propertyWrappers</code> for us.</p>
-
-<p>But to make everything clear may be a bit complicated at first. So I decided to check every wrapper and test the functionality behind it.</p>
-:ET

@@ -1,0 +1,21 @@
+I"¸<p>I would like to keep here small notes/quotes from books, that may be usefull or just interesting.</p>
+
+<table class="css3">
+<tr>
+  <th>1</th>
+  <th>2</th>
+  <th>3</th>
+</tr>
+</table>
+
+<p>table.css3 tbody tr + tr td:nth-child(2) {
+    background-color: red;
+}
+table.css2 tbody tr + tr td + td {
+    background-color: tomato;
+}
+/* overwrite background again */
+table.css2 tbody tr + tr td + td + td { 
+    background-color: inherit;
+}</p>
+:ET

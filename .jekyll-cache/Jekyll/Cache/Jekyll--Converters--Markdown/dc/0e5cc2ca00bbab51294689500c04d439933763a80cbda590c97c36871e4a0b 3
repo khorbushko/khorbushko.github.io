@@ -1,4 +1,0 @@
-I"H<p>Rich animations and some cool effects - it’s always something that I try to add when dealing with UI.</p>
-
-<p>In my opinion, a nicely animated transition is much better than just “blink” and simple state change. Off-cause, this requires a bit more time and sometimes no-one didn’t expect to get this animation effect or even didn’t notice that state is changed without animating <code class="language-plaintext highlighter-rouge">View</code>, but the process of creating animation bring some inner satisfaction for me, and as u know <em>“dress for success”</em>.</p>
-:ET
