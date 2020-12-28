@@ -138,7 +138,7 @@ final class SystemInfoViewModelTest: XCTestCase {
 
 ## Stub
 
-**Stub object** - object that has some *dummy data* for specific calls required by tests.
+**Stub object** - object that has some *dummy data* for specific calls required by tests and some mechanism that allow return specific value required by tests - some *state*.
 
 Every time we need to check if some call is executed, instead of introducing a complex solution using a real object, we can simplify it by using Stub one.
 
@@ -159,15 +159,15 @@ protocol SystemInformationProvider {
 }
 
 final class SystemInfoViewModel {
-    
+
     let infoProvider: SystemInformationProvider
-    
+
     // MARK: - Lifecycle
-    
+
     init(infoProvider: SystemInformationProvider) {
         self.infoProvider = infoProvider
     }
-    
+
     func fetchSystemInfo() -> SystemInfo {
         // simplified for sample logic
         infoProvider.fetchSystemInfo()
@@ -175,57 +175,59 @@ final class SystemInfoViewModel {
 }
 
 final class SystemInfoViewModelTest: XCTestCase {
-    
-    // This is now a stub object
+
+    // This is a stub object
     private final class StubSystemInfoProvider: SystemInformationProvider {
-        private(set) var isFetchSystemInfoCalled: Bool = false
-        func fetchSystemInfo() -> SystemInfo { // return dummy data
-            isFetchSystemInfoCalled = true
-            return SystemInfo()
+        // state that define return value
+        var returnSystemInfoOptionA: Bool = true
+        func fetchSystemInfo() -> SystemInfo {
+            if returnSystemInfoOptionA {
+                let info = SystemInfo()
+                info.foo = 1
+                return info
+            } else {
+                return SystemInfo()
+            }
         }
     }
-    
+
     private var sut: SystemInfoViewModel!
     private var provider: StubSystemInfoProvider!
-    
+
     // MARK: - Lifecycle
-    
+
     override func setUp() {
         super.setUp()
-        
+
         configureSUT()
     }
-    
+
     override func tearDown() {
         super.tearDown()
-        
+
         sut = nil
         provider = nil
-        
+
         XCTAssertNil(sut)
         XCTAssertNil(provider)
     }
-    
+
     // MARK: - Tests
-    
+
     func testGivenViewModelWhenCreatedShouldCallSystemInfoProviderWhenFetchSystemInfoData() {
-        XCTAssertFalse(
-            provider.isFetchSystemInfoCalled,
-            "isFetchSystemInfoCalled should be false (not called) before test"
-        )
-        _ = sut.fetchSystemInfo()
-        XCTAssertTrue(
-            provider.isFetchSystemInfoCalled,
-            "isFetchSystemInfoCalled should be true (called) after test"
-        )
+        // change existing stub state to retrive data we need
+        provider.returnSystemInfoOptionA = true
+        
+        let info = sut.fetchSystemInfo()
+        XCTAssertEqual(info.foo, 1)
     }
-    
+
     // MARK: - Private
-    
+
     private func configureSUT() {
         provider = StubSystemInfoProvider()
         sut = SystemInfoViewModel(infoProvider: provider)
-        
+
         XCTAssertNotNil(provider)
         XCTAssertNotNil(sut)
     }
@@ -234,7 +236,7 @@ final class SystemInfoViewModelTest: XCTestCase {
 
 ## Mock
 
-**Mock objects** - objects that used to *register received calls from test object* and so we can *verify* it. This type of object is also *not used in production*.
+**Mock objects** - objects that used to *register received calls from test object* and so we can *verify* it. This type of object is also *not used in production*. In other words, object contains some state, that can be cheked during test.
 
 Sometimes Mock object is called a special type of Stub object with extra states inside. Additional states and some other parameters allow checking whenever execution is processed expectedly. So *verification* is an essential part of such objects - u always *can check your expectation*.
 
@@ -265,7 +267,8 @@ final class SystemInfoViewModelTest: XCTestCase {
     // This is a mock object
     private final class MockSystemInfoProvider: SystemInformationProvider {
         private(set) var systemVersion: Int = 0 // value
-        private(set) var changeSystemCallCount: Int = 0 // state
+        // state to check
+        private(set) var changeSystemCallCount: Int = 0 
         
         func changeSystemVersionTo(_ version: Int) {
             // simplified logic for demo
@@ -319,6 +322,8 @@ final class SystemInfoViewModelTest: XCTestCase {
     }
 }
 {% endhighlight %}
+
+> Stub and Mock a bit similar, but "There is a difference in that the stub uses state verification while the mock uses behavior verification." [M.Flowler](https://martinfowler.com/articles/mocksArentStubs.html)
 
 ## Dummy
 
