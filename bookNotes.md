@@ -13,6 +13,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.amazon.com/Mythical-Man-Month-Software-Engineering-Anniversary/dp/0201835959/ref=sr_1_1?crid=2RV3B3N4KDNHO&dchild=1&keywords=mythical+man+month&qid=1609161393&sprefix=mythical+man%2Caps%2C255&sr=8-1"><img src="{{site.baseurl}}/assets/books/mmm/cover.jpg" alt="Mythical Man-Month, The: Essays on Software Engineering, Anniversary Edition Anniversary Edition by Frederick Brooks Jr. (Author)" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/Thinking-SwiftUI-Chris-Eidhof/dp/B085RNL1SJ/ref=sr_1_1?dchild=1&keywords=thinking+in+swiftUI&qid=1608372211&s=books&sr=1-1"><img src="{{site.baseurl}}/assets/books/ThinkinginSwiftUIObjcIO/cover.jpg" alt="Thinking in SwiftUI by Chris Eidhof (Author), Florian Kugler (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="{{site.baseurl}}/bookNotes/programmingInObjC"><img src="{{site.baseurl}}/assets/books/programmingInObjC/cover.jpg" alt="programmingInObjC" style="width:110px;height:150px;padding:10px"></a> 

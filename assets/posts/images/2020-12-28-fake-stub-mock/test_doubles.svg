@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="886px" height="419px" viewBox="0 0 886 419" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Slice</title>
+    <defs>
+        <rect id="path-1" x="692" y="171" width="165" height="73"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="165" height="73" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="246.5" y="63.5" width="164" height="72"></rect>
+        <rect id="Rectangle" stroke="#979797" x="23.5" y="171.5" width="164" height="72"></rect>
+        <text id="Test-Doubles" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="268" y="106">Test Doubles</tspan>
+        </text>
+        <text id="Fake" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="85" y="214">Fake</tspan>
+        </text>
+        <use id="Rectangle" stroke="#979797" mask="url(#mask-2)" stroke-width="2" stroke-dasharray="7" xlink:href="#path-1"></use>
+        <text id="Dummy" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="749" y="214">Dummy</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" x="246.5" y="171.5" width="164" height="72"></rect>
+        <text id="Stub" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="308" y="214">Stub</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" x="268.5" y="279.5" width="142" height="72"></rect>
+        <text id="Spy" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="325" y="322">Spy</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" x="469.5" y="171.5" width="164" height="72"></rect>
+        <text id="Mock" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="531" y="214">Mock</tspan>
+        </text>
+        <line x1="246.5" y1="99.5" x2="105.5" y2="99.5" id="Line" stroke="#979797" stroke-linecap="square"></line>
+        <path id="Line-2" d="M106,99 L106,163 L110,163 L105.5,172 L101,163 L105,163 L105,99 L106,99 Z" fill="#979797" fill-rule="nonzero"></path>
+        <line x1="774.5" y1="99.5" x2="410.5" y2="99.5" id="Line" stroke="#979797" stroke-linecap="square"></line>
+        <path id="Line-2" d="M552,99 L552,163 L556,163 L551.5,172 L547,163 L551,163 L551,99 L552,99 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line-2" d="M775,99 L775,163 L779,163 L774.5,172 L770,163 L774,163 L774,99 L775,99 Z" fill="#979797" fill-rule="nonzero"></path>
+        <line x1="255.5" y1="244.5" x2="255.5" y2="315.5" id="Line-3" stroke="#979797" stroke-linecap="square"></line>
+        <path id="Line-4" d="M260,311 L269,315.5 L260,320 L260,316 L255,316 L255,315 L260,315 L260,311 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line-2" d="M329,135 L329,163 L333,163 L328.5,172 L324,163 L328,163 L328,135 L329,135 Z" fill="#979797" fill-rule="nonzero"></path>
+    </g>
+</svg>
