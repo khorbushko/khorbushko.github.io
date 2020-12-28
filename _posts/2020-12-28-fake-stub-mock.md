@@ -323,7 +323,8 @@ final class SystemInfoViewModelTest: XCTestCase {
 }
 {% endhighlight %}
 
-> Stub and Mock a bit similar, but "There is a difference in that the stub uses state verification while the mock uses behavior verification." [M.Flowler](https://martinfowler.com/articles/mocksArentStubs.html)
+<br>
+> Stub and Mock a bit similar, but "There is a difference in that the stub uses state verification while the mock uses behavior verification." [M.Fowler](https://martinfowler.com/articles/mocksArentStubs.html)
 
 ## Dummy
 
@@ -416,7 +417,7 @@ So, to summarize:
 
 ## Resources
 
-* [Martin Folwer defienition](https://martinfowler.com/bliki/TestDouble.html)
+* [Martin Fowler defienition](https://martinfowler.com/bliki/TestDouble.html)
 * [Mocks Aren't Stubs by Martin Folwer](https://martinfowler.com/articles/mocksArentStubs.html)
 * [Given-When-Then](https://martinfowler.com/bliki/GivenWhenThen.html)
 * [Test Doubles](https://blog.pragmatists.com/test-doubles-fakes-mocks-and-stubs-1a7491dfa3da)
