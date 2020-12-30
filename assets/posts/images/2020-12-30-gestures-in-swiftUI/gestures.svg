@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="288px" height="616px" viewBox="0 0 288 616" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Slice</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="48.5" y="23.5" width="162" height="62"></rect>
+        <text id="Gestures" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="89.5" y="61">Gestures</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="81.5" y="106.5" width="152" height="62"></rect>
+        <text id="Tap" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="142.5" y="144">Tap</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="81.5" y="189.5" width="152" height="62"></rect>
+        <text id="LongPress" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="112.5" y="227">LongPress</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="81.5" y="272.5" width="152" height="62"></rect>
+        <text id="Drag" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="137.5" y="310">Drag</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="81.5" y="355.5" width="152" height="62"></rect>
+        <text id="Rotation" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="117.5" y="393">Rotation</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="81.5" y="438.5" width="152" height="62"></rect>
+        <text id="Magnification" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="92.5" y="476">Magnification</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="81.5" y="521.5" width="152" height="62"></rect>
+        <text id="Hover" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="20" font-weight="bold" fill="#000000">
+            <tspan x="132.5" y="559">Hover</tspan>
+        </text>
+        <text id="(swipe)" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="10" font-weight="bold" fill="#000000">
+            <tspan x="140.5" y="323">(swipe)</tspan>
+        </text>
+        <text id="(pinch-and-zoom)" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="10" font-weight="bold" fill="#000000">
+            <tspan x="117" y="489">(pinch and zoom)</tspan>
+        </text>
+        <text id="maxOS/iPad" font-family="Inconsolata-Regular_Bold, Inconsolata" font-size="10" font-weight="bold" fill="#000000">
+            <tspan x="178" y="530">maxOS/iPad</tspan>
+        </text>
+        <line x1="62.5" y1="86.5" x2="62.5" y2="552.5" id="Line" stroke="#979797" stroke-linecap="square"></line>
+        <path id="Line-2" d="M67,133 L67,137 L73,137 L73,133 L82,137.5 L73,142 L73,138 L67,138 L67,142 L58,142 L58,133 L67,133 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line-2" d="M67,216 L67,220 L73,220 L73,216 L82,220.5 L73,225 L73,221 L67,221 L67,225 L58,225 L58,216 L67,216 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line-2" d="M67,299 L67,303 L73,303 L73,299 L82,303.5 L73,308 L73,304 L67,304 L67,308 L58,308 L58,299 L67,299 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line-2" d="M67,382 L67,386 L73,386 L73,382 L82,386.5 L73,391 L73,387 L67,387 L67,391 L58,391 L58,382 L67,382 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line-2" d="M67,465 L67,469 L73,469 L73,465 L82,469.5 L73,474 L73,470 L67,470 L67,474 L58,474 L58,465 L67,465 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line-2" d="M67,548 L67,552 L73,552 L73,548 L82,552.5 L73,557 L73,553 L67,553 L67,557 L58,557 L58,548 L67,548 Z" fill="#979797" fill-rule="nonzero"></path>
+    </g>
+</svg>
