@@ -4,8 +4,8 @@ author:
   email: kirill.ge@gmail.com
 logo: /assets/favicon.png
 description: >
-  blog about diferent aspects of programming
-  for iOS, using Swift/Obj-C
+  blog about diferent aspects of programming,
+  mainly for iOS, using Swift/Obj-C
 
 show_excerpts: true # set to true to show excerpts on the homepage
 
@@ -36,7 +36,7 @@ theme: minima
 
 donations:
   paypal:
-    text:           Buy me a coffe
+    text:           Buy me a coffee
     id:             KKXW84CNZ5PGN
 
 #discus
@@ -50,7 +50,6 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-paginate
-  - jekyll-sitemap
 
 # Exclude these files from your production _site
 exclude:
@@ -60,5 +59,4 @@ exclude:
   - README.md
   - CNAME
 
-paginate: 10
-
+paginate: 7
