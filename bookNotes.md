@@ -13,6 +13,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.amazon.com/Pragmatic-Programmer-journey-mastery-Anniversary-dp-0135957052/dp/0135957052/ref=dp_ob_image_bk"><img src="{{site.baseurl}}/assets/books/thepragmaticProgrammer/cover.jpg" alt="The Pragmatic Programmer: Your Journey To Mastery, 20th Anniversary Edition (2nd Edition) 2nd Edition by David Thomas (Author), Andrew Hunt  (Author)" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/SwiftUI-Absolute-Beginners-Program-Controls/dp/1484255151/ref=sr_1_1?crid=YXQSX20S6N5G&dchild=1&keywords=swiftui+for+absolute+beginners&qid=1609835413&sprefix=swiftUI+for+ab%2Cdeals-intl-ship%2C246&sr=8-1"><img src="{{site.baseurl}}/assets/books/swiftUIforAbsoluteBegginers/cover.jpg" alt="SwiftUI for Absolute Beginners: Program Controls and Views for iPhone, iPad, and Mac Apps 1st ed. Edition by Jayant Varma  (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Mythical-Man-Month-Software-Engineering-Anniversary/dp/0201835959/ref=sr_1_1?crid=2RV3B3N4KDNHO&dchild=1&keywords=mythical+man+month&qid=1609161393&sprefix=mythical+man%2Caps%2C255&sr=8-1"><img src="{{site.baseurl}}/assets/books/mmm/cover.jpg" alt="Mythical Man-Month, The: Essays on Software Engineering, Anniversary Edition Anniversary Edition by Frederick Brooks Jr. (Author)" style="width:110px;height:150px;padding:10px"></a>
