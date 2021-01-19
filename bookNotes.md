@@ -11,7 +11,11 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <br>
 
+### 2021
+
 <div style="text-align:center">
+
+<a href="https://www.amazon.com/Learn-SwiftUI-introductory-cross-platform-interfaces/dp/1839215429"><img src="{{site.baseurl}}/assets/books/learnSwiftUI/cover.jpg" alt="Learn SwiftUI: An introductory guide to creating intuitive cross-platform user interfaces using Swift 5 Paperback – April 3, 2020 by Chris Barker  (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Pragmatic-Programmer-journey-mastery-Anniversary-dp-0135957052/dp/0135957052/ref=dp_ob_image_bk"><img src="{{site.baseurl}}/assets/books/thepragmaticProgrammer/cover.jpg" alt="The Pragmatic Programmer: Your Journey To Mastery, 20th Anniversary Edition (2nd Edition) 2nd Edition by David Thomas (Author), Andrew Hunt  (Author)" style="width:110px;height:150px;padding:10px"></a>
 
@@ -22,6 +26,14 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 <a href="https://www.amazon.com/Thinking-SwiftUI-Chris-Eidhof/dp/B085RNL1SJ/ref=sr_1_1?dchild=1&keywords=thinking+in+swiftUI&qid=1608372211&s=books&sr=1-1"><img src="{{site.baseurl}}/assets/books/ThinkinginSwiftUIObjcIO/cover.jpg" alt="Thinking in SwiftUI by Chris Eidhof (Author), Florian Kugler (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="{{site.baseurl}}/bookNotes/programmingInObjC"><img src="{{site.baseurl}}/assets/books/programmingInObjC/cover.jpg" alt="programmingInObjC" style="width:110px;height:150px;padding:10px"></a> 
+
+</div>
+<br>
+
+
+### ...2020
+
+<div style="text-align:center">
 
 <a href="https://www.amazon.com/SwiftUI-Tutorials-First-Declarative-Development/dp/1942878834/ref=sr_1_1?crid=17GFKQ1ABXSLQ&dchild=1&keywords=swiftui+by+tutorials&qid=1608372098&s=books&sprefix=SwiftUI+by+t,stripbooks-intl-ship,-1&sr=1-1"><img src="{{site.baseurl}}/assets/books/swiftUIRW/cover.jpeg" alt="SwiftUI by Tutorials (First Edition): Declarative App Development on the Apple Ecosystem by raywenderlich Tutorial Team (Author), Antonio Bello (Author), Phil Laszkowicz (Author), Bill Morefield (Author), Audrey Tam (Author)" style="width:110px;height:150px;padding:10px"></a>
 
