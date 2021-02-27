@@ -29,6 +29,7 @@ google_analytics: G-64DN886230
 header_pages:
  - bookNotes.md
  - search.md
+ - blog/archives/index.html
  - contact.md
  - about.md
 
@@ -45,11 +46,14 @@ donations:
 #  shortname: khorbushko-blog
 #url: https://khorbushko.github.io
 
+archive_path: blog/archives/
+
 # Use the following plug-ins
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-paginate
+
 
 # Exclude these files from your production _site
 exclude:
