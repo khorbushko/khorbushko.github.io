@@ -15,7 +15,9 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
-<a href="https://www.amazon.com/Learn-SwiftUI-introductory-cross-platform-interfaces/dp/1839215429"><img src="{{site.baseurl}}/assets/books/learnSwiftUI/cover.jpg" alt="Learn SwiftUI: An introductory guide to creating intuitive cross-platform user interfaces using Swift 5 Paperback – April 3, 2020 by Chris Barker  (Author)" style="width:110px;height:150px;padding:10px"></a>
+<a href="https://www.amazon.com/Head-First-Java-Kathy-Sierra/dp/0596009208"><img src="{{site.baseurl}}/assets/books/headFirstJava/cover.jpg" alt="Head First Java, 2nd Edition 2nd Edition by Kathy Sierra  (Author), Bert Bates (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com/Learn-SwiftUI-introductory-cross-platform-interfaces/dp/1839215429"><img src="{{site.baseurl}}/assets/books/learnSwiftUI/cover.jpg" alt="Learn SwiftUI: An introductory guide to creating intuitive cross-platform user interfaces using Swift 5 Paperback – April 3, 2020 by Chris Barker (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Pragmatic-Programmer-journey-mastery-Anniversary-dp-0135957052/dp/0135957052/ref=dp_ob_image_bk"><img src="{{site.baseurl}}/assets/books/thepragmaticProgrammer/cover.jpg" alt="The Pragmatic Programmer: Your Journey To Mastery, 20th Anniversary Edition (2nd Edition) 2nd Edition by David Thomas (Author), Andrew Hunt  (Author)" style="width:110px;height:150px;padding:10px"></a>
 
