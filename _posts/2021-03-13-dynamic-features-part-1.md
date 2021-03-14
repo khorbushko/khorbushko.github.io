@@ -71,7 +71,7 @@ Such an approach also does not provide any information about the type of object 
 
 `KeyPath` type, instead, is a fast, property traversal, statically type-safe, available for all values and on all platforms where Swift works.
 
-## usage of keyPath
+### usage of keyPath
 
 <div style="text-align:center">
 <img src="{{site.baseurl}}/assets/posts/images/2021-03-13-dynamic-features/usage.pdf" alt="files" width="450"/>
@@ -82,7 +82,7 @@ Such an approach also does not provide any information about the type of object 
 
 > based on [WWDC 17 #212 What's New in Foundation](https://developer.apple.com/videos/play/wwdc2017/212/)
 
-### AnyKeypath
+## AnyKeypath
 
 `AnyKeyPath` does not have some generic constraints, and this type is created for handling any keypath (:]) from any objects. So this type is fully erased, and don't know about its route and root object.
 
@@ -564,7 +564,7 @@ Now this is implemented and can be used within `Combine`:
 ```
 let responsePublisher = publisher
 				 .map(\.data)
-	// 				  	  ^~~~~~~~~
+	// 			  	  ^~~~~~~~~
                .decode(type: FeedItem.self, decoder: JSONDecoder())
                .receive(on: DispatchQueue.main)
 ```
