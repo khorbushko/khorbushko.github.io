@@ -63,4 +63,4 @@ exclude:
   - README.md
   - CNAME
 
-paginate: 7
+paginate: 25

@@ -119,6 +119,7 @@ let anyKeyPathArray = [
 ]
 // Array<AnyKeyPath>
 {% endhighlight %}
+
 In addition to described above, this type conforms to protocol `_AppendKeyPath` - this protocol allows us to modify keyPath by appending some components.
 
 > note: Apple mentions in header *"do not use this protocol directly."*
