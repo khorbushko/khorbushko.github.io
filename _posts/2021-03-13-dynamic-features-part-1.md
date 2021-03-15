@@ -20,12 +20,18 @@ Swift has a strongly-typed system. In the same moment during the last few years,
 - [keyPath](https://github.com/apple/swift-evolution/blob/master/proposals/0161-key-paths.md)
 - [dynamic member lookup](https://github.com/apple/swift-evolution/blob/master/proposals/0195-dynamic-member-lookup.md)
 - [dynamic replacement](https://forums.swift.org/t/dynamic-method-replacement/16619)
-- [callable](https://github.com/apple/swift-evolution/blob/master/proposals/0216-dynamic-callable.md)
+
+Also, it's good to mention about [opposite to @dynamicCallable - static Callable](https://github.com/apple/swift-evolution/blob/master/proposals/0253-callable.md)
 
 Some dynamic features were present in language from the very beginning:
 
 - [`Mirror`](https://developer.apple.com/documentation/swift/mirror).
 - additions from Obj-C (such as KVO, dynamic dispatch, etc) (this still can be used by using `@objc`, `dynamic`, `NSObject` and other modifiers/techniques)
+
+**Related articles:**
+
+- Dynamic swift - Part 1: KeyPath
+- [Dynamic swift - Part 2: @dynamicMemberLookup]({% post_url 2021-03-22-dynamic-swift-dynamic-member-lookup %})
 
 ## dynamic or static?
 
@@ -583,6 +589,11 @@ It's also good to mention, that we still can use `#keyPath` for Objective-C code
 <br>
 
 In the next articles, I will cover other dynamic aspects of Swift.
+
+**Related articles:**
+
+- Dynamic swift - Part 1: KeyPath
+- [Dynamic swift - Part 2: @dynamicMemberLookup]({% post_url 2021-03-22-dynamic-swift-dynamic-member-lookup %})
 
 ## Resources
 
