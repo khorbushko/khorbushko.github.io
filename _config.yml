@@ -46,6 +46,9 @@ donations:
 #  shortname: khorbushko-blog
 #url: https://khorbushko.github.io
 
+#payment
+payment_pointer: $ilp.uphold.com/GiEjnNF98h8k
+
 archive_path: blog/archives/
 
 # Use the following plug-ins
@@ -53,6 +56,7 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-paginate
+  - jekyll/web_monetization
 
 
 # Exclude these files from your production _site
