@@ -23,6 +23,8 @@ This feature was added in Swift 4.2.
 
 - [Dynamic swift - Part 1: KeyPath]({% post_url 2021-03-13-dynamic-features-part-1 %})
 - Dynamic swift - Part 2: @dynamicMemberLookup
+- [Dynamic swift - Part 3: Opposite to @dynamicCallable - static Callable]({% post_url 2021-03-30-dynamic-swift-callable %})
+- [Dynamic swift - Part 4: @dynamicReplacement]({% post_url 2021-01-11-do-that-instead-of-this %})
 
 ## introduction
 
@@ -181,6 +183,8 @@ Again, Swift was created as a very type-safe language, but such dynamism can thr
 
 - [Dynamic swift - Part 1: KeyPath]({% post_url 2021-03-13-dynamic-features-part-1 %})
 - Dynamic swift - Part 2: @dynamicMemberLookup
+- [Dynamic swift - Part 3: Opposite to @dynamicCallable - static Callable]({% post_url 2021-03-30-dynamic-swift-callable %})
+- [Dynamic swift - Part 4: @dynamicReplacement]({% post_url 2021-01-11-do-that-instead-of-this %})
 
 ## Resources
 
