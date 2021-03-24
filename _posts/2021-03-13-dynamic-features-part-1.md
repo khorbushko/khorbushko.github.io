@@ -32,7 +32,7 @@ Some dynamic features were present in language from the very beginning:
 
 - Dynamic swift - Part 1: KeyPath
 - [Dynamic swift - Part 2: @dynamicMemberLookup]({% post_url 2021-03-22-dynamic-swift-dynamic-member-lookup %})
-- [Dynamic swift - Part 3: Opposite to @dynamicCallable - static Callable]({% post_url 2021-03-30-dynamic-swift-callable %})
+- [Dynamic swift - Part 3: Opposite to @dynamicCallable - static Callable]({% post_url 2021-03-25-dynamic-swift-callable %})
 - [Dynamic swift - Part 4: @dynamicReplacement]({% post_url 2021-01-11-do-that-instead-of-this %})
 
 ## dynamic or static?
@@ -596,7 +596,7 @@ In the next articles, I will cover other dynamic aspects of Swift.
 
 - Dynamic swift - Part 1: KeyPath
 - [Dynamic swift - Part 2: @dynamicMemberLookup]({% post_url 2021-03-22-dynamic-swift-dynamic-member-lookup %})
-- [Dynamic swift - Part 3: Opposite to @dynamicCallable - static Callable]({% post_url 2021-03-30-dynamic-swift-callable %})
+- [Dynamic swift - Part 3: Opposite to @dynamicCallable - static Callable]({% post_url 2021-03-25-dynamic-swift-callable %})
 - [Dynamic swift - Part 4: @dynamicReplacement]({% post_url 2021-01-11-do-that-instead-of-this %})
 
 ## Resources

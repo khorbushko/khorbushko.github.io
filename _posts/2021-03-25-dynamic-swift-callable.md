@@ -73,7 +73,7 @@ let num3 = random(lowerBounds..<upperBounds)
 > You can have a few overloads of `callAsFunction` in the same type - instance will behave as it an overloaded function.
 <br>
 
-[download source code]({% link assets/posts/images/2021-03-30-dynamic-swift-callable/source/play.playground.zip %})
+[download source code]({% link assets/posts/images/2021-03-25-dynamic-swift-callable/source/play.playground.zip %})
 <br>
 
 **Related articles:**

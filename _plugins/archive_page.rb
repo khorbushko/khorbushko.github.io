@@ -90,7 +90,7 @@ module Jekyll
       archives.render(site.layouts, site.site_payload)
       archives.write(site.dest)
       site.pages << archives
-      puts "generated"
+      puts "    arhive has been generated"
     end
 
   end
