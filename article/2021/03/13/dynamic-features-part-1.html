@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Dynamic swift - Part 1: KeyPath | kyryl horbushko</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Dynamic swift - Part 1: KeyPath" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Dynamic features bring some flexibility and additional functionality into the programming language, but at the same moment, this can reduce compile-time safety." />
+<meta property="og:description" content="Dynamic features bring some flexibility and additional functionality into the programming language, but at the same moment, this can reduce compile-time safety." />
+<link rel="canonical" href="http://localhost:4000/article/2021/03/13/dynamic-features-part-1.html" />
+<meta property="og:url" content="http://localhost:4000/article/2021/03/13/dynamic-features-part-1.html" />
+<meta property="og:site_name" content="kyryl horbushko" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-03-13T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Dynamic swift - Part 1: KeyPath" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/article/2021/03/13/dynamic-features-part-1.html"},"@type":"BlogPosting","url":"http://localhost:4000/article/2021/03/13/dynamic-features-part-1.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/favicon.png"}},"headline":"Dynamic swift - Part 1: KeyPath","dateModified":"2021-03-13T00:00:00+02:00","datePublished":"2021-03-13T00:00:00+02:00","description":"Dynamic features bring some flexibility and additional functionality into the programming language, but at the same moment, this can reduce compile-time safety.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/favicon.png"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="kyryl horbushko" />
+<meta name='monetization' content='$ilp.uphold.com/GiEjnNF98h8k'>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">kyryl horbushko</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/bookNotes/">Books</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/blog/archives/">Archives</a><a class="page-link" href="/contact/">Contact</a><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Dynamic swift - Part 1: KeyPath</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2021-03-13T00:00:00+02:00" itemprop="datePublished">
+        Mar 13, 2021
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">kyryl horbushko</span></span>, 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Lviv</span></span></p>
+
+      
+         
+          <a class="post-tag" href="/tags/#swift">Swift</a>
+         
+          <a class="post-tag" href="/tags/#keypath">KeyPath</a>
+         
+      
+         <span style="float:right;">
+          <span class="ert">
+    <abbr title="Estimated reading time">Estimated reading time: </abbr>
+    
+    
+    
+    
+
+    
+    
+    
+
+    
+    12 minutes
+</span>
+         </span>
+         <br>
+      </p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <br>
+    <ul>
+  <li><a href="#dynamic-or-static">dynamic or static?</a></li>
+  <li><a href="#keypath">keyPath</a>
+    <ul>
+      <li><a href="#usage-of-keypath">usage of keyPath</a></li>
+    </ul>
+  </li>
+  <li><a href="#anykeypath">AnyKeypath</a></li>
+  <li><a href="#partialkeypath">PartialKeyPath</a></li>
+  <li><a href="#keypath-1">KeyPath</a></li>
+  <li><a href="#writablekeypath">WritableKeyPath</a></li>
+  <li><a href="#referencewritablekeypath">ReferenceWritableKeyPath</a></li>
+  <li><a href="#bonus">Bonus</a>
+    <ul>
+      <li><a href="#value-observation">value observation</a></li>
+      <li><a href="#se-0249">SE-0249</a></li>
+      <li><a href="#obj-c-keypath">Obj-C #keyPath</a></li>
+    </ul>
+  </li>
+  <li><a href="#resources">Resources</a></li>
+</ul>
+    <br>
+    <p>Dynamic features bring some flexibility and additional functionality into the programming language, but at the same moment, this can reduce compile-time safety. 
+<!--more--></p>
+
+<p>Swift has a strongly-typed system. In the same moment during the last few years, a few dynamic features were added to it. The most interesting are:</p>
+
+<ul>
+  <li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0161-key-paths.md">keyPath</a></li>
+  <li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0195-dynamic-member-lookup.md">dynamic member lookup</a></li>
+  <li><a href="https://forums.swift.org/t/dynamic-method-replacement/16619">dynamic replacement</a></li>
+</ul>
+
+<p>Also, it’s good to mention about <a href="https://github.com/apple/swift-evolution/blob/master/proposals/0253-callable.md">opposite to @dynamicCallable - static Callable</a></p>
+
+<p>Some dynamic features were present in language from the very beginning:</p>
+
+<ul>
+  <li><a href="https://developer.apple.com/documentation/swift/mirror"><code class="language-plaintext highlighter-rouge">Mirror</code></a>.</li>
+  <li>additions from Obj-C (such as KVO, dynamic dispatch, etc) (this still can be used by using <code class="language-plaintext highlighter-rouge">@objc</code>, <code class="language-plaintext highlighter-rouge">dynamic</code>, <code class="language-plaintext highlighter-rouge">NSObject</code> and other modifiers/techniques)</li>
+</ul>
+
+<p><strong>Related articles:</strong></p>
+
+<ul>
+  <li>Dynamic swift - Part 1: KeyPath</li>
+  <li><a href="/article/2021/03/22/dynamic-swift-dynamic-member-lookup.html">Dynamic swift - Part 2: @dynamicMemberLookup</a></li>
+  <li><a href="/article/2021/03/25/dynamic-swift-callable.html">Dynamic swift - Part 3: Opposite to @dynamicCallable - static Callable</a></li>
+  <li><a href="/article/2021/01/11/do-that-instead-of-this.html">Dynamic swift - Part 4: @dynamicReplacement</a></li>
+</ul>
+
+<h2 id="dynamic-or-static">dynamic or static?</h2>
+
+<p>Swift is a static type (or strong type) language - this means, that compiler should now all information about all classes, functions, and other types. This means, that all features, that somehow “close the all-seeing eye” of a compiler, can be named as a <em>dynamic</em> feature.</p>
+
+<p>For comparison let’s think about Obj-C - in this language all things are a bit more flexible than in Swift. This is because compiler deferring the bounding process for the all of components as long as it’s possible, as result - u get a great flexibility and a wide possibilities (<a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/DynamicTyping.html#//apple_ref/doc/uid/TP40008195-CH62-SW1">dynamic typing</a>, <a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/DynamicBinding.html#//apple_ref/doc/uid/TP40008195-CH15-SW1">dynamic binding</a>, <a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/KeyValueCoding.html#//apple_ref/doc/uid/TP40008195-CH25-SW1">kvc</a>, <a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/KVO.html#//apple_ref/doc/uid/TP40008195-CH16-SW1">kvo</a>, <a href="https://developer.apple.com/documentation/objectivec/nsobject/1571955-forwardinvocation">forward invokation</a>, <a href="/article/2021/01/11/do-that-instead-of-this.html">swizzling</a>, etc).</p>
+
+<p>The downside of such a process is safety. And Apple knows it.</p>
+
+<blockquote>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-objective-c" data-lang="objective-c">-(void)attentionClassDumpUser:(id)arg1 
+		yesItsUsAgain:(id)arg2 
+		althoughSwizzlingAndOverridingPrivateMethodsIsFun:(id)arg3 
+		itWasntMuchFunWhenYourAppStoppedWorking:(id)arg4 
+		pleaseRefrainFromDoingSoInTheFutureOkayThanksBye:(id)arg5;</code></pre></figure>
+
+<blockquote>
+  <p>source <a href="https://openradar.appspot.com/7044974">from iOS 3 dump of ViewController</a> or <a href="https://iphonedevwiki.net/index.php/UIViewController">wiki</a></p>
+</blockquote>
+
+<p>Swift started obtaining a different dynamic feature when support for Linux was added. On Linux, there is no <code class="language-plaintext highlighter-rouge">Foundation</code> framework from Apple (at least at the beginning, for now, it’s open-source), so runtime features from Obj-C are not available, but developers still need it, and open-source Swift allows them to do this.</p>
+
+<p>As of now, we have a few of them already added, and a few more are waiting for proposals.</p>
+
+<h2 id="keypath">keyPath</h2>
+
+<p><em><a href="https://developer.apple.com/documentation/swift/keypath">KeyPath</a> - A key path from a specific root type to a specific resulting value type.</em></p>
+
+<p>KeyPath allows us to get access to type variables using strongly-typed paths that are checked at compilation time.</p>
+
+<p>There are few types of keyPath:</p>
+
+<ul>
+  <li><a href="https://developer.apple.com/documentation/swift/anykeypath"><code class="language-plaintext highlighter-rouge">AnyKeyPath</code></a> - a type-erased key path, from any root type to any resulting value type</li>
+  <li><a href="https://developer.apple.com/documentation/swift/partialkeypath"><code class="language-plaintext highlighter-rouge">PartialKeyPath</code></a> - a partially type-erased key path, from a concrete root type to any resulting value type.</li>
+  <li><a href="https://developer.apple.com/documentation/swift/keypath"><code class="language-plaintext highlighter-rouge">KeyPath</code></a>: read-only.</li>
+  <li><a href="https://developer.apple.com/documentation/swift/writablekeypath"><code class="language-plaintext highlighter-rouge">WritableKeyPath</code></a>: read-write.</li>
+  <li><a href="https://developer.apple.com/documentation/swift/referencewritablekeypath"><code class="language-plaintext highlighter-rouge">ReferenceWritableKeyPath</code></a>: read-write, mutable, only for ref types.</li>
+</ul>
+
+<blockquote>
+  <p>mentioned according to a class hierarchy</p>
+</blockquote>
+
+<p>It’s also important to understand, that <code class="language-plaintext highlighter-rouge">#keyPath</code> added in Swift 3 compiles down into a String. It was added mostly to support Obj-C KVO/KVC and so, requires that our object inherits from <code class="language-plaintext highlighter-rouge">NSObject</code>. This off cause introduces some constraints into Swift code.</p>
+
+<p>Such an approach also does not provide any information about the type of object to which it below - it’s just a String. This means, that we can’t work with data processed with a key path as with concrete type data - only as <code class="language-plaintext highlighter-rouge">Any</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">KeyPath</code> type, instead, is a fast, property traversal, statically type-safe, available for all values and on all platforms where Swift works.</p>
+
+<h3 id="usage-of-keypath">usage of keyPath</h3>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2021-03-13-dynamic-features/usage.pdf" alt="files" width="450" />
+</div>
+<p><br /></p>
+
+<blockquote>
+  <p>subscript also allowed.</p>
+</blockquote>
+
+<blockquote>
+  <p>based on <a href="https://developer.apple.com/videos/play/wwdc2017/212/">WWDC 17 #212 What’s New in Foundation</a></p>
+</blockquote>
+
+<h2 id="anykeypath">AnyKeypath</h2>
+
+<p><code class="language-plaintext highlighter-rouge">AnyKeyPath</code> does not have some generic constraints, and this type is created for handling any keypath (:]) from any objects. So this type is fully erased, and don’t know about its route and root object.</p>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">route</code> means expression, that describes how we can get this property from a specific (or unknown) object. Another name for this object - <code class="language-plaintext highlighter-rouge">root</code></p>
+</blockquote>
+
+<p><code class="language-plaintext highlighter-rouge">AntKeyPath</code> is used when u have a deal with many keypaths from different objects. This can be an array of items, or input to u’r functions:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">final</span> <span class="kd">class</span> <span class="kt">Bar</span> <span class="p">{</span>
+  <span class="k">var</span> <span class="nv">foo</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span>
+<span class="p">}</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">Foo</span> <span class="p">{</span>
+  <span class="k">var</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">Bar</span><span class="p">?</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">barObject</span> <span class="o">=</span> <span class="kt">Bar</span><span class="p">()</span>
+<span class="n">barObject</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">let</span> <span class="nv">fooObject</span> <span class="o">=</span> <span class="kt">Foo</span><span class="p">()</span>
+<span class="n">fooObject</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="n">barObject</span>
+
+<span class="k">let</span> <span class="nv">fooBarKeyPath</span><span class="p">:</span> <span class="kt">AnyKeyPath</span> <span class="o">=</span> <span class="p">\</span><span class="kt">Foo</span><span class="o">.</span><span class="n">bar</span><span class="o">!</span>
+<span class="k">let</span> <span class="nv">barFooKeyPath</span><span class="p">:</span> <span class="kt">AnyKeyPath</span> <span class="o">=</span> <span class="p">\</span><span class="kt">Bar</span><span class="o">.</span><span class="n">foo</span>
+
+<span class="k">let</span> <span class="nv">value1</span> <span class="o">=</span> <span class="n">barObject</span><span class="p">[</span><span class="nv">keyPath</span><span class="p">:</span> <span class="n">fooBarKeyPath</span><span class="p">]</span>
+<span class="c1">// return 1</span>
+
+<span class="k">let</span> <span class="nv">value2</span> <span class="o">=</span> <span class="n">fooObject</span><span class="p">[</span><span class="nv">keyPath</span><span class="p">:</span> <span class="n">fooBarKeyPath</span><span class="p">]</span>
+<span class="c1">// return nil</span>
+
+<span class="k">let</span> <span class="nv">anyKeyPathArray</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="n">fooBarKeyPath</span><span class="p">,</span>
+  <span class="n">barFooKeyPath</span>
+<span class="p">]</span>
+<span class="c1">// Array&lt;AnyKeyPath&gt;</span></code></pre></figure>
+
+<p>In addition to described above, this type conforms to protocol <code class="language-plaintext highlighter-rouge">_AppendKeyPath</code> - this protocol allows us to modify keyPath by appending some components.</p>
+
+<blockquote>
+  <p>note: Apple mentions in header <em>“do not use this protocol directly.”</em></p>
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">fooBarKeyPath</span><span class="p">:</span> <span class="kt">AnyKeyPath</span> <span class="o">=</span> <span class="p">\</span><span class="kt">Foo</span><span class="o">.</span><span class="n">bar</span><span class="o">!</span>
+<span class="k">let</span> <span class="nv">barFooKeyPath</span><span class="p">:</span> <span class="kt">AnyKeyPath</span> <span class="o">=</span> <span class="p">\</span><span class="kt">Bar</span><span class="o">.</span><span class="n">foo</span>
+
+<span class="k">let</span> <span class="nv">appendedKeyPath</span> <span class="o">=</span> <span class="n">fooBarKeyPath</span><span class="o">.</span><span class="nf">appending</span><span class="p">(</span><span class="nv">path</span><span class="p">:</span> <span class="n">barFooKeyPath</span><span class="p">)</span>
+<span class="c1">// ReferenceWritableKeyPath&lt;AnotherTestObject, Optional&lt;Int&gt;&gt;</span>
+
+<span class="k">let</span> <span class="nv">value3</span> <span class="o">=</span> <span class="n">fooObject</span><span class="p">[</span><span class="nv">keyPath</span><span class="p">:</span> <span class="n">appendedKeyPath</span><span class="o">!</span><span class="p">]</span>
+<span class="c1">// return 1</span></code></pre></figure>
+
+<p>To describe rules of appending here is a quick image:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2021-03-13-dynamic-features/appending_rule.pdf" alt="files" width="450" />
+</div>
+<p><br /></p>
+
+<blockquote>
+  <p>based on <a href="https://developer.apple.com/videos/play/wwdc2017/212/">WWDC 17 #212 What’s New in Foundation</a></p>
+</blockquote>
+
+<p>When we perform appending of different keyPath, we may receive different KeyPath class as result:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>First</th>
+      <th>Second</th>
+      <th>Result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>AnyKeyPath</td>
+      <td>Anything</td>
+      <td>AnyKeyPath?</td>
+    </tr>
+    <tr>
+      <td>PartialKeyPath</td>
+      <td>AnyKeyPath or PartialKeyPath</td>
+      <td>PartialKeyPath?</td>
+    </tr>
+    <tr>
+      <td>PartialKeyPath</td>
+      <td>KeyPath or WritableKeyPath</td>
+      <td>KeyPath?</td>
+    </tr>
+    <tr>
+      <td>PartialKeyPath</td>
+      <td>ReferenceWritableKeyPath</td>
+      <td>ReferenceWritableKeyPath?</td>
+    </tr>
+    <tr>
+      <td>KeyPath</td>
+      <td>AnyKeyPath or PartialKeyPath</td>
+      <td>💥 Not possible 💥</td>
+    </tr>
+    <tr>
+      <td>KeyPath</td>
+      <td>KeyPath or WritableKeyPath</td>
+      <td>KeyPath</td>
+    </tr>
+    <tr>
+      <td>KeyPath</td>
+      <td>ReferenceWritableKeyPath</td>
+      <td>ReferenceWritableKeyPath</td>
+    </tr>
+    <tr>
+      <td>WritableKeyPath</td>
+      <td>AnyKeyPath or PartialKeyPath</td>
+      <td>💥 Not possible 💥</td>
+    </tr>
+    <tr>
+      <td>WritableKeyPath</td>
+      <td>KeyPath</td>
+      <td>KeyPath</td>
+    </tr>
+    <tr>
+      <td>WritableKeyPath</td>
+      <td>WritableKeyPath</td>
+      <td>WritableKeyPath</td>
+    </tr>
+    <tr>
+      <td>WritableKeyPath</td>
+      <td>ReferenceWritableKeyPath</td>
+      <td>ReferenceWritableKeyPath</td>
+    </tr>
+    <tr>
+      <td>ReferenceWritableKeyPath</td>
+      <td>AnyKeyPath or PartialKeyPath</td>
+      <td>💥 Not possible 💥</td>
+    </tr>
+    <tr>
+      <td>ReferenceWritableKeyPath</td>
+      <td>KeyPath</td>
+      <td>KeyPath</td>
+    </tr>
+    <tr>
+      <td>ReferenceWritableKeyPath</td>
+      <td>WritableKeyPath or ReferenceWritableKeyPath</td>
+      <td>ReferenceWritableKeyPath</td>
+    </tr>
+  </tbody>
+</table>
+
+<blockquote>
+  <p>source of this comparison table is <a href="https://klundberg.com/blog/swift-4-keypaths-and-you/">described by Kevin Lundberg</a></p>
+</blockquote>
+
+<p>If we looked into the header we could also find, that we have few more available public properties: a few required by a <code class="language-plaintext highlighter-rouge">Hashable</code> protocol, and also 2 more, that describe <code class="language-plaintext highlighter-rouge">root</code> type and <code class="language-plaintext highlighter-rouge">value</code> type:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">/// The root type for this key path.</span>
+<span class="kd">@inlinable</span> <span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">rootType</span><span class="p">:</span> <span class="kt">Any</span><span class="o">.</span><span class="k">Type</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span>
+
+<span class="c1">/// The value type for this key path.</span>
+<span class="kd">@inlinable</span> <span class="kd">public</span> <span class="kd">static</span> <span class="k">var</span> <span class="nv">valueType</span><span class="p">:</span> <span class="kt">Any</span><span class="o">.</span><span class="k">Type</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre></figure>
+
+<p>If we check <a href="https://github.com/apple/swift/blob/main/stdlib/public/core/KeyPath.swift">source code for <code class="language-plaintext highlighter-rouge">KeyPath</code></a> in swift, we can observe, that this values use <code class="language-plaintext highlighter-rouge">_rootAndValueType</code> value, that is implemented as follow:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">@usableFromInline</span>
+<span class="kd">internal</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">_rootAndValueType</span><span class="p">:</span> <span class="p">(</span><span class="nv">root</span><span class="p">:</span> <span class="kt">Any</span><span class="o">.</span><span class="k">Type</span><span class="p">,</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">Any</span><span class="o">.</span><span class="k">Type</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nf">_abstract</span><span class="p">()</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>where <code class="language-plaintext highlighter-rouge">_abstract()</code> defined as:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">internal</span> <span class="kd">func</span> <span class="nf">_abstract</span><span class="p">(</span>
+  <span class="nv">methodName</span><span class="p">:</span> <span class="kt">StaticString</span> <span class="o">=</span> <span class="kd">#function</span><span class="p">,</span>
+  <span class="nv">file</span><span class="p">:</span> <span class="kt">StaticString</span> <span class="o">=</span> <span class="kd">#file</span><span class="p">,</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">UInt</span> <span class="o">=</span> <span class="kd">#line</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Never</span> <span class="p">{</span>
+<span class="cp">#if INTERNAL_CHECKS_ENABLED</span>
+  <span class="nf">_fatalErrorMessage</span><span class="p">(</span><span class="s">"abstract method"</span><span class="p">,</span> <span class="n">methodName</span><span class="p">,</span> <span class="nv">file</span><span class="p">:</span> <span class="n">file</span><span class="p">,</span> <span class="nv">line</span><span class="p">:</span> <span class="n">line</span><span class="p">,</span>
+      <span class="nv">flags</span><span class="p">:</span> <span class="nf">_fatalErrorFlags</span><span class="p">())</span>
+<span class="cp">#else</span>
+  <span class="nf">_conditionallyUnreachable</span><span class="p">()</span>
+<span class="cp">#endif</span></code></pre></figure>
+
+<p>For generic subclasses this method has a bit different implementation:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">/// A key path from a specific root type to a specific resulting value type.</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt">Root</span><span class="p">,</span> <span class="kt">Value</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">PartialKeyPath</span><span class="o">&lt;</span><span class="kt">Root</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="kd">@usableFromInline</span>
+  <span class="kd">internal</span> <span class="kd">final</span> <span class="k">override</span> <span class="kd">class</span> <span class="k">var</span> <span class="nv">_rootAndValueType</span><span class="p">:</span> <span class="p">(</span>
+    <span class="nv">root</span><span class="p">:</span> <span class="kt">Any</span><span class="o">.</span><span class="k">Type</span><span class="p">,</span>
+    <span class="nv">value</span><span class="p">:</span> <span class="kt">Any</span><span class="o">.</span><span class="k">Type</span>
+  <span class="p">)</span> <span class="p">{</span>
+    <span class="nf">return</span> <span class="p">(</span><span class="kt">Root</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="kt">Value</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="o">...</span></code></pre></figure>
+
+<p>Indeed, if we try to grab this 2 values from <code class="language-plaintext highlighter-rouge">AnyKeyPath</code>, we will get an fatalError:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">//let anyKeyPathRootValue = AnyKeyPath.rootType</span>
+<span class="c1">// Fatal error: Method must be overridden: file Swift/KeyPath.swift, line 140</span></code></pre></figure>
+
+<p>But for types that is inherit from <code class="language-plaintext highlighter-rouge">KeyPath</code> (including), value about this types become available and we can obtain it easelly:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">concreateKeyPathRootValue</span> <span class="o">=</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt">Bar</span><span class="p">,</span> <span class="kt">Int</span><span class="o">&gt;.</span><span class="n">rootType</span> 
+<span class="c1">//__lldb_expr_7.Bar.Type</span>
+
+<span class="k">let</span> <span class="nv">concreateKeyPathValueType</span> <span class="o">=</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt">Bar</span><span class="p">,</span> <span class="kt">Int</span><span class="o">&gt;.</span><span class="n">valueType</span>
+<span class="c1">//Int.Type</span></code></pre></figure>
+
+<p>Why do this vaiables exists? This information used when different operations is tried to be performed within selected KeyPath. For example - appending, when we want to do this, on some internal step of this process:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">@usableFromInline</span>
+<span class="kd">internal</span> <span class="kd">func</span> <span class="n">_tryToAppendKeyPaths</span><span class="o">&lt;</span><span class="kt">Result</span><span class="p">:</span> <span class="kt">AnyKeyPath</span><span class="o">&gt;</span><span class="p">(</span>
+  <span class="nv">root</span><span class="p">:</span> <span class="kt">AnyKeyPath</span><span class="p">,</span>
+  <span class="nv">leaf</span><span class="p">:</span> <span class="kt">AnyKeyPath</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Result</span><span class="p">?</span> <span class="p">{</span>
+  <span class="k">let</span> <span class="p">(</span><span class="nv">rootRoot</span><span class="p">,</span> <span class="nv">rootValue</span><span class="p">)</span> <span class="o">=</span> <span class="nf">type</span><span class="p">(</span><span class="nv">of</span><span class="p">:</span> <span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">_rootAndValueType</span>
+  <span class="c1">//_rootAndValueType - source for valueType and rootType</span>
+  <span class="k">let</span> <span class="p">(</span><span class="nv">leafRoot</span><span class="p">,</span> <span class="nv">leafValue</span><span class="p">)</span> <span class="o">=</span> <span class="nf">type</span><span class="p">(</span><span class="nv">of</span><span class="p">:</span> <span class="n">leaf</span><span class="p">)</span><span class="o">.</span><span class="n">_rootAndValueType</span>
+  <span class="o">...</span>
+  <span class="c1">// perform different comparison operations and </span>
+  <span class="c1">// append if possible based on input data</span></code></pre></figure>
+
+<h2 id="partialkeypath">PartialKeyPath</h2>
+
+<p><a href="https://developer.apple.com/documentation/swift/partialkeypath"><code class="language-plaintext highlighter-rouge">PartialKeyPath</code></a> - A partially type-erased key path, from a concrete root type to any resulting value type.</p>
+
+<blockquote>
+  <p>More about idea - read <a href="https://github.com/apple/swift-evolution/blob/master/proposals/0161-key-paths.md#unknown-path--known-root-type">here</a>.</p>
+</blockquote>
+
+<p>If we check implementation, we can see next:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">public</span> <span class="kd">class</span> <span class="kt">PartialKeyPath</span><span class="o">&lt;</span><span class="kt">Root</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">AnyKeyPath</span> <span class="p">{</span> <span class="p">}</span></code></pre></figure>
+
+<p>Not much, the only difference is that this type holds information about the <code class="language-plaintext highlighter-rouge">Root</code> type. As result, this type knows about its base type:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">final</span> <span class="kd">class</span> <span class="kt">Bar</span> <span class="p">{</span>
+  <span class="k">var</span> <span class="nv">foo</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span>
+  <span class="k">var</span> <span class="nv">fooBar</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">barObject</span> <span class="o">=</span> <span class="kt">Bar</span><span class="p">()</span>
+<span class="n">barObject</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">barObject</span><span class="o">.</span><span class="n">fooBar</span> <span class="o">=</span> <span class="s">"hello"</span>
+
+<span class="k">let</span> <span class="nv">barPaths</span> <span class="o">=</span> <span class="p">[\</span><span class="kt">Bar</span><span class="o">.</span><span class="n">foo</span><span class="p">,</span> <span class="p">\</span><span class="kt">Bar</span><span class="o">.</span><span class="n">fooBar</span><span class="p">]</span>
+<span class="c1">// [PartialKeyPath&lt;Bar&gt;]</span>
+
+<span class="n">barPaths</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">in</span>
+  <span class="nf">print</span><span class="p">(</span><span class="n">barObject</span><span class="p">[</span><span class="nv">keyPath</span><span class="p">:</span> <span class="n">path</span><span class="p">])</span>
+<span class="p">}</span>
+
+<span class="c1">// prints:</span>
+<span class="c1">// Optional(1)</span>
+<span class="c1">// Optional("hello")</span></code></pre></figure>
+
+<p>This type of keyPath is also read-only.</p>
+
+<h2 id="keypath-1">KeyPath</h2>
+
+<p><a href="https://developer.apple.com/documentation/swift/keypath"><code class="language-plaintext highlighter-rouge">KeyPath</code></a>. This is a type, that describes not just a Root object, but also a value type.</p>
+
+<p>For <code class="language-plaintext highlighter-rouge">KeyPath</code> we can check <code class="language-plaintext highlighter-rouge">valueType</code> and <code class="language-plaintext highlighter-rouge">rootType</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">concreateKeyPathRootValue</span> <span class="o">=</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt">Bar</span><span class="p">,</span> <span class="kt">Int</span><span class="o">&gt;.</span><span class="n">rootType</span> 
+<span class="c1">//__lldb_expr_7.Bar.Type</span>
+
+<span class="k">let</span> <span class="nv">concreateKeyPathValueType</span> <span class="o">=</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt">Bar</span><span class="p">,</span> <span class="kt">Int</span><span class="o">&gt;.</span><span class="n">valueType</span>
+<span class="c1">//Int.Type</span></code></pre></figure>
+
+<blockquote>
+  <p><a href="https://github.com/apple/swift/blob/9b016cbc061b9bb5500ace237f1c306ab04d13f8/stdlib/public/core/KeyPath.swift#L203">realization</a></p>
+</blockquote>
+
+<p>But the most important - we have now information about valueType. Example of usage may be next:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">extension</span> <span class="kt">Sequence</span> <span class="p">{</span>
+  <span class="kd">func</span> <span class="n">transform</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="n">transform</span> <span class="nv">byKeyPath</span><span class="p">:</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt">Element</span><span class="p">,</span> <span class="kt">T</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nv">block</span><span class="p">:</span> <span class="p">((</span><span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">V</span><span class="p">)</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt">V</span><span class="p">]</span> <span class="p">{</span>
+    <span class="n">map</span> <span class="p">{</span> <span class="p">(</span><span class="n">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">V</span> <span class="k">in</span>
+      <span class="nf">block</span><span class="p">(</span><span class="n">object</span><span class="p">[</span><span class="nv">keyPath</span><span class="p">:</span> <span class="n">byKeyPath</span><span class="p">])</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Example:</span>
+
+<span class="kd">struct</span> <span class="kt">FooBar</span> <span class="p">{</span>
+
+  <span class="k">var</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">Int</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">barsObjects</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="kt">FooBar</span><span class="p">(</span><span class="nv">bar</span><span class="p">:</span> <span class="mi">1</span><span class="p">),</span>
+  <span class="kt">FooBar</span><span class="p">(</span><span class="nv">bar</span><span class="p">:</span> <span class="mi">2</span><span class="p">),</span>
+  <span class="kt">FooBar</span><span class="p">(</span><span class="nv">bar</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="n">barsObjects</span>
+  <span class="o">.</span><span class="nf">transform</span><span class="p">(</span><span class="nv">transform</span><span class="p">:</span> <span class="p">\</span><span class="kt">FooBar</span><span class="o">.</span><span class="n">bar</span><span class="p">)</span> <span class="p">{</span>
+    <span class="s">"</span><span class="se">\(</span><span class="nv">$0</span><span class="se">)</span><span class="s">"</span>
+  <span class="p">}</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="c1">// ["1", "2", "3"]</span></code></pre></figure>
+
+<p>or u may want to use it in some logic like next:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">protocol</span> <span class="kt">DataExpressible</span> <span class="p">{</span> <span class="p">}</span>
+
+<span class="kd">struct</span> <span class="kt">DataInfo</span><span class="o">&lt;</span><span class="kt">Element</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">Collection</span> <span class="k">where</span> <span class="kt">Element</span><span class="p">:</span> <span class="kt">DataExpressible</span> <span class="p">{</span>
+  <span class="kd">typealias</span> <span class="kt">Index</span> <span class="o">=</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">Element</span><span class="o">&gt;.</span><span class="kt">Index</span>
+
+  <span class="nf">subscript</span><span class="p">(</span><span class="nv">position</span><span class="p">:</span> <span class="kt">Index</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Element</span> <span class="p">{</span>
+    <span class="n">components</span><span class="p">[</span><span class="n">position</span><span class="p">]</span>
+  <span class="p">}</span>
+
+  <span class="k">let</span> <span class="nv">components</span><span class="p">:</span> <span class="p">[</span><span class="kt">Element</span><span class="p">]</span>
+
+  <span class="k">var</span> <span class="nv">startIndex</span><span class="p">:</span> <span class="kt">Index</span> <span class="p">{</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">startIndex</span>
+  <span class="p">}</span>
+
+  <span class="k">var</span> <span class="nv">endIndex</span><span class="p">:</span> <span class="kt">Index</span> <span class="p">{</span>
+    <span class="n">components</span><span class="o">.</span><span class="n">endIndex</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="nf">index</span><span class="p">(</span><span class="n">after</span> <span class="nv">i</span><span class="p">:</span> <span class="kt">Index</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Index</span> <span class="p">{</span>
+    <span class="n">components</span><span class="o">.</span><span class="nf">index</span><span class="p">(</span><span class="nv">after</span><span class="p">:</span> <span class="n">i</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">String</span> <span class="p">{</span>
+  <span class="kd">static</span> <span class="k">var</span> <span class="nv">newLine</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">DataInfo</span> <span class="k">where</span> <span class="kt">Element</span><span class="p">:</span> <span class="kt">LocalizedError</span> <span class="p">{</span>
+  <span class="k">var</span> <span class="nv">log</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+    <span class="p">[</span>
+      <span class="nf">description</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="n">errorDescription</span><span class="p">,</span> <span class="nv">separator</span><span class="p">:</span> <span class="o">.</span><span class="n">newLine</span><span class="p">),</span>
+      <span class="nf">description</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="n">failureReason</span><span class="p">,</span> <span class="nv">separator</span><span class="p">:</span> <span class="o">.</span><span class="n">newLine</span><span class="p">),</span>
+      <span class="nf">description</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="n">recoverySuggestion</span><span class="p">,</span> <span class="nv">separator</span><span class="p">:</span> <span class="o">.</span><span class="n">newLine</span><span class="p">),</span>
+      <span class="nf">description</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="p">\</span><span class="o">.</span><span class="n">helpAnchor</span><span class="p">,</span> <span class="nv">separator</span><span class="p">:</span> <span class="o">.</span><span class="n">newLine</span><span class="p">)</span>
+    <span class="p">]</span>
+    <span class="o">.</span><span class="nf">compactMap</span><span class="p">({</span> <span class="nv">$0</span> <span class="p">})</span>
+    <span class="o">.</span><span class="nf">joined</span><span class="p">(</span><span class="nv">separator</span><span class="p">:</span> <span class="o">.</span><span class="n">newLine</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">private</span> <span class="kd">func</span> <span class="nf">description</span><span class="p">(</span>
+  			<span class="k">for</span> <span class="nv">keyPath</span><span class="p">:</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt">Element</span><span class="p">,</span> <span class="kt">String</span><span class="p">?</span><span class="o">&gt;</span><span class="p">,</span>
+  			<span class="nv">separator</span><span class="p">:</span> <span class="kt">String</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span> <span class="p">{</span>
+    <span class="n">components</span>
+      <span class="o">.</span><span class="n">compactMap</span> <span class="p">{</span> <span class="nv">$0</span><span class="p">[</span><span class="nv">keyPath</span><span class="p">:</span> <span class="n">keyPath</span><span class="p">]</span> <span class="p">}</span>
+      <span class="o">.</span><span class="nf">joined</span><span class="p">(</span><span class="nv">separator</span><span class="p">:</span> <span class="n">separator</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="writablekeypath">WritableKeyPath</h2>
+
+<p><a href="https://developer.apple.com/documentation/swift/writablekeypath"><code class="language-plaintext highlighter-rouge">WritableKeyPath</code></a> This is the same as the previous type, but allows perform write in addition to read. A good note about this key-path - it’s only for value-type.</p>
+
+<p>To explain this type it’s better to provide an example:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">Some</span> <span class="p">{</span>
+
+  <span class="k">let</span> <span class="nv">variable</span><span class="p">:</span> <span class="kt">Int</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">someVar</span> <span class="o">=</span> <span class="kt">Some</span><span class="p">(</span><span class="nv">variable</span><span class="p">:</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="nv">someKeyPath</span> <span class="o">=</span> <span class="p">\</span><span class="kt">Some</span><span class="o">.</span><span class="n">variable</span>
+<span class="n">someVar</span><span class="p">[</span><span class="nv">keyPath</span><span class="p">:</span> <span class="n">someKeyPath</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span></code></pre></figure>
+
+<p>Output:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="nv">error</span><span class="p">:</span> <span class="n">play</span><span class="o">.</span><span class="nv">playground</span><span class="p">:</span><span class="mi">172</span><span class="p">:</span><span class="mi">8</span><span class="p">:</span> <span class="nv">error</span><span class="p">:</span> <span class="n">cannot</span> <span class="n">assign</span> <span class="n">through</span> <span class="nv">subscript</span><span class="p">:</span> <span class="err">'</span><span class="n">someKeyPath</span><span class="err">'</span> <span class="k">is</span> <span class="n">a</span> <span class="n">read</span><span class="o">-</span><span class="n">only</span> <span class="n">key</span> <span class="n">path</span>
+<span class="n">someVar</span><span class="p">[</span><span class="nv">keyPath</span><span class="p">:</span> <span class="n">someKeyPath</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span></code></pre></figure>
+
+<p>If we check type of <code class="language-plaintext highlighter-rouge">someKeyPath</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="nf">type</span><span class="p">(</span><span class="nv">of</span><span class="p">:</span> <span class="n">someKeyPath</span><span class="p">)</span> <span class="c1">// KeyPath&lt;Some, Int&gt;</span></code></pre></figure>
+
+<p>As I mentioned before, <code class="language-plaintext highlighter-rouge">KeyPath</code> - read-only. Now, let’s modify our <code class="language-plaintext highlighter-rouge">Some</code> struct:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">Some</span> <span class="p">{</span>
+
+   <span class="k">var</span> <span class="nv">variable</span><span class="p">:</span> <span class="kt">Int</span>
+<span class="c1">// ^~~~~~~~~~~ changed let to var </span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>u also could resolve this issue by adding mutation keyword to a method that calls this keypath, but this is not the right decision.</p>
+</blockquote>
+
+<p>If we now check <code class="language-plaintext highlighter-rouge">someKeyPath</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="nf">type</span><span class="p">(</span><span class="nv">of</span><span class="p">:</span> <span class="n">someKeyPath</span><span class="p">)</span> <span class="c1">// WritableKeyPath&lt;Some, Int&gt;</span></code></pre></figure>
+
+<p>Now, operations like <code class="language-plaintext highlighter-rouge">someVar[keyPath: someKeyPath] = 2</code> allowed.</p>
+
+<p>Example of usage:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="c1">// describe settingsService</span>
+
+<span class="kd">protocol</span> <span class="kt">SettingsService</span><span class="p">:</span> <span class="kd">class</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">didChange</span><span class="p">:</span> <span class="kt">NSNotification</span><span class="o">.</span><span class="kt">Name</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span>
+    
+    <span class="k">var</span> <span class="nv">isSoundsEnabled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// helper to store settings in UserDefaults</span>
+<span class="kd">@propertyWrapper</span>
+<span class="kd">public</span> <span class="kd">struct</span> <span class="kt">UserDefaultValue</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="k">let</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span>
+    <span class="kd">private</span> <span class="k">let</span> <span class="nv">defaultValue</span><span class="p">:</span> <span class="kt">T</span>
+
+    <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">:</span> <span class="kt">T</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">defaultValue</span> <span class="o">=</span> <span class="n">defaultValue</span>
+    <span class="p">}</span>
+
+    <span class="kd">public</span> <span class="k">var</span> <span class="nv">wrappedValue</span><span class="p">:</span> <span class="kt">T</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span>
+            <span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">object</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="n">key</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">T</span> <span class="p">??</span> <span class="n">defaultValue</span>
+        <span class="p">}</span>
+        <span class="k">set</span> <span class="p">{</span>
+            <span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">set</span><span class="p">(</span><span class="n">newValue</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="n">key</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// concrete realization of SettingsService</span>
+<span class="kd">extension</span> <span class="kt">UserDefaults</span><span class="p">:</span> <span class="kt">SettingsService</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">struct</span> <span class="kt">ValueStorage</span> <span class="p">{</span>
+        <span class="kd">@UserDefaultValue</span><span class="p">(</span><span class="kt">SettingsDataKeys</span><span class="o">.</span><span class="n">isSoundsEnabled</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+        <span class="kd">static</span> <span class="k">var</span> <span class="nv">isSoundsEnabled</span><span class="p">:</span> <span class="kt">Bool</span>
+
+        <span class="kd">@UserDefaultValue</span><span class="p">(</span><span class="kt">SettingsDataKeys</span><span class="o">.</span><span class="n">isVibroEnabled</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+        <span class="kd">static</span> <span class="k">var</span> <span class="nv">isVibroEnabled</span><span class="p">:</span> <span class="kt">Bool</span>
+    <span class="p">}</span>
+
+    <span class="k">var</span> <span class="nv">didChange</span><span class="p">:</span> <span class="kt">NSNotification</span><span class="o">.</span><span class="kt">Name</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span>
+            <span class="kt">UserDefaults</span><span class="o">.</span><span class="n">didChangeNotification</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="k">var</span> <span class="nv">isSoundsEnabled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span>
+        <span class="k">set</span> <span class="p">{</span> <span class="kt">ValueStorage</span><span class="o">.</span><span class="n">isSoundsEnabled</span> <span class="o">=</span> <span class="n">newValue</span> <span class="p">}</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="kt">ValueStorage</span><span class="o">.</span><span class="n">isSoundsEnabled</span>  <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// MARK: - Private</span>
+    
+    <span class="kd">private</span> <span class="kd">func</span> <span class="n">value</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">forKey</span> <span class="nv">key</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">?</span> <span class="p">{</span>
+        <span class="nf">value</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="n">key</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">T</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// And class where we can use keyPath in combination with dynamicMemberLookup</span>
+
+<span class="kd">@dynamicMemberLookup</span>
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">SettingsViewModel</span><span class="p">:</span> <span class="kt">ObservableObject</span> <span class="p">{</span>
+    <span class="kd">subscript</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span>
+    <span class="n">dynamicMember</span> <span class="nv">keyPath</span><span class="p">:</span> <span class="kt">WritableKeyPath</span><span class="o">&lt;</span><span class="kt">SettingsService</span><span class="p">,</span> <span class="kt">T</span><span class="o">&gt;</span>
+	<span class="c1">//		^~~~~~~~~~~~~~</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">T</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="n">storage</span><span class="p">[</span><span class="nv">keyPath</span><span class="p">:</span> <span class="n">keyPath</span><span class="p">]</span> <span class="p">}</span>
+        <span class="k">set</span> <span class="p">{</span> <span class="n">storage</span><span class="p">[</span><span class="nv">keyPath</span><span class="p">:</span> <span class="n">keyPath</span><span class="p">]</span> <span class="o">=</span> <span class="n">newValue</span> <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="k">let</span> <span class="nv">objectWillChange</span> <span class="o">=</span> <span class="kt">PassthroughSubject</span><span class="o">&lt;</span><span class="kt">Void</span><span class="p">,</span> <span class="kt">Never</span><span class="o">&gt;</span><span class="p">()</span>
+	<span class="c1">// ...    </span>
+    
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt">SettingsService</span>
+	<span class="c1">// ..</span>
+<span class="p">}</span>
+
+<span class="c1">// later on we can do something like:</span>
+
+<span class="n">viewModel</span><span class="o">.</span><span class="n">isSoundsEnabled</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="c1">// or bind to </span>
+<span class="err">$</span><span class="n">viewModel</span><span class="o">.</span><span class="n">isSoundsEnabled</span></code></pre></figure>
+
+<blockquote>
+  <p>I will tell more about <code class="language-plaintext highlighter-rouge">dynamicMemberLookup</code> in the next article</p>
+</blockquote>
+
+<p>Sometimes u can omit</p>
+
+<h2 id="referencewritablekeypath">ReferenceWritableKeyPath</h2>
+
+<p><a href="https://developer.apple.com/documentation/swift/referencewritablekeypath"><code class="language-plaintext highlighter-rouge">ReferenceWritableKeyPath</code></a>. Same as the previous one, but now for a reference type. So this type was created specifically to support reading from and writing to the resulting value using reference semantics.</p>
+
+<p>If we compare <code class="language-plaintext highlighter-rouge">WritableKeyPath</code> vs <code class="language-plaintext highlighter-rouge">ReferenceWritableKeyPath</code> - the fists one writes directly into a value-type base (inout or mutating), the second one writes into a reference-type base (simply invoking setter on reference type).</p>
+
+<h2 id="bonus">Bonus</h2>
+
+<h3 id="value-observation">value observation</h3>
+
+<p>We also can use now keyPath for value obsevation:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">var</span> <span class="nv">token</span><span class="p">:</span> <span class="kt">NSKeyvalueObservation</span> <span class="o">=</span> <span class="n">object</span>
+		<span class="o">.</span><span class="nf">observe</span><span class="p">(\</span><span class="o">.</span><span class="n">bar</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="o">.</span><span class="k">new</span><span class="p">])</span> <span class="p">{</span> <span class="n">observer</span><span class="p">,</span> <span class="n">changed</span> <span class="k">in</span>
+	<span class="c1">// do stuff with observer (object itself) and </span>
+	<span class="c1">// changed - NSKeyValueObsevedChange&lt;Type&gt; where Type - same as in \.bar</span>
+	<span class="p">}</span>
+	
+	<span class="c1">// ...</span>
+	
+<span class="n">token</span><span class="p">?</span><span class="o">.</span><span class="nf">invalidate</span><span class="p">()</span> <span class="c1">// when not needed</span></code></pre></figure>
+
+<blockquote>
+  <p><a href="https://developer.apple.com/videos/play/wwdc2017/212/?time=1214">WWDC 17 #212 What’s New in Foundation</a></p>
+</blockquote>
+
+<h3 id="se-0249">SE-0249</h3>
+
+<p>In proposal <a href="https://github.com/apple/swift-evolution/blob/master/proposals/0249-key-path-literal-function-expressions.md">SE-0249</a> described ideat that can add to key paths the ability to be used as functions.</p>
+
+<p>Now this is implemented and can be used within <code class="language-plaintext highlighter-rouge">Combine</code>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let responsePublisher = publisher
+				 .map(\.data)
+	// 			  	  ^~~~~~~~~
+               .decode(type: FeedItem.self, decoder: JSONDecoder())
+               .receive(on: DispatchQueue.main)
+</code></pre></div></div>
+
+<h3 id="obj-c-keypath">Obj-C #keyPath</h3>
+
+<p>It’s also good to mention, that we still can use <code class="language-plaintext highlighter-rouge">#keyPath</code> for Objective-C code.</p>
+
+<blockquote>
+  <p>more <a href="https://github.com/apple/swift-evolution/blob/master/proposals/0062-objc-keypaths.md">Referencing Objective-C key-paths</a></p>
+</blockquote>
+
+<p><br /></p>
+
+<p><a href="/assets/posts/images/2021-03-13-dynamic-features/source/play.playground.zip">download source code</a>
+<br />
+<br /></p>
+
+<p>In the next articles, I will cover other dynamic aspects of Swift.</p>
+
+<p><strong>Related articles:</strong></p>
+
+<ul>
+  <li>Dynamic swift - Part 1: KeyPath</li>
+  <li><a href="/article/2021/03/22/dynamic-swift-dynamic-member-lookup.html">Dynamic swift - Part 2: @dynamicMemberLookup</a></li>
+  <li><a href="/article/2021/03/25/dynamic-swift-callable.html">Dynamic swift - Part 3: Opposite to @dynamicCallable - static Callable</a></li>
+  <li><a href="/article/2021/01/11/do-that-instead-of-this.html">Dynamic swift - Part 4: @dynamicReplacement</a></li>
+</ul>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://developer.apple.com/documentation/swift/swift_standard_library/key-path_expressions">Key-Path Expressions</a></li>
+  <li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0161-key-paths.md">Key Paths</a></li>
+  <li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0195-dynamic-member-lookup.md">Dynamic member lookup</a></li>
+  <li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0252-keypath-dynamic-member-lookup.md">Key Path Member Lookup</a></li>
+  <li><a href="https://forums.swift.org/t/dynamic-method-replacement/16619">Dynamic replacement</a></li>
+  <li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0216-dynamic-callable.md">Callable</a></li>
+  <li><a href="https://academy.realm.io/posts/mobilization-roy-marmelstein-objective-c-runtime-swift-dynamic/">The Objective-C Runtime &amp; Swift Dynamism</a></li>
+  <li><a href="https://developer.apple.com/videos/play/wwdc2017/212/">WWDC 17 #212 What’s New in Foundation</a></li>
+  <li><a href="https://klundberg.com/blog/swift-4-keypaths-and-you/">Swift 4 KeyPaths and You</a></li>
+  <li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0062-objc-keypaths.md">Referencing Objective-C key-paths</a></li>
+  <li><a href="https://github.com/apple/swift-evolution/blob/master/proposals/0249-key-path-literal-function-expressions.md">Key Path Expressions as Functions</a></li>
+  <li><a href="https://developer.apple.com/documentation/swift/cocoa_design_patterns/using_key-value_observing_in_swift">Using Key-Value Observing in Swift</a></li>
+</ul>
+
+  </div><a class="u-url" href="/article/2021/03/13/dynamic-features-part-1.html" hidden></a>
+</article>
+
+<div class="prev-next">
+  
+    <a class="half prev" href="/article/2021/03/05/using-file.html">&laquo; a File</a>
+  
+  
+    <a class="half next" href="/article/2021/03/22/dynamic-swift-dynamic-member-lookup.html">Dynamic swift - Part 2: @dynamicMemberLookup/@dynamicCallable &raquo;</a>
+  
+</div>
+
+
+
+
+<style>
+#share-buttons {display: inline-block; vertical-align: middle; }
+#share-buttons:after {content: ""; display: block; clear: both;}
+#share-buttons > div {
+    position: relative;
+    text-align: left; 
+    height: 36px; 
+    width: 32px; 
+    float: left; 
+    text-align: center;
+}
+#share-buttons > div > svg {height: 16px; fill: #d5d5d5; margin-top: 10px;}
+#share-buttons > div:hover {cursor: pointer;}
+#share-buttons > div.facebook:hover > svg {fill: #3B5998;}
+#share-buttons > div.twitter:hover > svg {fill: #55ACEE;}
+#share-buttons > div.linkedin:hover > svg {fill: #0077b5;}
+#share-buttons > div.pinterest:hover > svg {fill: #CB2027;}
+#share-buttons > div.gplus:hover > svg {fill: #dd4b39;}
+#share-buttons > div.mail:hover > svg {fill: #7D7D7D;}
+#share-buttons > div.instagram:hover > svg {fill: #C73B92;}
+#share-buttons > div.facebook > svg {height: 18px; margin-top: 9px;}
+#share-buttons > div.twitter > svg {height: 20px; margin-top: 8px;}
+#share-buttons > div.linkedin > svg {height: 19px; margin-top: 7px;}
+#share-buttons > div.pinterest > svg {height: 20px; margin-top: 9px;}
+#share-buttons > div.gplus > svg {height: 17px; margin-top: 9px; position: relative; left: 1px;}
+#share-buttons > div.mail > svg {height: 14px; margin-top: 11px;}
+</style>
+
+<span style="color: silver;">Share on: </span><div id="share-buttons">
+    <div class="facebook" title="Share this on Facebook" onclick="window.open('http://www.facebook.com/share.php?u=http://localhost:4000/article/2021/03/13/dynamic-features-part-1.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1343 12v264h-157q-86 0-116 36t-30 108v189h293l-39 296h-254v759h-306v-759h-255v-296h255v-218q0-186 104-288.5t277-102.5q147 0 228 12z"/></svg></div>
+    <div class="twitter" title="Share this on Twitter" onclick="window.open('http://twitter.com/home?status=http://localhost:4000/article/2021/03/13/dynamic-features-part-1.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1684 408q-67 98-162 167 1 14 1 42 0 130-38 259.5t-115.5 248.5-184.5 210.5-258 146-323 54.5q-271 0-496-145 35 4 78 4 225 0 401-138-105-2-188-64.5t-114-159.5q33 5 61 5 43 0 85-11-112-23-185.5-111.5t-73.5-205.5v-4q68 38 146 41-66-44-105-115t-39-154q0-88 44-163 121 149 294.5 238.5t371.5 99.5q-8-38-8-74 0-134 94.5-228.5t228.5-94.5q140 0 236 102 109-21 205-78-37 115-142 178 93-10 186-50z"/></svg></div>
+    <div class="linkedin" title="Share this on Linkedin" onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/article/2021/03/13/dynamic-features-part-1.html&title=&summary=&source=');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M477 625v991h-330v-991h330zm21-306q1 73-50.5 122t-135.5 49h-2q-82 0-132-49t-50-122q0-74 51.5-122.5t134.5-48.5 133 48.5 51 122.5zm1166 729v568h-329v-530q0-105-40.5-164.5t-126.5-59.5q-63 0-105.5 34.5t-63.5 85.5q-11 30-11 81v553h-329q2-399 2-647t-1-296l-1-48h329v144h-2q20-32 41-56t56.5-52 87-43.5 114.5-15.5q171 0 275 113.5t104 332.5z"/></svg></div>
+    
+    <div class="gplus" title="Share this on Google Plus" onclick="window.open('https://plus.google.com/share?url=http://localhost:4000/article/2021/03/13/dynamic-features-part-1.html');"><svg viewBox="0 0 2304 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1437 913q0 208-87 370.5t-248 254-369 91.5q-149 0-285-58t-234-156-156-234-58-285 58-285 156-234 234-156 285-58q286 0 491 192l-199 191q-117-113-292-113-123 0-227.5 62t-165.5 168.5-61 232.5 61 232.5 165.5 168.5 227.5 62q83 0 152.5-23t114.5-57.5 78.5-78.5 49-83 21.5-74h-416v-252h692q12 63 12 122zm867-122v210h-209v209h-210v-209h-209v-210h209v-209h210v209h209z"/></svg></div>
+    <div class="mail" title="Share this through Email" onclick="window.open('mailto:?&body=http://localhost:4000/article/2021/03/13/dynamic-features-part-1.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z"/></svg></div>
+</div>
+
+<script src="  https://unpkg.com/showdown/dist/showdown.min.js"></script>
+<script>
+const GH_API_URL = 'https://api.github.com/repos/khorbushko/khorbushko.github.io/issues/33/comments'; // ?client_id=&client_secret=
+
+let request = new XMLHttpRequest();
+request.open( 'GET', GH_API_URL, true );
+request.onload = function() {
+	if ( this.status >= 200 && this.status < 400 ) {
+		let response = JSON.parse( this.response );
+
+		for ( var i = 0; i < response.length; i++ ) {
+			document.getElementById( 'gh-comments-list' ).appendChild( createCommentEl( response[ i ] ) );
+		}
+
+		if ( 0 === response.length ) {
+			document.getElementById( 'no-comments-found' ).style.display = 'block';
+		}
+	} else {
+		console.error( this );
+	}
+};
+
+function createCommentEl( response ) {
+	let user = document.createElement( 'a' );
+	user.setAttribute( 'href', response.user.url.replace( 'api.github.com/users', 'github.com' ) );
+	user.classList.add( 'user' );
+
+	let userAvatar = document.createElement( 'img' );
+	userAvatar.classList.add( 'avatar' );
+	userAvatar.setAttribute( 'src', response.user.avatar_url );
+
+	user.appendChild( userAvatar );
+
+	let commentLink = document.createElement( 'a' );
+	commentLink.setAttribute( 'href', response.html_url );
+	commentLink.classList.add( 'comment-url' );
+	commentLink.innerHTML = '#' + response.id + ' - ' + response.created_at;
+
+	let commentContents = document.createElement( 'div' );
+	commentContents.classList.add( 'comment-content' );
+	commentContents.innerHTML = response.body;
+	// Progressive enhancement.
+	if ( window.showdown ) {
+		let converter = new showdown.Converter();
+		commentContents.innerHTML = converter.makeHtml( response.body );
+	}
+
+	let comment = document.createElement( 'li' );
+	comment.setAttribute( 'data-created', response.created_at );
+	comment.setAttribute( 'data-author-avatar', response.user.avatar_url );
+	comment.setAttribute( 'data-user-url', response.user.url );
+
+	comment.appendChild( user );
+	comment.appendChild( commentContents );
+	comment.appendChild( commentLink );
+
+	return comment;
+}
+request.send();
+</script>
+
+<hr>
+
+<div class="github-comments">
+	<h2>Comments</h2>
+	<ul id="gh-comments-list"></ul>
+	<p id="leave-a-comment">Join the discussion for this article on <a href="https://github.com/khorbushko/khorbushko.github.io/issues/33">this ticket</a>. Comments appear on this page instantly.</p>
+</div>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>RSS</span>      
+          </a>
+          &nbsp;&nbsp;
+          <a href="https://feedrabbit.com/?url=http://khorbushko.github.io">
+            <svg class="svg-icon black">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Newsletter</span>      
+          </a>
+
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">khorbushko</li>
+          <li><a class="u-email" href="mailto:kirill.ge@gmail.com">kirill.ge@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>inspired by &quot;software craftsmanship&quot;</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/khorbushko" title="khorbushko"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://stackoverflow.com/users/2012219" title="2012219"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#stackoverflow"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/kyryl-horbushko-67936bb5" title="kyryl-horbushko-67936bb5"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>a File | kyryl horbushko</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="a File" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Managing data always was and will be the main concept behind any application for any platform and at any time. But how we can do this? How to manage data between different sessions of app usage? One of the simplest and still perfect ways to do this is by using files." />
+<meta property="og:description" content="Managing data always was and will be the main concept behind any application for any platform and at any time. But how we can do this? How to manage data between different sessions of app usage? One of the simplest and still perfect ways to do this is by using files." />
+<link rel="canonical" href="http://localhost:4000/article/2021/03/05/using-file.html" />
+<meta property="og:url" content="http://localhost:4000/article/2021/03/05/using-file.html" />
+<meta property="og:site_name" content="kyryl horbushko" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-03-05T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="a File" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/article/2021/03/05/using-file.html"},"@type":"BlogPosting","url":"http://localhost:4000/article/2021/03/05/using-file.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/favicon.png"}},"headline":"a File","dateModified":"2021-03-05T00:00:00+02:00","datePublished":"2021-03-05T00:00:00+02:00","description":"Managing data always was and will be the main concept behind any application for any platform and at any time. But how we can do this? How to manage data between different sessions of app usage? One of the simplest and still perfect ways to do this is by using files.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/favicon.png"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="kyryl horbushko" />
+<meta name='monetization' content='$ilp.uphold.com/GiEjnNF98h8k'>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">kyryl horbushko</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/bookNotes/">Books</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/blog/archives/">Archives</a><a class="page-link" href="/contact/">Contact</a><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">a File</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2021-03-05T00:00:00+02:00" itemprop="datePublished">
+        Mar 5, 2021
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">kyryl horbushko</span></span>, 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Lviv</span></span></p>
+
+      
+         
+          <a class="post-tag" href="/tags/#ios">iOS</a>
+         
+          <a class="post-tag" href="/tags/#filehandle">FileHandle</a>
+         
+          <a class="post-tag" href="/tags/#filemanager">FileManager</a>
+         
+          <a class="post-tag" href="/tags/#dispathio">DispathIO</a>
+         
+          <a class="post-tag" href="/tags/#files">Files</a>
+         
+          <a class="post-tag" href="/tags/#stream">Stream</a>
+         
+      
+         <span style="float:right;">
+          <span class="ert">
+    <abbr title="Estimated reading time">Estimated reading time: </abbr>
+    
+    
+    
+    
+
+    
+    
+    
+
+    
+    13 minutes
+</span>
+         </span>
+         <br>
+      </p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <br>
+    <ul>
+  <li><a href="#foundations-framework-way"><code class="language-plaintext highlighter-rouge">Foundation</code>s framework way</a>
+    <ul>
+      <li><a href="#data">Data</a></li>
+    </ul>
+  </li>
+  <li><a href="#filemanager">FileManager</a>
+    <ul>
+      <li><a href="#create">Create</a></li>
+      <li><a href="#read">Read</a></li>
+      <li><a href="#update">Update</a></li>
+      <li><a href="#move">Move</a></li>
+      <li><a href="#delete">Delete</a></li>
+    </ul>
+  </li>
+  <li><a href="#filehandle">FileHandle</a>
+    <ul>
+      <li><a href="#read-1">Read</a></li>
+      <li><a href="#write">Write</a></li>
+      <li><a href="#seek">Seek</a></li>
+      <li><a href="#update-1">Update</a></li>
+      <li><a href="#truncate">Truncate</a></li>
+    </ul>
+  </li>
+  <li><a href="#files">Files</a></li>
+  <li><a href="#dispathio">DispathIO</a>
+    <ul>
+      <li><a href="#read-2">Read</a></li>
+      <li><a href="#write-1">Write</a></li>
+    </ul>
+  </li>
+  <li><a href="#stream">Stream</a>
+    <ul>
+      <li><a href="#read-3">Read</a></li>
+      <li><a href="#write-2">Write</a></li>
+    </ul>
+  </li>
+  <li><a href="#c-api">C++ API</a>
+    <ul>
+      <li><a href="#writecreate">Write/Create</a></li>
+      <li><a href="#read-4">Read</a></li>
+      <li><a href="#seek-1">Seek</a></li>
+      <li><a href="#update-2">Update</a></li>
+      <li><a href="#delete-1">Delete</a></li>
+    </ul>
+  </li>
+  <li><a href="#resources">Resources</a></li>
+</ul>
+    <br>
+    <p>Managing data always was and will be the main concept behind any application for any platform and at any time. But how we can do this? How to manage data between different sessions of app usage?</p>
+
+<p>One of the simplest and still perfect ways to do this is by using files. 
+<!--more--></p>
+
+<p><em>“A computer file is a computer resource for recording data in a computer storage device.”</em> - according to <a href="https://en.wikipedia.org/wiki/Computer_file">wiki</a>.</p>
+
+<p>On the iOS platform luckily for us there is a bunch of ways how can perform various manipulations within the file (different <code class="language-plaintext highlighter-rouge">CRUD</code> operations):</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Foundation</code>s framework way</li>
+  <li><code class="language-plaintext highlighter-rouge">FileManager</code></li>
+  <li><code class="language-plaintext highlighter-rouge">FileHandle</code></li>
+  <li>Files</li>
+  <li><code class="language-plaintext highlighter-rouge">DispathIO</code></li>
+  <li>Stream</li>
+  <li>C++ API</li>
+</ul>
+
+<blockquote>
+  <p>CRUD - Create Read Update Delete</p>
+</blockquote>
+
+<h2 id="foundations-framework-way"><code class="language-plaintext highlighter-rouge">Foundation</code>s framework way</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Foundation</code> is a base framework that we use in every app. If we check API from it, we will find a lot of methods/functions that allow us to perform various manipulations within a file. The most known types are: <code class="language-plaintext highlighter-rouge">String</code>, <code class="language-plaintext highlighter-rouge">Dictionary</code>, <code class="language-plaintext highlighter-rouge">Data</code>, <code class="language-plaintext highlighter-rouge">Array</code>, etc.</p>
+
+<p>In most cases concrete Type supports only basic functionality:</p>
+
+<ul>
+  <li>read</li>
+  <li>write</li>
+</ul>
+
+<p>I will show examples only for <code class="language-plaintext highlighter-rouge">Data</code> type, all other has something similar or specific for concrete type.</p>
+
+<h3 id="data">Data</h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">Data</code> type - is a basic type that can represent information. It represents a byte buffer in memory.
+For basic operations like save/read here are a few code snippets.</p>
+
+<p>To <strong>save</strong> data into file we can:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">do</span> <span class="p">{</span>
+	<span class="k">try</span> <span class="n">someData</span><span class="p">?</span><span class="o">.</span><span class="nf">write</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="n">filePath</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+	<span class="c1">// handle error</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>To <strong>read</strong> data from the file:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">do</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">data</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">fileURL</span><span class="p">,</span> <span class="nv">options</span><span class="p">:</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">options</span><span class="o">&gt;</span><span class="p">])</span>
+    <span class="c1">// use data</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="filemanager">FileManager</h2>
+
+<p><a href="https://developer.apple.com/documentation/foundation/filemanager"><code class="language-plaintext highlighter-rouge">FileManager</code></a> is one of the simplest ways to work within a file. Using <code class="language-plaintext highlighter-rouge">FileManager</code> we can do all most common operations:</p>
+
+<ul>
+  <li>create</li>
+  <li>read</li>
+  <li>update</li>
+  <li>move</li>
+  <li>delete</li>
+</ul>
+
+<blockquote>
+  <p>we can also use this class for work with directories, not just for files.</p>
+</blockquote>
+
+<p>To demonstrate all possibilities related to files, we first should obtain an instance of FileManager. To do this, we can use either shared instance either create or own:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">fileManager</span> <span class="o">=</span> <span class="kt">FileManager</span><span class="o">.</span><span class="k">default</span>
+<span class="c1">// or</span>
+<span class="k">let</span> <span class="nv">fileManager</span> <span class="o">=</span> <span class="kt">FileManager</span><span class="p">()</span></code></pre></figure>
+
+<blockquote>
+  <p>This method always represents the same file manager object. If you plan to use a delegate with the file manager to receive notifications about the completion of file-based operations, you should create a new instance of FileManager (using the init method) rather than using the shared object. [<a href="https://developer.apple.com/documentation/foundation/filemanager/1409234-default">source</a>].</p>
+</blockquote>
+
+<h3 id="create">Create</h3>
+
+<p>To create file we can use simple snipet:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">someData</span> <span class="o">=</span> <span class="s">"hello world!"</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">isCreated</span> <span class="o">=</span> <span class="n">fileManager</span><span class="o">.</span><span class="nf">createFile</span><span class="p">(</span><span class="nv">atPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="nv">contents</span><span class="p">:</span> <span class="n">someData</span><span class="p">,</span> <span class="nv">attributes</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="read">Read</h3>
+
+<p>Reading is also trivial operation - all u need, its just a path:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">data</span> <span class="o">=</span> <span class="n">fileManager</span><span class="o">.</span><span class="nf">contents</span><span class="p">(</span><span class="nv">atPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="update">Update</h3>
+
+<p>Update operation is a bit tricky - using any approach, its require at least 2 operations - find what to update and perform update.</p>
+
+<p>I will asume in my samples, that we would like simply append some information to the end of the file (in real-world scenarious, u probably needs to find concrete postion for replacement or appending content):</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">if</span> <span class="k">let</span> <span class="nv">data</span> <span class="o">=</span> <span class="n">fileManager</span><span class="o">.</span><span class="nf">contents</span><span class="p">(</span><span class="nv">atPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="k">let</span> <span class="nv">stringInFile</span> <span class="o">=</span> <span class="kt">String</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="nv">encoding</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">let</span> <span class="nv">newContent</span> <span class="o">=</span> <span class="s">"content"</span>
+	 	<span class="k">let</span> <span class="nv">updatedContent</span> <span class="o">=</span> <span class="n">stringInFile</span> <span class="o">+</span> <span class="n">newContent</span> <span class="c1">// &lt;-- update</span>
+	 	<span class="k">let</span> <span class="nv">isCreated</span> <span class="o">=</span> <span class="n">fileManager</span><span class="o">.</span><span class="nf">createFile</span><span class="p">(</span><span class="nv">atPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="nv">contents</span><span class="p">:</span> <span class="n">updatedContent</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">),</span> <span class="nv">attributes</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span> <span class="c1">// &lt;-- recreate with updated content as a workaround</span>
+	 	<span class="nf">print</span><span class="p">(</span><span class="n">isCreated</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+ 		<span class="nf">print</span><span class="p">(</span><span class="s">"Nothing in file"</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Update is not supported by FileManager, that why we can use a workaround - recreate the file instead.</p>
+
+  <p>From the <a href="https://developer.apple.com/documentation/foundation/filemanager">official documentation</a> - “You use it to <strong>locate</strong>, <strong>create</strong>, <strong>copy</strong>, and <strong>move</strong> files and directories. You also use it to <strong>get information about</strong> a file or directory or change some of its attributes.”</p>
+</blockquote>
+
+<h3 id="move">Move</h3>
+
+<p>To change position of a file, we can simply calling only one method:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">do</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="n">fileManager</span><span class="o">.</span><span class="nf">moveItem</span><span class="p">(</span><span class="nv">atPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="nv">toPath</span><span class="p">:</span> <span class="n">newURL</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+  <span class="nf">print</span><span class="p">(</span><span class="s">"Moved successfully"</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+  <span class="nf">print</span><span class="p">(</span><span class="s">"Error: </span><span class="se">\(</span><span class="n">error</span><span class="o">.</span><span class="n">localizedDescription</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="delete">Delete</h3>
+
+<p>To remove unnecessary element fom file system:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">do</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="n">fileManager</span><span class="o">.</span><span class="nf">removeItem</span><span class="p">(</span><span class="nv">atPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+  <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="filehandle">FileHandle</h2>
+
+<p><a href="https://developer.apple.com/documentation/foundation/filehandle"><code class="language-plaintext highlighter-rouge">FileHandle</code></a> is a less known, but yet powerful class for working with files. The list of operations is quite different from that one used in <code class="language-plaintext highlighter-rouge">FileManager</code>, but usage is much simpler.</p>
+
+<p>Also, this class provides additional possibilities - it allows us to work not only within files, but with sockets, pipes, and devices.</p>
+
+<p>As we are talking about a files, we can:</p>
+
+<ul>
+  <li>read</li>
+  <li>write</li>
+  <li>seek</li>
+  <li>update</li>
+  <li>truncate</li>
+</ul>
+
+<blockquote>
+  <p>It’s good to know, that <code class="language-plaintext highlighter-rouge">FileHandle</code> can create asynchronous background I/O operations, so u can use it in systems, where u would like to save some resources for I/O operations.</p>
+</blockquote>
+
+<p>To use the possibilities of <code class="language-plaintext highlighter-rouge">FileHandle</code>, we should create an instance of this class by using one of the existing initializers. The key-point here - we should use init based on our needs. I will show u different initializations of this object below in each examples.</p>
+
+<h3 id="read-1">Read</h3>
+
+<p>Read is essential part of data management, and <code class="language-plaintext highlighter-rouge">FileHandle</code> has a perfect method for this:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">fileHandler</span> <span class="o">=</span> <span class="kt">FileHandle</span><span class="p">(</span><span class="nv">forReadingAtPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">buffer</span> <span class="o">=</span> <span class="n">fileHandler</span><span class="p">?</span><span class="o">.</span><span class="nf">readDataToEndOfFile</span><span class="p">()</span></code></pre></figure>
+
+<h3 id="write">Write</h3>
+
+<p>To write something in a file we can use next snipet:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">if</span> <span class="k">let</span> <span class="nv">fileHandler</span> <span class="o">=</span> <span class="kt">FileHandle</span><span class="p">(</span><span class="nv">forWritingAtPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">),</span>
+  <span class="k">let</span> <span class="nv">someData</span> <span class="o">=</span> <span class="s">"hello world!"</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">fileHandler</span><span class="p">?</span><span class="o">.</span><span class="nf">write</span><span class="p">(</span><span class="n">someData</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>With <code class="language-plaintext highlighter-rouge">FileHandle</code> we can’t write data to file if the file does not exist.</p>
+</blockquote>
+
+<h3 id="seek">Seek</h3>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">file</span><span class="p">:</span> <span class="kt">FileHandle</span><span class="p">?</span> <span class="o">=</span> <span class="kt">FileHandle</span><span class="p">(</span><span class="nv">forUpdatingAtPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">file</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+  <span class="k">let</span> <span class="nv">data</span> <span class="o">=</span> <span class="s">" and goodbuy"</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span>
+
+  <span class="c1">// option 1 - set offset</span>
+  <span class="k">let</span> <span class="nv">offset</span> <span class="o">=</span> <span class="mi">100</span>
+  <span class="n">file</span><span class="p">?</span><span class="o">.</span><span class="nf">seek</span><span class="p">(</span><span class="nv">toFileOffset</span><span class="p">:</span> <span class="kt">UInt64</span><span class="p">(</span><span class="n">offset</span><span class="p">))</span>
+  <span class="c1">// option 2 - seek the end of file</span>
+  <span class="n">file</span><span class="p">?</span><span class="o">.</span><span class="nf">seekToEndOfFile</span><span class="p">()</span>
+  <span class="c1">// do any other operations with content and file</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="update-1">Update</h3>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">file</span><span class="p">:</span> <span class="kt">FileHandle</span><span class="p">?</span> <span class="o">=</span> <span class="kt">FileHandle</span><span class="p">(</span><span class="nv">forUpdatingAtPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">file</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+  <span class="k">let</span> <span class="nv">data</span> <span class="o">=</span> <span class="err">«</span><span class="n">content</span><span class="s">".data(using: .utf8)
+  file?.seekToEndOfFile()
+  file?.write(data!)
+  file?.closeFile()
+}</span></code></pre></figure>
+
+<h3 id="truncate">Truncate</h3>
+
+<p>Remove is not available as an option for <code class="language-plaintext highlighter-rouge">FileHandle</code>. 
+We can, instead, truncate the content:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">file</span><span class="p">:</span> <span class="kt">FileHandle</span><span class="p">?</span> <span class="o">=</span> <span class="kt">FileHandle</span><span class="p">(</span><span class="nv">forUpdatingAtPath</span><span class="p">:</span> <span class="n">filePath</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">file</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+  <span class="nf">print</span><span class="p">(</span><span class="s">"File open failed"</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="n">file</span><span class="p">?</span><span class="o">.</span><span class="nf">truncateFile</span><span class="p">(</span><span class="nv">atOffset</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
+  <span class="n">file</span><span class="p">?</span><span class="o">.</span><span class="nf">closeFile</span><span class="p">()</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="files">Files</h2>
+
+<p><em>“The Files app brings all of your files together in iOS 11 or later. You can easily browse, search, and organize all your files in one place. Not just the ones on the device you’re using, but also those in apps, on your other iOS devices, in iCloud Drive, and across other cloud services.”</em> <a href="https://support.apple.com/en-us/HT206481">more</a>.</p>
+
+<p>We also can use <code class="language-plaintext highlighter-rouge">UIDocument</code> that also can represent data from files. Using this class we can create and read information from files in our apps. To do this, we should describe this feature in metadata of the app - using plist:</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2021-03-05-using-file/files.png" alt="files" width="450" />
+</div>
+<p><br /></p>
+
+<p>Then, define <code class="language-plaintext highlighter-rouge">UIDocument</code> subclass that will represent the content of a file and provide some UI for manipulating with files on our file system.</p>
+
+<p>The simplest code for doing this can be as next:</p>
+
+<p>Document description:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="kt">UIKit</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">MyDocument</span><span class="p">:</span> <span class="kt">UIDocument</span> <span class="p">{</span>
+
+  <span class="kd">private</span> <span class="p">(</span><span class="k">set</span><span class="p">)</span> <span class="k">var</span> <span class="nv">stringValue</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
+
+  <span class="k">override</span> <span class="kd">func</span> <span class="nf">contents</span><span class="p">(</span><span class="n">forType</span> <span class="nv">typeName</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Any</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kt">Data</span><span class="p">()</span>
+  <span class="p">}</span>
+
+  <span class="k">override</span> <span class="kd">func</span> <span class="nf">load</span><span class="p">(</span><span class="n">fromContents</span> <span class="nv">contents</span><span class="p">:</span> <span class="kt">Any</span><span class="p">,</span> <span class="n">ofType</span> <span class="nv">typeName</span><span class="p">:</span> <span class="kt">String</span><span class="p">?)</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">contentData</span> <span class="o">=</span> <span class="n">contents</span> <span class="k">as?</span> <span class="kt">Data</span> <span class="p">{</span>
+      <span class="n">stringValue</span> <span class="o">=</span> <span class="kt">String</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="n">contentData</span><span class="p">,</span> <span class="nv">encoding</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Document preview:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="kt">UIKit</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">DocumentViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+
+  <span class="kd">@IBOutlet</span> <span class="kd">private</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">documentNameLabel</span><span class="p">:</span> <span class="kt">UILabel</span><span class="o">!</span>
+  <span class="kd">@IBOutlet</span> <span class="kd">private</span> <span class="k">weak</span> <span class="k">var</span> <span class="nv">textView</span><span class="p">:</span> <span class="kt">UITextView</span><span class="o">!</span>
+
+  <span class="k">var</span> <span class="nv">document</span><span class="p">:</span> <span class="kt">UIDocument</span><span class="p">?</span>
+
+  <span class="c1">// MARK: - LifeCycle</span>
+
+  <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+    <span class="n">document</span><span class="p">?</span><span class="o">.</span><span class="nf">open</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">success</span><span class="p">)</span> <span class="k">in</span>
+      <span class="k">if</span> <span class="n">success</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">documentNameLabel</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">document</span><span class="p">?</span><span class="o">.</span><span class="n">fileURL</span><span class="o">.</span><span class="n">lastPathComponent</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">textView</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="p">(</span><span class="k">self</span><span class="o">.</span><span class="n">document</span> <span class="k">as?</span> <span class="kt">MyDocument</span><span class="p">)?</span><span class="o">.</span><span class="n">stringValue</span>
+      <span class="p">}</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
+
+  <span class="kd">@IBAction</span> <span class="kd">private</span> <span class="kd">func</span> <span class="nf">dismissDocumentViewController</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nf">dismiss</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">self</span><span class="o">.</span><span class="n">document</span><span class="p">?</span><span class="o">.</span><span class="nf">close</span><span class="p">(</span><span class="nv">completionHandler</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Document picker:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="kt">UIKit</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">DocumentPreviewViewController</span><span class="p">:</span> <span class="kt">UIDocumentBrowserViewController</span><span class="p">,</span> <span class="kt">UIDocumentBrowserViewControllerDelegate</span> <span class="p">{</span>
+
+  <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
+
+    <span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span>
+    <span class="n">allowsDocumentCreation</span> <span class="o">=</span> <span class="kc">true</span>
+    <span class="n">allowsPickingMultipleItems</span> <span class="o">=</span> <span class="kc">false</span>
+  <span class="p">}</span>
+
+  <span class="c1">// MARK: UIDocumentBrowserViewControllerDelegate</span>
+
+  <span class="kd">func</span> <span class="nf">documentBrowser</span><span class="p">(</span><span class="n">_</span> <span class="nv">controller</span><span class="p">:</span> <span class="kt">UIDocumentBrowserViewController</span><span class="p">,</span> <span class="n">didRequestDocumentCreationWithHandler</span> <span class="nv">importHandler</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">URL</span><span class="p">?,</span> <span class="kt">UIDocumentBrowserViewController</span><span class="o">.</span><span class="kt">ImportMode</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nf">importHandler</span><span class="p">(</span><span class="kc">nil</span><span class="p">,</span> <span class="o">.</span><span class="k">none</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="nf">documentBrowser</span><span class="p">(</span><span class="n">_</span> <span class="nv">controller</span><span class="p">:</span> <span class="kt">UIDocumentBrowserViewController</span><span class="p">,</span> <span class="n">didPickDocumentURLs</span> <span class="nv">documentURLs</span><span class="p">:</span> <span class="p">[</span><span class="kt">URL</span><span class="p">])</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">sourceURL</span> <span class="o">=</span> <span class="n">documentURLs</span><span class="o">.</span><span class="n">first</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+    <span class="nf">presentDocument</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="n">sourceURL</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="nf">documentBrowser</span><span class="p">(</span><span class="n">_</span> <span class="nv">controller</span><span class="p">:</span> <span class="kt">UIDocumentBrowserViewController</span><span class="p">,</span> <span class="n">didImportDocumentAt</span> <span class="nv">sourceURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="n">toDestinationURL</span> <span class="nv">destinationURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">presentDocument</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="n">destinationURL</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="nf">documentBrowser</span><span class="p">(</span><span class="n">_</span> <span class="nv">controller</span><span class="p">:</span> <span class="kt">UIDocumentBrowserViewController</span><span class="p">,</span> <span class="n">failedToImportDocumentAt</span> <span class="nv">documentURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?)</span> <span class="p">{</span>
+  <span class="p">}</span>
+
+  <span class="c1">// MARK: Document Presentation</span>
+
+  <span class="kd">func</span> <span class="nf">presentDocument</span><span class="p">(</span><span class="n">at</span> <span class="nv">documentURL</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">storyBoard</span> <span class="o">=</span> <span class="kt">UIStoryboard</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Main"</span><span class="p">,</span> <span class="nv">bundle</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">documentViewController</span> <span class="o">=</span> <span class="n">storyBoard</span><span class="o">.</span><span class="nf">instantiateViewController</span><span class="p">(</span><span class="nv">withIdentifier</span><span class="p">:</span> <span class="s">"DocumentViewController"</span><span class="p">)</span> <span class="k">as!</span> <span class="kt">DocumentViewController</span>
+    <span class="n">documentViewController</span><span class="o">.</span><span class="n">document</span> <span class="o">=</span> <span class="kt">MyDocument</span><span class="p">(</span><span class="nv">fileURL</span><span class="p">:</span> <span class="n">documentURL</span><span class="p">)</span>
+    <span class="nf">present</span><span class="p">(</span><span class="n">documentViewController</span><span class="p">,</span> <span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nv">completion</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>Off cause document representation and preview is non-real-world and used just for simplification of the approach presentation.</p>
+</blockquote>
+
+<h2 id="dispathio">DispathIO</h2>
+
+<p><code class="language-plaintext highlighter-rouge">DispatchIO</code> - An object that manages operations on a file descriptor using either stream-based or random-access semantics. <a href="https://developer.apple.com/documentation/dispatch/dispatchio">source</a>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">DispatchIO</code> can perform only a few operations within the file descriptor:</p>
+
+<ul>
+  <li>read</li>
+  <li>write</li>
+</ul>
+
+<p>U should use this class when u have a large file and u need to efficiently work within it.</p>
+
+<h3 id="read-2">Read</h3>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="kt">Foundation</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">DispatchIOReader</span> <span class="p">{</span>
+
+  <span class="kd">typealias</span> <span class="kt">IsReadingCompleted</span> <span class="o">=</span> <span class="kt">Bool</span>
+
+  <span class="kd">enum</span> <span class="kt">Failure</span><span class="p">:</span> <span class="kt">Error</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">cantFindFile</span>
+    <span class="k">case</span> <span class="n">cantFindChannel</span>
+    <span class="k">case</span> <span class="nf">readingIssue</span><span class="p">(</span><span class="kt">Int32</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="k">var</span> <span class="nv">channel</span><span class="p">:</span> <span class="kt">DispatchIO</span><span class="p">?</span>
+
+  <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">inputPath</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Int8</span><span class="p">](</span><span class="n">path</span><span class="o">.</span><span class="n">utf8</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="kt">Int8</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
+    <span class="n">channel</span> <span class="o">=</span> <span class="kt">DispatchIO</span><span class="p">(</span>
+      <span class="nv">type</span><span class="p">:</span> <span class="o">.</span><span class="n">random</span><span class="p">,</span>
+      <span class="nv">path</span><span class="p">:</span> <span class="n">inputPath</span><span class="p">,</span>
+      <span class="nv">oflag</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nv">mode</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nv">queue</span><span class="p">:</span> <span class="o">.</span><span class="n">main</span><span class="p">,</span>
+      <span class="nv">cleanupHandler</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="n">errCode</span><span class="p">)</span> <span class="k">in</span>
+
+      <span class="p">})</span>
+
+    <span class="k">if</span> <span class="n">channel</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">Failure</span><span class="o">.</span><span class="n">cantFindFile</span>
+    <span class="p">}</span>
+
+    <span class="n">channel</span><span class="p">?</span><span class="o">.</span><span class="nf">setLimit</span><span class="p">(</span><span class="nv">lowWater</span><span class="p">:</span> <span class="o">.</span><span class="n">max</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">deinit</span> <span class="p">{</span>
+    <span class="n">channel</span><span class="p">?</span><span class="o">.</span><span class="nf">close</span><span class="p">()</span>
+    <span class="n">channel</span> <span class="o">=</span> <span class="kc">nil</span>
+  <span class="p">}</span>
+
+  <span class="c1">// MARK: - Public</span>
+
+  <span class="kd">func</span> <span class="nf">read</span><span class="p">(</span>
+    <span class="nv">byteRange</span><span class="p">:</span> <span class="kt">CountableRange</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="nv">queue</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="o">.</span><span class="n">main</span><span class="p">,</span>
+    <span class="nv">completion</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Result</span><span class="o">&lt;</span><span class="p">(</span><span class="kt">DispatchData</span><span class="p">?,</span> <span class="kt">IsReadingCompleted</span><span class="p">),</span> <span class="kt">Error</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span>
+  <span class="p">)</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">channel</span> <span class="o">=</span> <span class="n">channel</span> <span class="p">{</span>
+      <span class="n">channel</span><span class="o">.</span><span class="nf">read</span><span class="p">(</span>
+        <span class="nv">offset</span><span class="p">:</span> <span class="nf">off_t</span><span class="p">(</span><span class="n">byteRange</span><span class="o">.</span><span class="n">startIndex</span><span class="p">),</span>
+        <span class="nv">length</span><span class="p">:</span> <span class="n">byteRange</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+        <span class="nv">queue</span><span class="p">:</span> <span class="n">queue</span><span class="p">,</span>
+        <span class="nv">ioHandler</span><span class="p">:</span> <span class="p">{</span> <span class="n">done</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">errorCode</span> <span class="k">in</span>
+          <span class="k">if</span> <span class="n">errorCode</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="nf">completion</span><span class="p">(</span><span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="kt">Failure</span><span class="o">.</span><span class="nf">readingIssue</span><span class="p">(</span><span class="n">errorCode</span><span class="p">)))</span>
+          <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nf">completion</span><span class="p">(</span><span class="o">.</span><span class="nf">success</span><span class="p">((</span><span class="n">data</span><span class="p">,</span> <span class="n">done</span><span class="p">)))</span>
+          <span class="p">}</span>
+      <span class="p">})</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">Failure</span><span class="o">.</span><span class="n">cantFindChannel</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>usage:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">path</span> <span class="o">=</span> <span class="kt">FileManager</span><span class="p">()</span><span class="o">.</span><span class="nf">urls</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="n">documentDirectory</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">.</span><span class="n">userDomainMask</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+<span class="k">let</span> <span class="nv">file</span> <span class="o">=</span> <span class="n">path</span><span class="p">?</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="s">"CreatedFile.txt"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="k">let</span> <span class="nv">dispatchReader</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="kt">DispatchIOReader</span><span class="p">(</span><span class="n">file</span><span class="o">!.</span><span class="n">path</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">try</span><span class="p">?</span> <span class="n">dispatchReader</span><span class="o">.</span><span class="nf">read</span><span class="p">(</span><span class="nv">byteRange</span><span class="p">:</span> <span class="mi">0</span><span class="o">..&lt;</span><span class="mi">300</span><span class="p">)</span> <span class="p">{</span> <span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">result</span> <span class="p">{</span>
+      <span class="k">case</span> <span class="o">.</span><span class="nf">failure</span><span class="p">(</span><span class="k">let</span> <span class="nv">error</span><span class="p">):</span>
+        <span class="nf">print</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+      <span class="k">case</span> <span class="o">.</span><span class="nf">success</span><span class="p">(</span><span class="k">let</span> <span class="nv">resultTuple</span><span class="p">):</span>
+        <span class="k">let</span> <span class="nv">data</span> <span class="o">=</span> <span class="n">resultTuple</span><span class="o">.</span><span class="mi">0</span><span class="p">?</span><span class="o">.</span><span class="nf">compactMap</span><span class="p">({</span> <span class="kt">UInt8</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span> <span class="p">??</span> <span class="p">[]</span>
+        <span class="k">let</span> <span class="nv">text</span> <span class="o">=</span> <span class="kt">String</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nv">encoding</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Read - "</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p><a href="https://www.gnu.org/software/libc/manual/html_node/File-Position-Primitive.html"><code class="language-plaintext highlighter-rouge">off_t</code></a> - This is a data type defined in the sys/types.h header file (of fundamental type unsigned long) and is used to measure the file offset in bytes from the beginning of the file. It is defined as a signed, 32-bit integer, but if the programming environment enables large files off_t is defined to be a signed, 64-bit integer.</p>
+</blockquote>
+
+<h3 id="write-1">Write</h3>
+
+<p>Write with <code class="language-plaintext highlighter-rouge">DispatchIO</code> is a similar operation - simply open channel and execute <a href="https://developer.apple.com/documentation/dispatch/dispatchio/1388932-write"><code class="language-plaintext highlighter-rouge">write(offset:data:queue:ioHandler:)</code></a>.</p>
+
+<blockquote>
+  <p>Dispatch framework is very powerful, but most of the developers didn’t use its power - instead, only <code class="language-plaintext highlighter-rouge">Dispatch.main.async</code> was used. If u would like to find more - u can start by checking <a href="https://swiftrocks.com/dispatchsource-detecting-changes-in-files-and-folders-in-swift">Bruno Rocha’s article about DispatchSouce</a>.</p>
+</blockquote>
+
+<h2 id="stream">Stream</h2>
+
+<p><a href="https://developer.apple.com/documentation/foundation/stream"><code class="language-plaintext highlighter-rouge">Stream</code></a> - it’s and abstractions, that allow us to manipulate the data over. In <code class="language-plaintext highlighter-rouge">Foundation</code> framework we have <a href="https://developer.apple.com/documentation/foundation/inputstream"><code class="language-plaintext highlighter-rouge">InputStream</code></a> and <a href="https://developer.apple.com/documentation/foundation/outputstream"><code class="language-plaintext highlighter-rouge">OutputStream</code></a>for reading and writing.</p>
+
+<p>In the context of a file, using streams, we can:</p>
+
+<ul>
+  <li>read</li>
+  <li>write</li>
+</ul>
+
+<h3 id="read-3">Read</h3>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">path</span> <span class="o">=</span> <span class="kt">FileManager</span><span class="p">()</span><span class="o">.</span><span class="nf">urls</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="n">documentDirectory</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">.</span><span class="n">userDomainMask</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+<span class="k">let</span> <span class="nv">file</span> <span class="o">=</span> <span class="n">path</span><span class="p">?</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="s">"CreatedFile.txt"</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="nv">inputStr</span> <span class="o">=</span> <span class="kt">InputStream</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">file</span><span class="o">!</span><span class="p">)</span>
+<span class="n">inputStr</span><span class="p">?</span><span class="o">.</span><span class="nf">open</span><span class="p">()</span>
+<span class="k">while</span> <span class="n">inputStr</span><span class="p">?</span><span class="o">.</span><span class="n">hasBytesAvailable</span> <span class="o">==</span> <span class="kc">true</span> <span class="p">{</span>
+  <span class="k">let</span> <span class="nv">buff</span> <span class="o">=</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">UInt8</span><span class="o">&gt;.</span><span class="nf">allocate</span><span class="p">(</span><span class="nv">capacity</span><span class="p">:</span> <span class="mi">8</span><span class="p">)</span>
+  <span class="k">let</span> <span class="nv">readLen</span> <span class="o">=</span> <span class="n">inputStr</span><span class="p">?</span><span class="o">.</span><span class="nf">read</span><span class="p">(</span><span class="n">buff</span><span class="p">,</span> <span class="nv">maxLength</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span>
+
+  <span class="k">let</span> <span class="nv">bytesArray</span> <span class="o">=</span> <span class="kt">UnsafeBufferPointer</span><span class="p">(</span><span class="nv">start</span><span class="p">:</span> <span class="n">buff</span><span class="p">,</span> <span class="nv">count</span><span class="p">:</span> <span class="mi">8</span><span class="p">)</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="nv">$0</span> <span class="p">}</span>
+  <span class="nf">print</span><span class="p">(</span><span class="s">"read </span><span class="se">\(</span><span class="n">readLen</span><span class="se">)</span><span class="s"> bytes "</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="kt">Data</span><span class="p">(</span><span class="n">bytesArray</span><span class="p">),</span> <span class="nv">encoding</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">))</span>
+<span class="p">}</span>
+<span class="n">inputStr</span><span class="p">?</span><span class="o">.</span><span class="nf">close</span><span class="p">()</span></code></pre></figure>
+
+<p>output:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">read</span> <span class="kt">Optional</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="n">bytes</span>  <span class="kt">Optional</span><span class="p">(</span><span class="s">"Hello</span><span class="se">\0\0</span><span class="s"> "</span><span class="p">)</span>
+<span class="n">read</span> <span class="kt">Optional</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="n">bytes</span>  <span class="kt">Optional</span><span class="p">(</span><span class="s">" worl</span><span class="se">\0\0</span><span class="s"> "</span><span class="p">)</span>
+<span class="n">read</span> <span class="kt">Optional</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="n">bytes</span>  <span class="kt">Optional</span><span class="p">(</span><span class="s">"d</span><span class="se">\0\0\0\0\0\0</span><span class="s"> "</span><span class="p">)</span>
+<span class="n">read</span> <span class="kt">Optional</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="n">bytes</span>  <span class="kt">Optional</span><span class="p">(</span><span class="s">"</span><span class="se">\0\0\0\0\0\0\0</span><span class="s"> "</span><span class="p">)</span></code></pre></figure>
+
+<h3 id="write-2">Write</h3>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">outputStream</span> <span class="o">=</span> <span class="kt">OutputStream</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">file</span><span class="o">!</span><span class="p">,</span> <span class="nv">append</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+<span class="n">outputStream</span><span class="p">?</span><span class="o">.</span><span class="nf">open</span><span class="p">()</span>
+
+<span class="k">let</span> <span class="nv">data</span> <span class="o">=</span> <span class="s">"Aloha"</span><span class="o">.</span><span class="nf">data</span><span class="p">(</span><span class="nv">using</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">)</span>
+<span class="k">var</span> <span class="nv">buffer</span> <span class="o">=</span> <span class="kt">Array</span><span class="p">(</span><span class="n">data</span><span class="o">!</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="n">outputStream</span><span class="p">?</span><span class="o">.</span><span class="nf">write</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">,</span> <span class="nv">maxLength</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"write </span><span class="se">\(</span><span class="n">result</span><span class="se">)</span><span class="s"> bytes "</span><span class="p">,</span> <span class="kt">String</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="k">try!</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="n">file</span><span class="o">!</span><span class="p">),</span> <span class="nv">encoding</span><span class="p">:</span> <span class="o">.</span><span class="n">utf8</span><span class="p">))</span>
+<span class="n">outputStream</span><span class="p">?</span><span class="o">.</span><span class="nf">close</span><span class="p">()</span></code></pre></figure>
+
+<p>output:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">write</span> <span class="kt">Optional</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="n">bytes</span>  <span class="kt">Optional</span><span class="p">(</span><span class="s">"Hello worldAloha"</span><span class="p">)</span></code></pre></figure>
+
+<blockquote>
+  <p>There is a lot of discussions about <code class="language-plaintext highlighter-rouge">Stream</code> usage, for example <a href="https://forums.swift.org/t/make-inputstream-and-outputstream-methods-safe-and-swifty/23726">this one</a>.</p>
+</blockquote>
+
+<h2 id="c-api">C++ API</h2>
+
+<p>Another option for file manipulation use C++ API like <a href="http://www.cplusplus.com/reference/cstdio/fopen/"><code class="language-plaintext highlighter-rouge">fopen</code></a> and support functions.</p>
+
+<p>We can perform all basic operations within files like:</p>
+
+<ul>
+  <li>write/create</li>
+  <li>read</li>
+  <li>seek</li>
+  <li>update</li>
+  <li>delete</li>
+</ul>
+
+<p>We can use different variants of accessMode and perform various operations, for example - “rb”, “wb”, “ab”, “r+b”, “w+b”, “a+b”, etc.</p>
+
+<h3 id="writecreate">Write/Create</h3>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">import</span> <span class="kt">Foundation</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">FileWriter</span> <span class="p">{</span>
+
+  <span class="kd">enum</span> <span class="kt">Failure</span><span class="p">:</span> <span class="kt">Error</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nf">cantCreateFile</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">writeError</span>
+  <span class="p">}</span>
+
+  <span class="kd">private</span> <span class="k">var</span> <span class="nv">file</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">FILE</span><span class="o">&gt;</span><span class="p">?</span>
+
+  <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="nf">fopen</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">"w"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">file</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">Failure</span><span class="o">.</span><span class="nf">cantCreateFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">deinit</span> <span class="p">{</span>
+    <span class="nf">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="nf">write</span><span class="p">(</span><span class="n">_</span> <span class="nv">text</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">buffer</span> <span class="o">=</span> <span class="p">[</span><span class="kt">UInt8</span><span class="p">](</span><span class="n">text</span><span class="o">.</span><span class="n">utf8</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">writtenCharCount</span> <span class="o">=</span> <span class="nf">fwrite</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">MemoryLayout</span><span class="o">&lt;</span><span class="kt">UInt8</span><span class="o">&gt;.</span><span class="n">size</span><span class="p">,</span> <span class="n">buffer</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="n">file</span><span class="p">);</span>
+
+    <span class="c1">// chronize a file's in-core state with storage device</span>
+    <span class="c1">// map a stream pointer to a file descriptor</span>
+    <span class="nf">fsync</span><span class="p">(</span><span class="nf">fileno</span><span class="p">(</span><span class="n">file</span><span class="p">));</span>
+
+    <span class="k">if</span> <span class="n">writtenCharCount</span> <span class="o">!=</span> <span class="n">buffer</span><span class="o">.</span><span class="n">count</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">Failure</span><span class="o">.</span><span class="n">writeError</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>usage:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">path</span> <span class="o">=</span> <span class="kt">FileManager</span><span class="p">()</span><span class="o">.</span><span class="nf">urls</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="n">documentDirectory</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">.</span><span class="n">userDomainMask</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+<span class="k">let</span> <span class="nv">file</span> <span class="o">=</span> <span class="n">path</span><span class="p">?</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="s">"CreatedFile.txt"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="k">let</span> <span class="nv">writer</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="kt">FileWriter</span><span class="p">(</span><span class="n">file</span><span class="o">!.</span><span class="n">path</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">let</span> <span class="nv">text</span> <span class="o">=</span> <span class="s">"Hello world"</span>
+  <span class="k">try</span><span class="p">?</span> <span class="n">writer</span><span class="o">.</span><span class="nf">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="read-4">Read</h3>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">final</span> <span class="kd">class</span> <span class="kt">FileReader</span> <span class="p">{</span>
+
+  <span class="kd">enum</span> <span class="kt">Failure</span><span class="p">:</span> <span class="kt">Error</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nf">cantReadFile</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">cantReadLine</span>
+  <span class="p">}</span>
+
+  <span class="kd">private</span> <span class="k">var</span> <span class="nv">file</span><span class="p">:</span> <span class="kt">UnsafeMutablePointer</span><span class="o">&lt;</span><span class="kt">FILE</span><span class="o">&gt;</span><span class="p">?</span>
+
+  <span class="c1">// MARK: - Lifecycle</span>
+
+  <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="nf">fopen</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">"r"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">file</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">Failure</span><span class="o">.</span><span class="nf">cantReadFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">deinit</span> <span class="p">{</span>
+    <span class="nf">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="c1">// MARK: - Public</span>
+
+  <span class="kd">func</span> <span class="nf">readNextLine</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span><span class="p">?</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">line</span><span class="p">:</span> <span class="kt">String</span>
+    <span class="k">repeat</span> <span class="p">{</span>
+      <span class="c1">// create buffer</span>
+      <span class="k">var</span> <span class="nv">buffer</span> <span class="o">=</span> <span class="p">[</span><span class="kt">CChar</span><span class="p">](</span><span class="nv">repeating</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">count</span><span class="p">:</span> <span class="mi">1024</span><span class="p">)</span>
+
+      <span class="c1">// Reads characters from stream and stores them as a C string into str until</span>
+      <span class="c1">// (num-1) characters have been read or either a newline or the end-of-file</span>
+      <span class="c1">// is reached, whichever happens first.</span>
+      <span class="k">if</span> <span class="nf">fgets</span><span class="p">(</span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">,</span> <span class="kt">Int32</span><span class="p">(</span><span class="n">buffer</span><span class="o">.</span><span class="n">count</span><span class="p">),</span> <span class="n">file</span><span class="p">)</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+
+        <span class="c1">// Checks if the error indicator associated with stream is set,</span>
+        <span class="c1">// returning a value different from zero if it is.</span>
+        <span class="k">if</span> <span class="nf">ferror</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">{</span>
+          <span class="k">throw</span> <span class="kt">Failure</span><span class="o">.</span><span class="n">cantReadLine</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="kc">nil</span>
+      <span class="p">}</span>
+      <span class="c1">// append line</span>
+      <span class="n">line</span> <span class="o">=</span> <span class="kt">String</span><span class="p">(</span><span class="nv">cString</span><span class="p">:</span> <span class="n">buffer</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="n">line</span><span class="o">.</span><span class="nf">lastIndex</span><span class="p">(</span><span class="nv">of</span><span class="p">:</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span> <span class="o">==</span> <span class="kc">nil</span>
+    <span class="k">return</span> <span class="n">line</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>usage:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">if</span> <span class="k">let</span> <span class="nv">path</span> <span class="o">=</span> <span class="kt">Bundle</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="nf">path</span><span class="p">(</span><span class="nv">forResource</span><span class="p">:</span> <span class="s">"Text"</span><span class="p">,</span> <span class="nv">ofType</span><span class="p">:</span> <span class="s">"txt"</span><span class="p">),</span>
+   <span class="k">let</span> <span class="nv">file</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="kt">FileReader</span><span class="p">(</span><span class="n">path</span><span class="p">){</span>
+  <span class="k">while</span> <span class="k">let</span> <span class="nv">line</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="n">file</span><span class="o">.</span><span class="nf">readNextLine</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// do some operations</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<blockquote>
+  <p>discussion about read approach using fopen <a href="https://forums.swift.org/t/read-text-file-line-by-line/28852/34">here</a>.</p>
+</blockquote>
+
+<h3 id="seek-1">Seek</h3>
+
+<p>Seek concrete position in file also can be performed using c++ api and <a href="http://www.cplusplus.com/reference/cstdio/fseek/"><code class="language-plaintext highlighter-rouge">fseek</code></a>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kt">FILE</span><span class="o">*</span> <span class="n">fp</span><span class="p">;</span>
+<span class="c1">// if file is 50 bytes long:</span>
+<span class="nf">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="cm">/* from the end */</span> <span class="mi">23</span><span class="p">,</span> <span class="kt">SEEK_END</span><span class="p">);</span> <span class="c1">// &lt;- at 50 - 23 so 27</span>
+<span class="nf">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="cm">/* from the start */</span> <span class="mi">23</span><span class="p">,</span> <span class="kt">SEEK_SET</span><span class="p">);</span> <span class="c1">// 23</span>
+<span class="nf">fseek</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="cm">/* from the the current (see ftell) */</span> <span class="mi">10</span><span class="p">,</span> <span class="kt">SEEK_CUR</span><span class="p">);</span> <span class="c1">// 33</span></code></pre></figure>
+
+<blockquote>
+  <p>U can combine <a href="http://www.cplusplus.com/reference/cstdio/fseek/"><code class="language-plaintext highlighter-rouge">fseek</code></a> usage within <a href="http://www.cplusplus.com/reference/cstdio/rewind/?kw=rewind"><code class="language-plaintext highlighter-rouge">rewind</code></a>. More about file related api from c++ <a href="https://talk.objc.io/episodes/S01E92-practicing-with-pointers">here</a></p>
+</blockquote>
+
+<h3 id="update-2">Update</h3>
+
+<p>Update operation can be done using specifc flag <code class="language-plaintext highlighter-rouge">a</code> while perform <code class="language-plaintext highlighter-rouge">fopen</code>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="n">f</span> <span class="o">=</span> <span class="nf">fopen</span><span class="p">(</span><span class="s">"filename"</span><span class="p">,</span> <span class="s">"a"</span><span class="p">);</span> <span class="c1">// or a+</span></code></pre></figure>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">a</code> for append.</p>
+</blockquote>
+
+<p>write operation can be done as before.</p>
+
+<h3 id="delete-1">Delete</h3>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">final</span> <span class="kd">class</span> <span class="kt">FileRemover</span> <span class="p">{</span>
+
+  <span class="kd">enum</span> <span class="kt">Failure</span><span class="p">:</span> <span class="kt">Error</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="nf">cantFindFile</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span>
+    <span class="k">case</span> <span class="n">cantRemove</span>
+  <span class="p">}</span>
+
+  <span class="kd">private</span> <span class="k">var</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
+
+  <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">path</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">file</span> <span class="o">=</span> <span class="nf">fopen</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s">"w"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">file</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">Failure</span><span class="o">.</span><span class="nf">cantFindFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nf">fclose</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+      <span class="k">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="nf">remove</span><span class="p">()</span> <span class="k">throws</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Int8</span><span class="p">](</span><span class="n">path</span><span class="o">!.</span><span class="n">utf8</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="kt">Int8</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">})</span>
+    <span class="k">let</span> <span class="nv">err</span> <span class="o">=</span> <span class="kt">Darwin</span><span class="o">.</span><span class="nf">remove</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="kt">Failure</span><span class="o">.</span><span class="n">cantRemove</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>usage:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="k">let</span> <span class="nv">path</span> <span class="o">=</span> <span class="kt">FileManager</span><span class="p">()</span><span class="o">.</span><span class="nf">urls</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="o">.</span><span class="n">documentDirectory</span><span class="p">,</span> <span class="nv">in</span><span class="p">:</span> <span class="o">.</span><span class="n">userDomainMask</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+<span class="k">let</span> <span class="nv">file</span> <span class="o">=</span> <span class="n">path</span><span class="p">?</span><span class="o">.</span><span class="nf">appendingPathComponent</span><span class="p">(</span><span class="s">"CreatedFile.txt"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="k">let</span> <span class="nv">remover</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="kt">FileRemover</span><span class="p">(</span><span class="n">file</span><span class="o">!.</span><span class="n">path</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">try</span><span class="p">?</span> <span class="n">remover</span><span class="o">.</span><span class="nf">remove</span><span class="p">()</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><a href="/assets/posts/images/2021-03-05-using-file/source/demoFileRead.zip">download source code</a></p>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://en.wikipedia.org/wiki/Computer_file">File</a></li>
+  <li><a href="https://developer.apple.com/documentation/foundation/filemanager"><code class="language-plaintext highlighter-rouge">FileManager</code></a></li>
+  <li><a href="https://developer.apple.com/documentation/foundation/filehandle"><code class="language-plaintext highlighter-rouge">FileHandle</code></a></li>
+  <li><a href="https://developer.apple.com/documentation/uikit/documents_data_and_pasteboard">Files</a></li>
+  <li><a href="https://developer.apple.com/documentation/foundation/stream"><code class="language-plaintext highlighter-rouge">Stream</code></a></li>
+  <li><a href="https://developer.apple.com/documentation/dispatch/dispatchio"><code class="language-plaintext highlighter-rouge">DispatchIO</code></a>.</li>
+  <li><a href="https://talk.objc.io/episodes/S01E92-practicing-with-pointers">S01E92-practicing-with-pointers</a></li>
+  <li><a href="https://www.gnu.org/software/libc/manual/html_node/File-Position-Primitive.html"><code class="language-plaintext highlighter-rouge">off_t</code></a></li>
+  <li><a href="https://developer.apple.com/support/downloads/Apple-File-System-Reference.pdf">APFS</a></li>
+</ul>
+
+  </div><a class="u-url" href="/article/2021/03/05/using-file.html" hidden></a>
+</article>
+
+<div class="prev-next">
+  
+    <a class="half prev" href="/article/2021/02/28/god-helps-those-who-help-themselves.html">&laquo; God helps those who help themselves</a>
+  
+  
+    <a class="half next" href="/article/2021/03/13/dynamic-features-part-1.html">Dynamic swift - Part 1: KeyPath &raquo;</a>
+  
+</div>
+
+
+
+
+<style>
+#share-buttons {display: inline-block; vertical-align: middle; }
+#share-buttons:after {content: ""; display: block; clear: both;}
+#share-buttons > div {
+    position: relative;
+    text-align: left; 
+    height: 36px; 
+    width: 32px; 
+    float: left; 
+    text-align: center;
+}
+#share-buttons > div > svg {height: 16px; fill: #d5d5d5; margin-top: 10px;}
+#share-buttons > div:hover {cursor: pointer;}
+#share-buttons > div.facebook:hover > svg {fill: #3B5998;}
+#share-buttons > div.twitter:hover > svg {fill: #55ACEE;}
+#share-buttons > div.linkedin:hover > svg {fill: #0077b5;}
+#share-buttons > div.pinterest:hover > svg {fill: #CB2027;}
+#share-buttons > div.gplus:hover > svg {fill: #dd4b39;}
+#share-buttons > div.mail:hover > svg {fill: #7D7D7D;}
+#share-buttons > div.instagram:hover > svg {fill: #C73B92;}
+#share-buttons > div.facebook > svg {height: 18px; margin-top: 9px;}
+#share-buttons > div.twitter > svg {height: 20px; margin-top: 8px;}
+#share-buttons > div.linkedin > svg {height: 19px; margin-top: 7px;}
+#share-buttons > div.pinterest > svg {height: 20px; margin-top: 9px;}
+#share-buttons > div.gplus > svg {height: 17px; margin-top: 9px; position: relative; left: 1px;}
+#share-buttons > div.mail > svg {height: 14px; margin-top: 11px;}
+</style>
+
+<span style="color: silver;">Share on: </span><div id="share-buttons">
+    <div class="facebook" title="Share this on Facebook" onclick="window.open('http://www.facebook.com/share.php?u=http://localhost:4000/article/2021/03/05/using-file.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1343 12v264h-157q-86 0-116 36t-30 108v189h293l-39 296h-254v759h-306v-759h-255v-296h255v-218q0-186 104-288.5t277-102.5q147 0 228 12z"/></svg></div>
+    <div class="twitter" title="Share this on Twitter" onclick="window.open('http://twitter.com/home?status=http://localhost:4000/article/2021/03/05/using-file.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1684 408q-67 98-162 167 1 14 1 42 0 130-38 259.5t-115.5 248.5-184.5 210.5-258 146-323 54.5q-271 0-496-145 35 4 78 4 225 0 401-138-105-2-188-64.5t-114-159.5q33 5 61 5 43 0 85-11-112-23-185.5-111.5t-73.5-205.5v-4q68 38 146 41-66-44-105-115t-39-154q0-88 44-163 121 149 294.5 238.5t371.5 99.5q-8-38-8-74 0-134 94.5-228.5t228.5-94.5q140 0 236 102 109-21 205-78-37 115-142 178 93-10 186-50z"/></svg></div>
+    <div class="linkedin" title="Share this on Linkedin" onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/article/2021/03/05/using-file.html&title=&summary=&source=');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M477 625v991h-330v-991h330zm21-306q1 73-50.5 122t-135.5 49h-2q-82 0-132-49t-50-122q0-74 51.5-122.5t134.5-48.5 133 48.5 51 122.5zm1166 729v568h-329v-530q0-105-40.5-164.5t-126.5-59.5q-63 0-105.5 34.5t-63.5 85.5q-11 30-11 81v553h-329q2-399 2-647t-1-296l-1-48h329v144h-2q20-32 41-56t56.5-52 87-43.5 114.5-15.5q171 0 275 113.5t104 332.5z"/></svg></div>
+    
+    <div class="gplus" title="Share this on Google Plus" onclick="window.open('https://plus.google.com/share?url=http://localhost:4000/article/2021/03/05/using-file.html');"><svg viewBox="0 0 2304 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1437 913q0 208-87 370.5t-248 254-369 91.5q-149 0-285-58t-234-156-156-234-58-285 58-285 156-234 234-156 285-58q286 0 491 192l-199 191q-117-113-292-113-123 0-227.5 62t-165.5 168.5-61 232.5 61 232.5 165.5 168.5 227.5 62q83 0 152.5-23t114.5-57.5 78.5-78.5 49-83 21.5-74h-416v-252h692q12 63 12 122zm867-122v210h-209v209h-210v-209h-209v-210h209v-209h210v209h209z"/></svg></div>
+    <div class="mail" title="Share this through Email" onclick="window.open('mailto:?&body=http://localhost:4000/article/2021/03/05/using-file.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z"/></svg></div>
+</div>
+
+<script src="  https://unpkg.com/showdown/dist/showdown.min.js"></script>
+<script>
+const GH_API_URL = 'https://api.github.com/repos/khorbushko/khorbushko.github.io/issues/32/comments'; // ?client_id=&client_secret=
+
+let request = new XMLHttpRequest();
+request.open( 'GET', GH_API_URL, true );
+request.onload = function() {
+	if ( this.status >= 200 && this.status < 400 ) {
+		let response = JSON.parse( this.response );
+
+		for ( var i = 0; i < response.length; i++ ) {
+			document.getElementById( 'gh-comments-list' ).appendChild( createCommentEl( response[ i ] ) );
+		}
+
+		if ( 0 === response.length ) {
+			document.getElementById( 'no-comments-found' ).style.display = 'block';
+		}
+	} else {
+		console.error( this );
+	}
+};
+
+function createCommentEl( response ) {
+	let user = document.createElement( 'a' );
+	user.setAttribute( 'href', response.user.url.replace( 'api.github.com/users', 'github.com' ) );
+	user.classList.add( 'user' );
+
+	let userAvatar = document.createElement( 'img' );
+	userAvatar.classList.add( 'avatar' );
+	userAvatar.setAttribute( 'src', response.user.avatar_url );
+
+	user.appendChild( userAvatar );
+
+	let commentLink = document.createElement( 'a' );
+	commentLink.setAttribute( 'href', response.html_url );
+	commentLink.classList.add( 'comment-url' );
+	commentLink.innerHTML = '#' + response.id + ' - ' + response.created_at;
+
+	let commentContents = document.createElement( 'div' );
+	commentContents.classList.add( 'comment-content' );
+	commentContents.innerHTML = response.body;
+	// Progressive enhancement.
+	if ( window.showdown ) {
+		let converter = new showdown.Converter();
+		commentContents.innerHTML = converter.makeHtml( response.body );
+	}
+
+	let comment = document.createElement( 'li' );
+	comment.setAttribute( 'data-created', response.created_at );
+	comment.setAttribute( 'data-author-avatar', response.user.avatar_url );
+	comment.setAttribute( 'data-user-url', response.user.url );
+
+	comment.appendChild( user );
+	comment.appendChild( commentContents );
+	comment.appendChild( commentLink );
+
+	return comment;
+}
+request.send();
+</script>
+
+<hr>
+
+<div class="github-comments">
+	<h2>Comments</h2>
+	<ul id="gh-comments-list"></ul>
+	<p id="leave-a-comment">Join the discussion for this article on <a href="https://github.com/khorbushko/khorbushko.github.io/issues/32">this ticket</a>. Comments appear on this page instantly.</p>
+</div>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>RSS</span>      
+          </a>
+          &nbsp;&nbsp;
+          <a href="https://feedrabbit.com/?url=http://khorbushko.github.io">
+            <svg class="svg-icon black">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Newsletter</span>      
+          </a>
+
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">khorbushko</li>
+          <li><a class="u-email" href="mailto:kirill.ge@gmail.com">kirill.ge@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>inspired by &quot;software craftsmanship&quot;</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/khorbushko" title="khorbushko"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://stackoverflow.com/users/2012219" title="2012219"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#stackoverflow"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/kyryl-horbushko-67936bb5" title="kyryl-horbushko-67936bb5"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

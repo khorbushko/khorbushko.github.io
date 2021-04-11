@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>DynamicProperty | kyryl horbushko</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="DynamicProperty" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="With SwiftUI we are already faced with a bunch of specially designed @propertyWrappers. But, the number of developers who use SwiftUI constantly increasing, the problems that they are trying to solve also increasing quite fast. As result, we would like to combine different functions and provide our specific wrapper that should also trigger an update of View in SwiftUI world." />
+<meta property="og:description" content="With SwiftUI we are already faced with a bunch of specially designed @propertyWrappers. But, the number of developers who use SwiftUI constantly increasing, the problems that they are trying to solve also increasing quite fast. As result, we would like to combine different functions and provide our specific wrapper that should also trigger an update of View in SwiftUI world." />
+<link rel="canonical" href="http://localhost:4000/article/2021/01/08/dynamicProperty.html" />
+<meta property="og:url" content="http://localhost:4000/article/2021/01/08/dynamicProperty.html" />
+<meta property="og:site_name" content="kyryl horbushko" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-01-08T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="DynamicProperty" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/article/2021/01/08/dynamicProperty.html"},"@type":"BlogPosting","url":"http://localhost:4000/article/2021/01/08/dynamicProperty.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/favicon.png"}},"headline":"DynamicProperty","dateModified":"2021-01-08T00:00:00+02:00","datePublished":"2021-01-08T00:00:00+02:00","description":"With SwiftUI we are already faced with a bunch of specially designed @propertyWrappers. But, the number of developers who use SwiftUI constantly increasing, the problems that they are trying to solve also increasing quite fast. As result, we would like to combine different functions and provide our specific wrapper that should also trigger an update of View in SwiftUI world.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/favicon.png"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="kyryl horbushko" />
+<meta name='monetization' content='$ilp.uphold.com/GiEjnNF98h8k'>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">kyryl horbushko</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/bookNotes/">Books</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/blog/archives/">Archives</a><a class="page-link" href="/contact/">Contact</a><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">DynamicProperty</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2021-01-08T00:00:00+02:00" itemprop="datePublished">
+        Jan 8, 2021
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">kyryl horbushko</span></span>, 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Lviv</span></span></p>
+
+      
+         
+          <a class="post-tag" href="/tags/#ios">iOS</a>
+         
+          <a class="post-tag" href="/tags/#swiftui">SwiftUI</a>
+         
+          <a class="post-tag" href="/tags/#propertywrapper">propertyWrapper</a>
+         
+      
+         <span style="float:right;">
+          <span class="ert">
+    <abbr title="Estimated reading time">Estimated reading time: </abbr>
+    
+    
+    
+    
+
+    
+    
+    
+
+    
+    5 minutes
+</span>
+         </span>
+         <br>
+      </p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <br>
+    <ul>
+  <li><a href="#dynamicproperty">DynamicProperty</a></li>
+  <li><a href="#example">Example</a></li>
+  <li><a href="#resources">Resources</a></li>
+</ul>
+    <br>
+    <p>With <code class="language-plaintext highlighter-rouge">SwiftUI</code> we are already faced with a bunch of specially designed <code class="language-plaintext highlighter-rouge">@propertyWrappers</code>. But, the number of developers who use <code class="language-plaintext highlighter-rouge">SwiftUI</code> constantly increasing, the problems that they are trying to solve also increasing quite fast. As result, we would like to combine different functions and provide our specific wrapper that should also trigger an update of <code class="language-plaintext highlighter-rouge">View</code> in <code class="language-plaintext highlighter-rouge">SwiftUI</code> world.
+<!--more--></p>
+
+<blockquote>
+  <p>Example may be analog to <code class="language-plaintext highlighter-rouge">@FetchRequest</code> but for <em>photos</em> or fetch request but for a custom database such as <code class="language-plaintext highlighter-rouge">Firebase</code>. Or simply for some internal logic that wraps some aspect into compact representation.</p>
+</blockquote>
+
+<p>To do this - we may inspect existing triggers (<code class="language-plaintext highlighter-rouge">@propertyWrappers</code>) for <code class="language-plaintext highlighter-rouge">View</code> updates. All of them conform to one protocol - <code class="language-plaintext highlighter-rouge">DynamicProperty</code>.</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2021-01-08-dynamicProperty/conformingTypes.png" alt="conformingTypes" width="400" />
+</div>
+<p><br /></p>
+
+<h2 id="dynamicproperty">DynamicProperty</h2>
+
+<p>If we check <a href="https://developer.apple.com/documentation/swiftui/dynamicproperty">documentation</a> there is not too much - <em>An interface for a stored variable that updates an external property of a view.</em> At least we can get an idea - if adopt this protocol, a view should <strong>react</strong> to any changes when property receives updates (changes).</p>
+
+<p>If we go inside the header and check requirements, we can find, that:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">DynamicProperty</span> <span class="p">{</span>
+
+    <span class="c1">/// Updates the underlying value of the stored value.</span>
+    <span class="c1">///</span>
+    <span class="c1">/// SwiftUI calls this function before rending a view's</span>
+    <span class="c1">/// ``View/body-swift.property`` to ensure the view has the most recent</span>
+    <span class="c1">/// value.</span>
+    <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">DynamicProperty</span> <span class="p">{</span>
+
+    <span class="c1">/// Updates the underlying value of the stored value.</span>
+    <span class="c1">///</span>
+    <span class="c1">/// SwiftUI calls this function before rending a view's</span>
+    <span class="c1">/// ``View/body-swift.property`` to ensure the view has the most recent</span>
+    <span class="c1">/// value.</span>
+    <span class="kd">public</span> <span class="k">mutating</span> <span class="kd">func</span> <span class="nf">update</span><span class="p">()</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>The only requirements - <code class="language-plaintext highlighter-rouge">func update()</code>. As we can see from both header and official doc - <code class="language-plaintext highlighter-rouge">update</code> is already implemented for us.</p>
+
+<blockquote>
+  <p>from <a href="https://developer.apple.com/documentation/swiftui/dynamicproperty">doc</a> <em>Required. Default implementation provided.</em></p>
+</blockquote>
+
+<p>Looks like everything simple - we create our own <code class="language-plaintext highlighter-rouge">@propertyWrapper</code>, conform to <code class="language-plaintext highlighter-rouge">DynamicProperty</code> protocol, and <code class="language-plaintext highlighter-rouge">View</code> will respect any changes in it and display appropriate changes on the screen for us. Pretty simple, let’s try it.</p>
+
+<blockquote>
+  <p>Note here - I’m talking about <code class="language-plaintext highlighter-rouge">@propertyWrapper</code> and <code class="language-plaintext highlighter-rouge">DynamicProperty</code>, but actually <code class="language-plaintext highlighter-rouge">DynamicProperty</code> hasn’t any limitation, and in theory, anything can adopt it.</p>
+
+  <p>Both will compile successfully:</p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">class</span> <span class="kt">ExampleClass</span><span class="p">:</span> <span class="kt">DynamicProperty</span> <span class="p">{</span> <span class="p">}</span>
+<span class="kd">struct</span> <span class="kt">ExampleStruct</span><span class="p">:</span> <span class="kt">DynamicProperty</span> <span class="p">{</span> <span class="p">}</span></code></pre></figure>
+
+<h2 id="example">Example</h2>
+
+<p>We can test <code class="language-plaintext highlighter-rouge">DynamicProperty</code> by creating our custom <code class="language-plaintext highlighter-rouge">@propertyWrapper</code> that simply stores some <em>Value</em> and as result, any change should be reflected in <code class="language-plaintext highlighter-rouge">View</code> (something similar to <code class="language-plaintext highlighter-rouge">@State</code>).</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">@propertyWrapper</span>
+<span class="kd">struct</span> <span class="kt">StoredValue</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">DynamicProperty</span> <span class="k">where</span> <span class="kt">T</span><span class="p">:</span> <span class="kt">DefaultValueProvidable</span> <span class="p">{</span>
+    
+    <span class="k">var</span> <span class="nv">wrappedValue</span><span class="p">:</span> <span class="kt">T</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span>
+            <span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">value</span><span class="p">(</span><span class="nv">forKey</span><span class="p">:</span> <span class="s">"testKey.storedValue"</span><span class="p">)</span> <span class="k">as?</span> <span class="kt">T</span> <span class="p">??</span> <span class="kt">T</span><span class="o">.</span><span class="nf">defaultValue</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="k">nonmutating</span> <span class="k">set</span> <span class="p">{</span>
+            <span class="kt">UserDefaults</span><span class="o">.</span><span class="n">standard</span><span class="o">.</span><span class="nf">setValue</span><span class="p">(</span><span class="n">newValue</span><span class="p">,</span> <span class="nv">forKey</span><span class="p">:</span> <span class="s">"testKey.storedValue"</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="nf">init</span><span class="p">(</span><span class="n">wrappedValue</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">T</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">wrappedValue</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">protocol</span> <span class="kt">DefaultValueProvidable</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">defaultValue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="k">Self</span>
+<span class="p">}</span>
+
+<span class="kd">extension</span> <span class="kt">Int</span><span class="p">:</span> <span class="kt">DefaultValueProvidable</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">defaultValue</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="k">Self</span> <span class="p">{</span>
+        <span class="mi">0</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>View for test purpose will show some text and action that will update our value. In the same moment text appearance depends on value:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">struct</span> <span class="kt">DynamicTestView</span><span class="p">:</span> <span class="kt">View</span> <span class="p">{</span>
+    
+    <span class="kd">@StoredValue</span> <span class="kd">private</span> <span class="k">var</span> <span class="nv">testValue</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">var</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">some</span> <span class="kt">View</span> <span class="p">{</span>
+        <span class="kt">VStack</span> <span class="p">{</span>
+            <span class="kt">Text</span><span class="p">(</span><span class="s">"Testing DynamicProperty"</span><span class="p">)</span>
+                <span class="o">.</span><span class="nf">padding</span><span class="p">()</span>
+                <span class="o">.</span><span class="nf">background</span><span class="p">(</span><span class="n">testValue</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">?</span> <span class="kt">Color</span><span class="o">.</span><span class="nv">red</span> <span class="p">:</span> <span class="kt">Color</span><span class="o">.</span><span class="n">green</span><span class="p">)</span>
+            
+            <span class="kt">Button</span><span class="p">(</span><span class="nv">action</span><span class="p">:</span> <span class="p">{</span>
+                <span class="n">testValue</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="p">},</span> <span class="nv">label</span><span class="p">:</span> <span class="p">{</span>
+                <span class="kt">Text</span><span class="p">(</span><span class="s">"Tap"</span><span class="p">)</span>
+            <span class="p">})</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><code class="language-plaintext highlighter-rouge">update</code> should be called automatically by the <code class="language-plaintext highlighter-rouge">SwiftUI</code> engine. But, when we launch the app and press the button - nothing happens.</p>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2021-01-08-dynamicProperty/demo_firstTry.gif" alt="demo_firstTry" width="350" />
+</div>
+<p><br /></p>
+
+<p>Why? Here we have a few moments:</p>
+
+<ol>
+  <li>how <code class="language-plaintext highlighter-rouge">SwiftUI</code> determine that something is changed?</li>
+  <li>how the <code class="language-plaintext highlighter-rouge">SwiftUI</code> call the <code class="language-plaintext highlighter-rouge">update</code> function (as for struct it doesn’t allow you to call a mutating function)?</li>
+</ol>
+
+<p>The first question is very interesting. As u can see from the example above, we got no success in making workable <code class="language-plaintext highlighter-rouge">DynamicProperty</code>. But, as soon as we can change a bit implementation, by injecting usage of existing <code class="language-plaintext highlighter-rouge">SwiftUI</code> any <code class="language-plaintext highlighter-rouge">DynamicProperty</code> as a kind of storage for our value, it works as expected:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">@propertyWrapper</span>
+<span class="kd">struct</span> <span class="kt">StoredValue</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">:</span> <span class="kt">DynamicProperty</span>  <span class="p">{</span>
+
+    <span class="kd">final</span> <span class="kd">private</span> <span class="kd">class</span> <span class="kt">Storage</span><span class="p">:</span> <span class="kt">ObservableObject</span> <span class="p">{</span>
+        <span class="k">var</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">T</span> <span class="p">{</span>
+            <span class="k">willSet</span> <span class="p">{</span>
+                <span class="n">objectWillChange</span><span class="o">.</span><span class="nf">send</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">T</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">@ObservedObject</span> <span class="kd">private</span> <span class="k">var</span> <span class="nv">storage</span><span class="p">:</span> <span class="kt">Storage</span>
+
+    <span class="k">var</span> <span class="nv">wrappedValue</span><span class="p">:</span> <span class="kt">T</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span>
+            <span class="n">storage</span><span class="o">.</span><span class="n">value</span>
+        <span class="p">}</span>
+        <span class="k">nonmutating</span> <span class="k">set</span> <span class="p">{</span>
+            <span class="n">storage</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">newValue</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nf">init</span><span class="p">(</span><span class="n">wrappedValue</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">T</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">storage</span> <span class="o">=</span> <span class="kt">Storage</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2021-01-08-dynamicProperty/demo_secondTry.gif" alt="demo_secondTry" width="350" />
+</div>
+<p><br /></p>
+
+<p>The answer to question number 1 (<em>how <code class="language-plaintext highlighter-rouge">SwiftUI</code> determine that something is changed?</em>) maybe next: <code class="language-plaintext highlighter-rouge">SwiftUI</code> introspect children in type and check values for change events using some internal mechanism.</p>
+
+<blockquote>
+  <p>A bit more deep dive in how difference is determined by inspecting <code class="language-plaintext highlighter-rouge">@State</code> is <a href="https://kateinoigakukun.hatenablog.com/entry/2019/06/08/232142">available here</a></p>
+</blockquote>
+
+<p>And as a sample we may refer to <a href="https://forums.swift.org/t/dynamicviewproperty/25627/5">discussion on Swift forum</a> related to this topic and <a href="https://github.com/SwiftWebUI/SwiftWebUI/blob/18cbd100d360432cbc38142f8571176776953450/Sources/SwiftWebUI/Properties/DynamicViewProperty.swift#L55">custom implementation of <code class="language-plaintext highlighter-rouge">update</code> function</a>:</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift">  <span class="kd">static</span> <span class="kd">func</span> <span class="n">update</span><span class="o">&lt;</span><span class="kt">V</span><span class="p">:</span> <span class="kt">View</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">view</span><span class="p">:</span> <span class="k">inout</span> <span class="kt">V</span><span class="p">,</span> <span class="k">in</span> <span class="nv">context</span><span class="p">:</span> <span class="kt">TreeStateContext</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="k">case</span> <span class="o">.</span><span class="nf">dynamic</span><span class="p">(</span><span class="k">let</span> <span class="nv">props</span><span class="p">)</span> <span class="o">=</span> <span class="n">view</span><span class="o">.</span><span class="nf">lookupTypeInfo</span><span class="p">()</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="p">}</span>
+    
+    <span class="n">currentContext</span> <span class="o">=</span> <span class="n">context</span>
+    <span class="n">props</span><span class="o">.</span><span class="n">forEach</span> <span class="p">{</span> <span class="nv">$0</span><span class="o">.</span><span class="nf">updateInView</span><span class="p">(</span><span class="o">&amp;</span><span class="n">view</span><span class="p">)</span> <span class="p">}</span>
+    <span class="n">currentContext</span> <span class="o">=</span> <span class="kc">nil</span>
+  <span class="p">}</span></code></pre></figure>
+
+<p>The same idea used for this approach - check the type and update the view.</p>
+
+<p>But still, we have unanswered question number 2 (<em>how the <code class="language-plaintext highlighter-rouge">SwiftUI</code> calls the <code class="language-plaintext highlighter-rouge">update</code> function?</em>). On the same thread on the Swift forum we may found a few suggestions on how it can be done, and as mentioned by <strong>Helge_Hess1</strong>:</p>
+
+<blockquote>
+  <p><em>To make the View’s value “mutable” one just casts the pointer to a mutable one. Which explains why this works even if the properties are defined as let. Not sure whether that is sound (optimizer might layout the properties differently?), but I guess the layout should be stable as part of the “ABI”.</em></p>
+
+</blockquote>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift">    <span class="k">let</span> <span class="nv">typedPtr</span> <span class="o">=</span> <span class="n">location</span><span class="o">.</span><span class="nf">assumingMemoryBound</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="k">Self</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+    <span class="n">typedPtr</span><span class="o">.</span><span class="n">pointee</span><span class="o">.</span><span class="nf">update</span><span class="p">()</span></code></pre></figure>
+
+<p>Now, it’s become more clear - why only <code class="language-plaintext highlighter-rouge">SwiftUI</code> <code class="language-plaintext highlighter-rouge">DynamicProperties</code> (an initial name <code class="language-plaintext highlighter-rouge">DynamicViewProperty</code>) works in such way: all data stored in some external memory and all changes tracked by some internal mechanism, change is done in swift runtime. A bit complex idea, but the result is great (in my opinion).</p>
+
+<h2 id="resources">Resources</h2>
+
+<ol>
+  <li><a href="https://forums.swift.org/t/dynamicviewproperty/25627">Thread at Swift forum</a></li>
+  <li><a href="https://github.com/SwiftWebUI/SwiftWebUI">SwiftUIWeb</a></li>
+  <li><a href="https://kateinoigakukun.hatenablog.com/entry/2019/06/08/232142">Inside <code class="language-plaintext highlighter-rouge">@State</code></a></li>
+  <li><a href="https://vmanot.com/data-flow-through-swiftui">Data Flow Through SwiftUI</a></li>
+  <li><a href="https://stackoverflow.com/questions/59580065/is-it-correct-to-expect-internal-updates-of-a-swiftui-dynamicproperty-property-w">Stackoverflow question</a></li>
+</ol>
+
+<p><a href="/assets/posts/images/2021-01-08-dynamicProperty/source/dynamicTestView.swift.zip">download source code</a></p>
+
+  </div><a class="u-url" href="/article/2021/01/08/dynamicProperty.html" hidden></a>
+</article>
+
+<div class="prev-next">
+  
+    <a class="half prev" href="/article/2021/01/04/hello-arduino.html">&laquo; Hello Arduino</a>
+  
+  
+    <a class="half next" href="/article/2021/01/11/do-that-instead-of-this.html">Do that instead of this &raquo;</a>
+  
+</div>
+
+
+
+
+<style>
+#share-buttons {display: inline-block; vertical-align: middle; }
+#share-buttons:after {content: ""; display: block; clear: both;}
+#share-buttons > div {
+    position: relative;
+    text-align: left; 
+    height: 36px; 
+    width: 32px; 
+    float: left; 
+    text-align: center;
+}
+#share-buttons > div > svg {height: 16px; fill: #d5d5d5; margin-top: 10px;}
+#share-buttons > div:hover {cursor: pointer;}
+#share-buttons > div.facebook:hover > svg {fill: #3B5998;}
+#share-buttons > div.twitter:hover > svg {fill: #55ACEE;}
+#share-buttons > div.linkedin:hover > svg {fill: #0077b5;}
+#share-buttons > div.pinterest:hover > svg {fill: #CB2027;}
+#share-buttons > div.gplus:hover > svg {fill: #dd4b39;}
+#share-buttons > div.mail:hover > svg {fill: #7D7D7D;}
+#share-buttons > div.instagram:hover > svg {fill: #C73B92;}
+#share-buttons > div.facebook > svg {height: 18px; margin-top: 9px;}
+#share-buttons > div.twitter > svg {height: 20px; margin-top: 8px;}
+#share-buttons > div.linkedin > svg {height: 19px; margin-top: 7px;}
+#share-buttons > div.pinterest > svg {height: 20px; margin-top: 9px;}
+#share-buttons > div.gplus > svg {height: 17px; margin-top: 9px; position: relative; left: 1px;}
+#share-buttons > div.mail > svg {height: 14px; margin-top: 11px;}
+</style>
+
+<span style="color: silver;">Share on: </span><div id="share-buttons">
+    <div class="facebook" title="Share this on Facebook" onclick="window.open('http://www.facebook.com/share.php?u=http://localhost:4000/article/2021/01/08/dynamicProperty.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1343 12v264h-157q-86 0-116 36t-30 108v189h293l-39 296h-254v759h-306v-759h-255v-296h255v-218q0-186 104-288.5t277-102.5q147 0 228 12z"/></svg></div>
+    <div class="twitter" title="Share this on Twitter" onclick="window.open('http://twitter.com/home?status=http://localhost:4000/article/2021/01/08/dynamicProperty.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1684 408q-67 98-162 167 1 14 1 42 0 130-38 259.5t-115.5 248.5-184.5 210.5-258 146-323 54.5q-271 0-496-145 35 4 78 4 225 0 401-138-105-2-188-64.5t-114-159.5q33 5 61 5 43 0 85-11-112-23-185.5-111.5t-73.5-205.5v-4q68 38 146 41-66-44-105-115t-39-154q0-88 44-163 121 149 294.5 238.5t371.5 99.5q-8-38-8-74 0-134 94.5-228.5t228.5-94.5q140 0 236 102 109-21 205-78-37 115-142 178 93-10 186-50z"/></svg></div>
+    <div class="linkedin" title="Share this on Linkedin" onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/article/2021/01/08/dynamicProperty.html&title=&summary=&source=');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M477 625v991h-330v-991h330zm21-306q1 73-50.5 122t-135.5 49h-2q-82 0-132-49t-50-122q0-74 51.5-122.5t134.5-48.5 133 48.5 51 122.5zm1166 729v568h-329v-530q0-105-40.5-164.5t-126.5-59.5q-63 0-105.5 34.5t-63.5 85.5q-11 30-11 81v553h-329q2-399 2-647t-1-296l-1-48h329v144h-2q20-32 41-56t56.5-52 87-43.5 114.5-15.5q171 0 275 113.5t104 332.5z"/></svg></div>
+    
+    <div class="gplus" title="Share this on Google Plus" onclick="window.open('https://plus.google.com/share?url=http://localhost:4000/article/2021/01/08/dynamicProperty.html');"><svg viewBox="0 0 2304 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1437 913q0 208-87 370.5t-248 254-369 91.5q-149 0-285-58t-234-156-156-234-58-285 58-285 156-234 234-156 285-58q286 0 491 192l-199 191q-117-113-292-113-123 0-227.5 62t-165.5 168.5-61 232.5 61 232.5 165.5 168.5 227.5 62q83 0 152.5-23t114.5-57.5 78.5-78.5 49-83 21.5-74h-416v-252h692q12 63 12 122zm867-122v210h-209v209h-210v-209h-209v-210h209v-209h210v209h209z"/></svg></div>
+    <div class="mail" title="Share this through Email" onclick="window.open('mailto:?&body=http://localhost:4000/article/2021/01/08/dynamicProperty.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z"/></svg></div>
+</div>
+
+<script src="  https://unpkg.com/showdown/dist/showdown.min.js"></script>
+<script>
+const GH_API_URL = 'https://api.github.com/repos/khorbushko/khorbushko.github.io/issues/22/comments'; // ?client_id=&client_secret=
+
+let request = new XMLHttpRequest();
+request.open( 'GET', GH_API_URL, true );
+request.onload = function() {
+	if ( this.status >= 200 && this.status < 400 ) {
+		let response = JSON.parse( this.response );
+
+		for ( var i = 0; i < response.length; i++ ) {
+			document.getElementById( 'gh-comments-list' ).appendChild( createCommentEl( response[ i ] ) );
+		}
+
+		if ( 0 === response.length ) {
+			document.getElementById( 'no-comments-found' ).style.display = 'block';
+		}
+	} else {
+		console.error( this );
+	}
+};
+
+function createCommentEl( response ) {
+	let user = document.createElement( 'a' );
+	user.setAttribute( 'href', response.user.url.replace( 'api.github.com/users', 'github.com' ) );
+	user.classList.add( 'user' );
+
+	let userAvatar = document.createElement( 'img' );
+	userAvatar.classList.add( 'avatar' );
+	userAvatar.setAttribute( 'src', response.user.avatar_url );
+
+	user.appendChild( userAvatar );
+
+	let commentLink = document.createElement( 'a' );
+	commentLink.setAttribute( 'href', response.html_url );
+	commentLink.classList.add( 'comment-url' );
+	commentLink.innerHTML = '#' + response.id + ' - ' + response.created_at;
+
+	let commentContents = document.createElement( 'div' );
+	commentContents.classList.add( 'comment-content' );
+	commentContents.innerHTML = response.body;
+	// Progressive enhancement.
+	if ( window.showdown ) {
+		let converter = new showdown.Converter();
+		commentContents.innerHTML = converter.makeHtml( response.body );
+	}
+
+	let comment = document.createElement( 'li' );
+	comment.setAttribute( 'data-created', response.created_at );
+	comment.setAttribute( 'data-author-avatar', response.user.avatar_url );
+	comment.setAttribute( 'data-user-url', response.user.url );
+
+	comment.appendChild( user );
+	comment.appendChild( commentContents );
+	comment.appendChild( commentLink );
+
+	return comment;
+}
+request.send();
+</script>
+
+<hr>
+
+<div class="github-comments">
+	<h2>Comments</h2>
+	<ul id="gh-comments-list"></ul>
+	<p id="leave-a-comment">Join the discussion for this article on <a href="https://github.com/khorbushko/khorbushko.github.io/issues/22">this ticket</a>. Comments appear on this page instantly.</p>
+</div>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>RSS</span>      
+          </a>
+          &nbsp;&nbsp;
+          <a href="https://feedrabbit.com/?url=http://khorbushko.github.io">
+            <svg class="svg-icon black">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Newsletter</span>      
+          </a>
+
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">khorbushko</li>
+          <li><a class="u-email" href="mailto:kirill.ge@gmail.com">kirill.ge@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>inspired by &quot;software craftsmanship&quot;</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/khorbushko" title="khorbushko"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://stackoverflow.com/users/2012219" title="2012219"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#stackoverflow"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/kyryl-horbushko-67936bb5" title="kyryl-horbushko-67936bb5"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

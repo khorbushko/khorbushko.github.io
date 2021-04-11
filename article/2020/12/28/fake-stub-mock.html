@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Fake, Stub, Mock… | kyryl horbushko</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Fake, Stub, Mock…" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Testing is an essential component of quality during any process. App development is not an exception. Often, during testing, we are faced with a situation, when real data is not available, or some part of real implementation logic is complex and currently not tested but required to be used, so some-how simulated. Such situations require additional efforts and increase the complexity of tests." />
+<meta property="og:description" content="Testing is an essential component of quality during any process. App development is not an exception. Often, during testing, we are faced with a situation, when real data is not available, or some part of real implementation logic is complex and currently not tested but required to be used, so some-how simulated. Such situations require additional efforts and increase the complexity of tests." />
+<link rel="canonical" href="http://localhost:4000/article/2020/12/28/fake-stub-mock.html" />
+<meta property="og:url" content="http://localhost:4000/article/2020/12/28/fake-stub-mock.html" />
+<meta property="og:site_name" content="kyryl horbushko" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-12-28T00:00:00+02:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Fake, Stub, Mock…" />
+<script type="application/ld+json">
+{"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/article/2020/12/28/fake-stub-mock.html"},"@type":"BlogPosting","url":"http://localhost:4000/article/2020/12/28/fake-stub-mock.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/favicon.png"}},"headline":"Fake, Stub, Mock…","dateModified":"2020-12-28T00:00:00+02:00","datePublished":"2020-12-28T00:00:00+02:00","description":"Testing is an essential component of quality during any process. App development is not an exception. Often, during testing, we are faced with a situation, when real data is not available, or some part of real implementation logic is complex and currently not tested but required to be used, so some-how simulated. Such situations require additional efforts and increase the complexity of tests.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="shortcut icon" type="image/png" href="/assets/favicon.png"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="kyryl horbushko" />
+<meta name='monetization' content='$ilp.uphold.com/GiEjnNF98h8k'>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">kyryl horbushko</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/bookNotes/">Books</a><a class="page-link" href="/search/">Search</a><a class="page-link" href="/blog/archives/">Archives</a><a class="page-link" href="/contact/">Contact</a><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Fake, Stub, Mock...</h1>
+    <p class="post-meta"><time class="dt-published" datetime="2020-12-28T00:00:00+02:00" itemprop="datePublished">
+        Dec 28, 2020
+      </time>• 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">kyryl horbushko</span></span>, 
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span class="p-author h-card" itemprop="name">Lviv</span></span></p>
+
+      
+         
+          <a class="post-tag" href="/tags/#ios">iOS</a>
+         
+          <a class="post-tag" href="/tags/#test">test</a>
+         
+      
+         <span style="float:right;">
+          <span class="ert">
+    <abbr title="Estimated reading time">Estimated reading time: </abbr>
+    
+    
+    
+    
+
+    
+    
+    
+
+    
+    8 minutes
+</span>
+         </span>
+         <br>
+      </p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <br>
+    <ul>
+  <li><a href="#intro">Intro</a></li>
+  <li><a href="#fake">Fake</a></li>
+  <li><a href="#stub">Stub</a></li>
+  <li><a href="#mock">Mock</a></li>
+  <li><a href="#dummy">Dummy</a></li>
+  <li><a href="#resources">Resources</a></li>
+</ul>
+    <br>
+    <p>Testing is an essential component of quality during any process. App development is not an exception.</p>
+
+<p>Often, during testing, we are faced with a situation, when real data is not available, or some part of real implementation logic is complex and currently not tested but required to be used, so some-how simulated. Such situations require additional efforts and increase the complexity of tests.
+<!--more--></p>
+
+<h2 id="intro">Intro</h2>
+
+<p>Complexity - is something that we would like to keep at a minimum in most systems.</p>
+
+<p>There are a lot of different concepts that can be applied to the process of creating a good test - <a href="https://www.amazon.com/Clean-Coder-Conduct-Professional-Programmers/dp/0137081073/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1326135682&amp;sr=1-1">F.I.R.S.T.</a>, <a href="https://martinfowler.com/bliki/GivenWhenThen.html">Given-When-Then</a>, etc. All of them propagate simplicity as one of the core concepts.</p>
+
+<blockquote>
+  <p>if u find it hard to determine simplicity criteria - u can refer to results <a href="https://www.agilealliance.org/glossary/rules-of-simplicity/">provided by Kent Beck</a></p>
+</blockquote>
+
+<p>Another reason for reducing complexity - is speed. The complex test is slow, but we always need speed in a test - this allows us to run tests every time we want and get an almost instant report about the current product quality state.</p>
+
+<p>Returning to tests, we also can apply simplification to a testing subject in parallel to the tests themselves. This makes any test even more clear and concrete - everyone can easily understand what tested, understand why it fails (if any), and understand how some part of code should work.</p>
+
+<p>How we can simplify testing code? To answer this question we should review the reason for this question.</p>
+
+<p>Many objects use dependencies - so every testing need’s to create them. Imagine a situation when dependencies use another dependency and so on (not a very good coding practice, but it’s life, the ideal situation is rare. Rare because of time cost, rate because of some other reason. We always can find some :], but truth is that because we can make an error because sometimes we are too lazy to do things right).</p>
+
+<p>Another case - we may use remote service in the real-time application or some async result, but how we can test such response or some other operation related to it? How to test some complex precondition for some situations? How to make it fast? How to get the same input for tests every time?</p>
+
+<p>Yep, a lot of cases…</p>
+
+<p>For simplification, we can use something that simulates these complex operations, something that equivalent and not important for the testing system, something that represents data structure but not a real one.</p>
+
+<p>The common name for such objects - <strong>Test Doubles</strong>.</p>
+
+<blockquote>
+  <p><strong>Test Double</strong> - object that can be used instead of real objects during a test.</p>
+</blockquote>
+
+<p>We may require different objects for different test purposes. Indeed, this object has few types: <strong>Mock</strong>, <strong>Stub</strong>, <strong>Fake</strong>, other.</p>
+
+<blockquote>
+  <p>Introduction of these names was done by Gerard Meszaros <a href="http://xunitpatterns.com/Test%20Double.html">here is an article about them</a></p>
+</blockquote>
+
+<h2 id="fake">Fake</h2>
+
+<p><strong>Fake object</strong> - object that has the same functionality as a real object, but different implementation. Often this implementation is simplified.</p>
+
+<p>Fake objects usually used as <em>shortcut for required functionality</em> - this provide speed and expected result. It’s often an object that adopts some requirements from the protocol.</p>
+
+<p>Often, as a sample u found an in-memory database - such a database is <em>never will be used on production</em>, but for the test, the purpose is the perfect one.</p>
+
+<p>One more property of such objects - they are <em>not affect the SUT</em> (system under test), instead, these objects <em>simplify the process of testing</em>, and so, <em>have some limited capabilities</em>.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">final</span> <span class="kd">class</span> <span class="kt">SystemInfo</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">foo</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span>
+    <span class="k">var</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span>
+<span class="p">}</span>
+
+<span class="kd">protocol</span> <span class="kt">SystemInformationProvider</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">fetchSystemInfo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">SystemInfo</span>
+<span class="p">}</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">SystemInfoViewModel</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">infoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span>
+    
+    <span class="c1">// MARK: - Lifecycle</span>
+    
+    <span class="nf">init</span><span class="p">(</span><span class="nv">infoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">infoProvider</span> <span class="o">=</span> <span class="n">infoProvider</span>
+    <span class="p">}</span>
+    
+    <span class="kd">func</span> <span class="nf">fetchSystemInfo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">SystemInfo</span> <span class="p">{</span>
+        <span class="c1">// simplified for sample logic</span>
+        <span class="n">infoProvider</span><span class="o">.</span><span class="nf">fetchSystemInfo</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">SystemInfoViewModelTest</span><span class="p">:</span> <span class="kt">XCTestCase</span> <span class="p">{</span>
+    
+    <span class="c1">// This is a fake object</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">FakeSystemInfoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span> <span class="p">{</span>
+        <span class="kd">func</span> <span class="nf">fetchSystemInfo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">SystemInfo</span> <span class="p">{</span>
+            <span class="k">let</span> <span class="nv">info</span> <span class="o">=</span> <span class="kt">SystemInfo</span><span class="p">()</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">info</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="k">return</span> <span class="n">info</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">sut</span><span class="p">:</span> <span class="kt">SystemInfoViewModel</span><span class="o">!</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">provider</span><span class="p">:</span> <span class="kt">FakeSystemInfoProvider</span><span class="o">!</span>
+    
+    <span class="c1">// MARK: - Lifecycle</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">setUp</span><span class="p">()</span>
+        
+        <span class="nf">configureSUT</span><span class="p">()</span>
+    <span class="p">}</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">tearDown</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">tearDown</span><span class="p">()</span>
+        
+        <span class="n">sut</span> <span class="o">=</span> <span class="kc">nil</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="kc">nil</span>
+        
+        <span class="kt">XCTAssertNil</span><span class="p">(</span><span class="n">sut</span><span class="p">)</span>
+        <span class="kt">XCTAssertNil</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// MARK: - Tests</span>
+    
+    <span class="kd">func</span> <span class="nf">testGivenViewModelWhenCreatedShouldProvideSystemInfoWithCorrectBarValue</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">system</span> <span class="o">=</span> <span class="n">sut</span><span class="o">.</span><span class="nf">fetchSystemInfo</span><span class="p">()</span>
+        <span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">system</span><span class="o">.</span><span class="n">bar</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s">"bar value should be ..."</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// MARK: - Private</span>
+    
+    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">configureSUT</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="kt">FakeSystemInfoProvider</span><span class="p">()</span>
+        <span class="n">sut</span> <span class="o">=</span> <span class="kt">SystemInfoViewModel</span><span class="p">(</span><span class="nv">infoProvider</span><span class="p">:</span> <span class="n">provider</span><span class="p">)</span>
+        
+        <span class="kt">XCTAssertNotNil</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
+        <span class="kt">XCTAssertNotNil</span><span class="p">(</span><span class="n">sut</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="stub">Stub</h2>
+
+<p><strong>Stub object</strong> - object that has some <em>dummy data</em> for specific calls required by tests and some mechanism that allow return specific value required by tests - some <em>state</em>.</p>
+
+<p>Every time we need to check if some call is executed, instead of introducing a complex solution using a real object, we can simplify it by using Stub one.</p>
+
+<p>Sometimes u can hear <strong>Spy object</strong> - this is the same Stub object but with <em>ability to record received information</em> about how they are used.</p>
+
+<p>Such objects are also <em>not used in production</em> and so may behave in a strange, not-real manner. This is ok, thus the purpose of such an object is to <em>simplify the process of testing</em>.</p>
+
+<p>A good example may be REST API response - u always know that some operation during the test will return the expected result - predefined answer.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">final</span> <span class="kd">class</span> <span class="kt">SystemInfo</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">foo</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span>
+    <span class="k">var</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span>
+<span class="p">}</span>
+
+<span class="kd">protocol</span> <span class="kt">SystemInformationProvider</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">fetchSystemInfo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">SystemInfo</span>
+<span class="p">}</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">SystemInfoViewModel</span> <span class="p">{</span>
+
+    <span class="k">let</span> <span class="nv">infoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span>
+
+    <span class="c1">// MARK: - Lifecycle</span>
+
+    <span class="nf">init</span><span class="p">(</span><span class="nv">infoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">infoProvider</span> <span class="o">=</span> <span class="n">infoProvider</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">fetchSystemInfo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">SystemInfo</span> <span class="p">{</span>
+        <span class="c1">// simplified for sample logic</span>
+        <span class="n">infoProvider</span><span class="o">.</span><span class="nf">fetchSystemInfo</span><span class="p">()</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">SystemInfoViewModelTest</span><span class="p">:</span> <span class="kt">XCTestCase</span> <span class="p">{</span>
+
+    <span class="c1">// This is a stub object</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">StubSystemInfoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span> <span class="p">{</span>
+        <span class="c1">// state that define return value</span>
+        <span class="k">var</span> <span class="nv">returnSystemInfoOptionA</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">true</span>
+        <span class="kd">func</span> <span class="nf">fetchSystemInfo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">SystemInfo</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="n">returnSystemInfoOptionA</span> <span class="p">{</span>
+                <span class="k">let</span> <span class="nv">info</span> <span class="o">=</span> <span class="kt">SystemInfo</span><span class="p">()</span>
+                <span class="n">info</span><span class="o">.</span><span class="n">foo</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">return</span> <span class="n">info</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="kt">SystemInfo</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">sut</span><span class="p">:</span> <span class="kt">SystemInfoViewModel</span><span class="o">!</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">provider</span><span class="p">:</span> <span class="kt">StubSystemInfoProvider</span><span class="o">!</span>
+
+    <span class="c1">// MARK: - Lifecycle</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">setUp</span><span class="p">()</span>
+
+        <span class="nf">configureSUT</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">tearDown</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">tearDown</span><span class="p">()</span>
+
+        <span class="n">sut</span> <span class="o">=</span> <span class="kc">nil</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="kc">nil</span>
+
+        <span class="kt">XCTAssertNil</span><span class="p">(</span><span class="n">sut</span><span class="p">)</span>
+        <span class="kt">XCTAssertNil</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1">// MARK: - Tests</span>
+
+    <span class="kd">func</span> <span class="nf">testGivenViewModelWhenCreatedShouldCallSystemInfoProviderWhenFetchSystemInfoData</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// change existing stub state to retrive data we need</span>
+        <span class="n">provider</span><span class="o">.</span><span class="n">returnSystemInfoOptionA</span> <span class="o">=</span> <span class="kc">true</span>
+        
+        <span class="k">let</span> <span class="nv">info</span> <span class="o">=</span> <span class="n">sut</span><span class="o">.</span><span class="nf">fetchSystemInfo</span><span class="p">()</span>
+        <span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">foo</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1">// MARK: - Private</span>
+
+    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">configureSUT</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="kt">StubSystemInfoProvider</span><span class="p">()</span>
+        <span class="n">sut</span> <span class="o">=</span> <span class="kt">SystemInfoViewModel</span><span class="p">(</span><span class="nv">infoProvider</span><span class="p">:</span> <span class="n">provider</span><span class="p">)</span>
+
+        <span class="kt">XCTAssertNotNil</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
+        <span class="kt">XCTAssertNotNil</span><span class="p">(</span><span class="n">sut</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="mock">Mock</h2>
+
+<p><strong>Mock objects</strong> - objects that used to <em>register received calls from test object</em> and so we can <em>verify</em> it. This type of object is also <em>not used in production</em>. In other words, object contains some state, that can be cheked during test.</p>
+
+<p>Sometimes Mock object is called a special type of Stub object with extra states inside. Additional states and some other parameters allow checking whenever execution is processed expectedly. So <em>verification</em> is an essential part of such objects - u always <em>can check your expectation</em>.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">protocol</span> <span class="kt">SystemInformationProvider</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">systemVersion</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span>
+    
+    <span class="kd">func</span> <span class="nf">changeSystemVersionTo</span><span class="p">(</span><span class="n">_</span> <span class="nv">version</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">SystemInfoViewModel</span> <span class="p">{</span>
+    
+    <span class="k">let</span> <span class="nv">infoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span>
+    
+    <span class="c1">// MARK: - Lifecycle</span>
+    
+    <span class="nf">init</span><span class="p">(</span><span class="nv">infoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">infoProvider</span> <span class="o">=</span> <span class="n">infoProvider</span>
+    <span class="p">}</span>
+    
+    <span class="kd">func</span> <span class="nf">changeVersion</span><span class="p">(</span><span class="n">_</span> <span class="nv">version</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">infoProvider</span><span class="o">.</span><span class="nf">changeSystemVersionTo</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">SystemInfoViewModelTest</span><span class="p">:</span> <span class="kt">XCTestCase</span> <span class="p">{</span>
+    
+    <span class="c1">// This is a mock object</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">MockSystemInfoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span> <span class="p">{</span>
+        <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">systemVersion</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">// value</span>
+        <span class="c1">// state to check</span>
+        <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">changeSystemCallCount</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span> 
+        
+        <span class="kd">func</span> <span class="nf">changeSystemVersionTo</span><span class="p">(</span><span class="n">_</span> <span class="nv">version</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// simplified logic for demo</span>
+            <span class="n">systemVersion</span> <span class="o">=</span> <span class="n">version</span>
+            <span class="n">changeSystemCallCount</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="p">}</span>
+        
+        <span class="kd">func</span> <span class="nf">verifyVersionChange</span><span class="p">(</span><span class="n">_</span> <span class="nv">expectedVersion</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="nv">callCount</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">expectedVersion</span><span class="p">,</span> <span class="n">systemVersion</span><span class="p">)</span>
+            <span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">callCount</span><span class="p">,</span> <span class="n">changeSystemCallCount</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">sut</span><span class="p">:</span> <span class="kt">SystemInfoViewModel</span><span class="o">!</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">provider</span><span class="p">:</span> <span class="kt">MockSystemInfoProvider</span><span class="o">!</span>
+    
+    <span class="c1">// MARK: - Lifecycle</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">setUp</span><span class="p">()</span>
+        
+        <span class="nf">configureSUT</span><span class="p">()</span>
+    <span class="p">}</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">tearDown</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">tearDown</span><span class="p">()</span>
+        
+        <span class="n">sut</span> <span class="o">=</span> <span class="kc">nil</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="kc">nil</span>
+        
+        <span class="kt">XCTAssertNil</span><span class="p">(</span><span class="n">sut</span><span class="p">)</span>
+        <span class="kt">XCTAssertNil</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// MARK: - Tests</span>
+    
+    <span class="kd">func</span> <span class="nf">testGivenViewModelWhenCreatedShouldBeAbleToChangeVersion</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">newVersion</span> <span class="o">=</span> <span class="mi">1111</span>
+        <span class="n">sut</span><span class="o">.</span><span class="nf">changeVersion</span><span class="p">(</span><span class="n">newVersion</span><span class="p">)</span>
+        <span class="n">provider</span><span class="o">.</span><span class="nf">verifyVersionChange</span><span class="p">(</span><span class="n">newVersion</span><span class="p">,</span> <span class="nv">callCount</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// MARK: - Private</span>
+    
+    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">configureSUT</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="kt">MockSystemInfoProvider</span><span class="p">()</span>
+        <span class="n">sut</span> <span class="o">=</span> <span class="kt">SystemInfoViewModel</span><span class="p">(</span><span class="nv">infoProvider</span><span class="p">:</span> <span class="n">provider</span><span class="p">)</span>
+        
+        <span class="kt">XCTAssertNotNil</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
+        <span class="kt">XCTAssertNotNil</span><span class="p">(</span><span class="n">sut</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p><br /></p>
+<blockquote>
+  <p>Stub and Mock a bit similar, but “There is a difference in that the stub uses state verification while the mock uses behavior verification.” <a href="https://martinfowler.com/articles/mocksArentStubs.html">M.Fowler</a></p>
+</blockquote>
+
+<h2 id="dummy">Dummy</h2>
+
+<p><strong>Dummy objects</strong> - objects that are <em>not use during tests</em> and used only to <em>allow compilation to be successful</em>.</p>
+
+<figure class="highlight"><pre><code class="language-swift" data-lang="swift"><span class="kd">protocol</span> <span class="kt">SystemInformationProvider</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">performOperation</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">SystemInfoViewModel</span> <span class="p">{</span>
+    
+    <span class="k">let</span> <span class="nv">infoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span>
+    
+    <span class="kd">private(set)</span> <span class="k">var</span> <span class="nv">someValue</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="c1">// MARK: - Lifecycle</span>
+    
+    <span class="nf">init</span><span class="p">(</span><span class="nv">infoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">infoProvider</span> <span class="o">=</span> <span class="n">infoProvider</span>
+    <span class="p">}</span>
+    
+    <span class="kd">func</span> <span class="nf">doSometingNotRelatedToInfoProvider</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">someValue</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">final</span> <span class="kd">class</span> <span class="kt">SystemInfoViewModelTest</span><span class="p">:</span> <span class="kt">XCTestCase</span> <span class="p">{</span>
+    
+    <span class="c1">// This is a dummy object</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">class</span> <span class="kt">DummySystemInfoProvider</span><span class="p">:</span> <span class="kt">SystemInformationProvider</span> <span class="p">{</span>
+        <span class="kd">func</span> <span class="nf">performOperation</span><span class="p">()</span> <span class="p">{</span>
+            <span class="cm">/*do nothing*/</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">sut</span><span class="p">:</span> <span class="kt">SystemInfoViewModel</span><span class="o">!</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">provider</span><span class="p">:</span> <span class="kt">DummySystemInfoProvider</span><span class="o">!</span>
+    
+    <span class="c1">// MARK: - Lifecycle</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">setUp</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">setUp</span><span class="p">()</span>
+        
+        <span class="nf">configureSUT</span><span class="p">()</span>
+    <span class="p">}</span>
+    
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">tearDown</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">tearDown</span><span class="p">()</span>
+        
+        <span class="n">sut</span> <span class="o">=</span> <span class="kc">nil</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="kc">nil</span>
+        
+        <span class="kt">XCTAssertNil</span><span class="p">(</span><span class="n">sut</span><span class="p">)</span>
+        <span class="kt">XCTAssertNil</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// MARK: - Tests</span>
+    
+    <span class="kd">func</span> <span class="nf">testGivenViewModelWhenCreatedShouldBeAbleToDoSomething</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">sut</span><span class="o">.</span><span class="n">someValue</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">sut</span><span class="o">.</span><span class="nf">doSometingNotRelatedToInfoProvider</span><span class="p">()</span>
+        <span class="kt">XCTAssertEqual</span><span class="p">(</span><span class="n">sut</span><span class="o">.</span><span class="n">someValue</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// MARK: - Private</span>
+    
+    <span class="kd">private</span> <span class="kd">func</span> <span class="nf">configureSUT</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="kt">DummySystemInfoProvider</span><span class="p">()</span>
+        <span class="n">sut</span> <span class="o">=</span> <span class="kt">SystemInfoViewModel</span><span class="p">(</span><span class="nv">infoProvider</span><span class="p">:</span> <span class="n">provider</span><span class="p">)</span>
+        
+        <span class="kt">XCTAssertNotNil</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
+        <span class="kt">XCTAssertNotNil</span><span class="p">(</span><span class="n">sut</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<div style="text-align:center">
+<img src="/assets/posts/images/2020-12-28-fake-stub-mock/test_doubles.svg" alt="test_doubles" width="550" />
+</div>
+
+<p>So, to summarize:</p>
+
+<ol>
+  <li><strong>Fake</strong> -	same functionality, but different implementation</li>
+  <li>
+    <p><strong>Stub</strong> - provide predefined data</p>
+
+    <p>a. <strong><em>Spy</em></strong> - provide predefined data and logs of actions</p>
+  </li>
+  <li><strong>Mock</strong> - register calls and can check your expectation</li>
+  <li><strong>Dummy</strong> - allow tests to meet compiler requirements, not used in tests</li>
+</ol>
+
+<h2 id="resources">Resources</h2>
+
+<ul>
+  <li><a href="https://martinfowler.com/bliki/TestDouble.html">Martin Fowler defienition</a></li>
+  <li><a href="https://martinfowler.com/articles/mocksArentStubs.html">Mocks Aren’t Stubs by Martin Fowler</a></li>
+  <li><a href="https://martinfowler.com/bliki/GivenWhenThen.html">Given-When-Then</a></li>
+  <li><a href="https://blog.pragmatists.com/test-doubles-fakes-mocks-and-stubs-1a7491dfa3da">Test Doubles</a></li>
+  <li><a href="https://stackoverflow.com/questions/346372/whats-the-difference-between-faking-mocking-and-stubbing">SO discussion</a></li>
+  <li><a href="https://www.amazon.com/Clean-Coder-Conduct-Professional-Programmers/dp/0137081073/ref=sr_1_1?s=books&amp;ie=UTF8&amp;qid=1326135682&amp;sr=1-1">F.I.R.S.T. - chapter from Clean-Coder</a></li>
+</ul>
+
+<p><a href="/assets/posts/images/2020-12-28-fake-stub-mock/source/test_doubles.playground.zip">download source</a></p>
+
+  </div><a class="u-url" href="/article/2020/12/28/fake-stub-mock.html" hidden></a>
+</article>
+
+<div class="prev-next">
+  
+    <a class="half prev" href="/article/2020/12/23/swiftUI-animation.html">&laquo; Introduction into SwiftUI animations</a>
+  
+  
+    <a class="half next" href="/article/2020/12/30/gestures-in-swiftUI.html">Gestures in SwiftUI at scale &raquo;</a>
+  
+</div>
+
+
+
+
+<style>
+#share-buttons {display: inline-block; vertical-align: middle; }
+#share-buttons:after {content: ""; display: block; clear: both;}
+#share-buttons > div {
+    position: relative;
+    text-align: left; 
+    height: 36px; 
+    width: 32px; 
+    float: left; 
+    text-align: center;
+}
+#share-buttons > div > svg {height: 16px; fill: #d5d5d5; margin-top: 10px;}
+#share-buttons > div:hover {cursor: pointer;}
+#share-buttons > div.facebook:hover > svg {fill: #3B5998;}
+#share-buttons > div.twitter:hover > svg {fill: #55ACEE;}
+#share-buttons > div.linkedin:hover > svg {fill: #0077b5;}
+#share-buttons > div.pinterest:hover > svg {fill: #CB2027;}
+#share-buttons > div.gplus:hover > svg {fill: #dd4b39;}
+#share-buttons > div.mail:hover > svg {fill: #7D7D7D;}
+#share-buttons > div.instagram:hover > svg {fill: #C73B92;}
+#share-buttons > div.facebook > svg {height: 18px; margin-top: 9px;}
+#share-buttons > div.twitter > svg {height: 20px; margin-top: 8px;}
+#share-buttons > div.linkedin > svg {height: 19px; margin-top: 7px;}
+#share-buttons > div.pinterest > svg {height: 20px; margin-top: 9px;}
+#share-buttons > div.gplus > svg {height: 17px; margin-top: 9px; position: relative; left: 1px;}
+#share-buttons > div.mail > svg {height: 14px; margin-top: 11px;}
+</style>
+
+<span style="color: silver;">Share on: </span><div id="share-buttons">
+    <div class="facebook" title="Share this on Facebook" onclick="window.open('http://www.facebook.com/share.php?u=http://localhost:4000/article/2020/12/28/fake-stub-mock.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1343 12v264h-157q-86 0-116 36t-30 108v189h293l-39 296h-254v759h-306v-759h-255v-296h255v-218q0-186 104-288.5t277-102.5q147 0 228 12z"/></svg></div>
+    <div class="twitter" title="Share this on Twitter" onclick="window.open('http://twitter.com/home?status=http://localhost:4000/article/2020/12/28/fake-stub-mock.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1684 408q-67 98-162 167 1 14 1 42 0 130-38 259.5t-115.5 248.5-184.5 210.5-258 146-323 54.5q-271 0-496-145 35 4 78 4 225 0 401-138-105-2-188-64.5t-114-159.5q33 5 61 5 43 0 85-11-112-23-185.5-111.5t-73.5-205.5v-4q68 38 146 41-66-44-105-115t-39-154q0-88 44-163 121 149 294.5 238.5t371.5 99.5q-8-38-8-74 0-134 94.5-228.5t228.5-94.5q140 0 236 102 109-21 205-78-37 115-142 178 93-10 186-50z"/></svg></div>
+    <div class="linkedin" title="Share this on Linkedin" onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/article/2020/12/28/fake-stub-mock.html&title=&summary=&source=');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M477 625v991h-330v-991h330zm21-306q1 73-50.5 122t-135.5 49h-2q-82 0-132-49t-50-122q0-74 51.5-122.5t134.5-48.5 133 48.5 51 122.5zm1166 729v568h-329v-530q0-105-40.5-164.5t-126.5-59.5q-63 0-105.5 34.5t-63.5 85.5q-11 30-11 81v553h-329q2-399 2-647t-1-296l-1-48h329v144h-2q20-32 41-56t56.5-52 87-43.5 114.5-15.5q171 0 275 113.5t104 332.5z"/></svg></div>
+    
+    <div class="gplus" title="Share this on Google Plus" onclick="window.open('https://plus.google.com/share?url=http://localhost:4000/article/2020/12/28/fake-stub-mock.html');"><svg viewBox="0 0 2304 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1437 913q0 208-87 370.5t-248 254-369 91.5q-149 0-285-58t-234-156-156-234-58-285 58-285 156-234 234-156 285-58q286 0 491 192l-199 191q-117-113-292-113-123 0-227.5 62t-165.5 168.5-61 232.5 61 232.5 165.5 168.5 227.5 62q83 0 152.5-23t114.5-57.5 78.5-78.5 49-83 21.5-74h-416v-252h692q12 63 12 122zm867-122v210h-209v209h-210v-209h-209v-210h209v-209h210v209h209z"/></svg></div>
+    <div class="mail" title="Share this through Email" onclick="window.open('mailto:?&body=http://localhost:4000/article/2020/12/28/fake-stub-mock.html');"><svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z"/></svg></div>
+</div>
+
+<script src="  https://unpkg.com/showdown/dist/showdown.min.js"></script>
+<script>
+const GH_API_URL = 'https://api.github.com/repos/khorbushko/khorbushko.github.io/issues/19/comments'; // ?client_id=&client_secret=
+
+let request = new XMLHttpRequest();
+request.open( 'GET', GH_API_URL, true );
+request.onload = function() {
+	if ( this.status >= 200 && this.status < 400 ) {
+		let response = JSON.parse( this.response );
+
+		for ( var i = 0; i < response.length; i++ ) {
+			document.getElementById( 'gh-comments-list' ).appendChild( createCommentEl( response[ i ] ) );
+		}
+
+		if ( 0 === response.length ) {
+			document.getElementById( 'no-comments-found' ).style.display = 'block';
+		}
+	} else {
+		console.error( this );
+	}
+};
+
+function createCommentEl( response ) {
+	let user = document.createElement( 'a' );
+	user.setAttribute( 'href', response.user.url.replace( 'api.github.com/users', 'github.com' ) );
+	user.classList.add( 'user' );
+
+	let userAvatar = document.createElement( 'img' );
+	userAvatar.classList.add( 'avatar' );
+	userAvatar.setAttribute( 'src', response.user.avatar_url );
+
+	user.appendChild( userAvatar );
+
+	let commentLink = document.createElement( 'a' );
+	commentLink.setAttribute( 'href', response.html_url );
+	commentLink.classList.add( 'comment-url' );
+	commentLink.innerHTML = '#' + response.id + ' - ' + response.created_at;
+
+	let commentContents = document.createElement( 'div' );
+	commentContents.classList.add( 'comment-content' );
+	commentContents.innerHTML = response.body;
+	// Progressive enhancement.
+	if ( window.showdown ) {
+		let converter = new showdown.Converter();
+		commentContents.innerHTML = converter.makeHtml( response.body );
+	}
+
+	let comment = document.createElement( 'li' );
+	comment.setAttribute( 'data-created', response.created_at );
+	comment.setAttribute( 'data-author-avatar', response.user.avatar_url );
+	comment.setAttribute( 'data-user-url', response.user.url );
+
+	comment.appendChild( user );
+	comment.appendChild( commentContents );
+	comment.appendChild( commentLink );
+
+	return comment;
+}
+request.send();
+</script>
+
+<hr>
+
+<div class="github-comments">
+	<h2>Comments</h2>
+	<ul id="gh-comments-list"></ul>
+	<p id="leave-a-comment">Join the discussion for this article on <a href="https://github.com/khorbushko/khorbushko.github.io/issues/19">this ticket</a>. Comments appear on this page instantly.</p>
+</div>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>RSS</span>      
+          </a>
+          &nbsp;&nbsp;
+          <a href="https://feedrabbit.com/?url=http://khorbushko.github.io">
+            <svg class="svg-icon black">
+              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Newsletter</span>      
+          </a>
+
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">khorbushko</li>
+          <li><a class="u-email" href="mailto:kirill.ge@gmail.com">kirill.ge@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>inspired by &quot;software craftsmanship&quot;</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/khorbushko" title="khorbushko"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://stackoverflow.com/users/2012219" title="2012219"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#stackoverflow"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/kyryl-horbushko-67936bb5" title="kyryl-horbushko-67936bb5"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
