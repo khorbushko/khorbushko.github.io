@@ -15,7 +15,9 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
-<a href="https://www.amazon.com/Head-First-Java-Kathy-Sierra/dp/0596009208"><img src="{{site.baseurl}}/assets/books/headFirstJava/cover.jpg" alt="Head First Java, 2nd Edition 2nd Edition by Kathy Sierra  (Author), Bert Bates (Author)" style="width:110px;height:150px;padding:10px"></a>
+<a href="https://www.amazon.com/Head-First-JavaScript-Programming-Brain-Friendly/dp/144934013X/ref=sr_1_1?crid=4K37NIIPBKIV&dchild=1&keywords=head+first+javascript&qid=1618587748&s=books&sprefix=Head+first+JavaSc%2Cstripbooks-intl-ship%2C270&sr=1-1"><img src="{{site.baseurl}}/assets/books/headFirstJavaScript/cover.jpg" alt="Head First JavaScript Programming: A Brain-Friendly Guide, 2nd Edition by Eric Freeman  (Author), Elisabeth Robson  (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com/Head-First-Java-Kathy-Sierra/dp/0596009208"><img src="{{site.baseurl}}/assets/books/headFirstJava/cover.jpg" alt="Head First Java, 2nd Edition by Kathy Sierra  (Author), Bert Bates (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Learn-SwiftUI-introductory-cross-platform-interfaces/dp/1839215429"><img src="{{site.baseurl}}/assets/books/learnSwiftUI/cover.jpg" alt="Learn SwiftUI: An introductory guide to creating intuitive cross-platform user interfaces using Swift 5 Paperback – April 3, 2020 by Chris Barker (Author)" style="width:110px;height:150px;padding:10px"></a>
 
