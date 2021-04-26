@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "First look at WindowGroup"
 categories: article
-tags: [iOS, SwiftUI, WindowGroup, SceneBuilder]
+tags: [iOS, macOS, SwiftUI, WindowGroup, SceneBuilder]
 excerpt_separator: <!--more-->
 comments_id: 39
 

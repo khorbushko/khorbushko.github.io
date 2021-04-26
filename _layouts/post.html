@@ -45,15 +45,12 @@ layout: default
     {{ content }}
   </div>
 
-  {%- if site.disqus.shortname -%}
-    {%- include disqus_comments.html -%}
-  {%- endif -%}
-
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
 
 {% include prev_next.html prev_url=page.previous.url prev_text=page.previous.title next_url=page.next.url next_text=page.next.title %}
 
+{% include donation-paypal.html %}
 {% include share.html %}
 
 {% include comments.html element=".post-content" github_account="khorbushko/khorbushko.github.io" require_cookie_consent="true" %}

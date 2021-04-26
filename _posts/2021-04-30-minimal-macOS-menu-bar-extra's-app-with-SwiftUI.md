@@ -5,7 +5,7 @@ title: "Minimal macOS menu bar extra's app with SwiftUI"
 categories: article
 tags: [macOS, SwiftUI, menu bar extra]
 excerpt_separator: <!--more-->
-comments_id: 39
+comments_id: 40
 
 author:
 - kyryl horbushko
