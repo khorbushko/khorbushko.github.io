@@ -20,6 +20,7 @@ In this series of article, I will try to cover some aspects related to debugging
 Articles in this series:
 
 * The LLDB Debugger - Part 1: Basics
+* [The LLDB Debugger - Part 2: Breakpoints]({% post_url 2021-05-20-the-lldb-debugger-part2-breakpoints %})
 
 ## Basic operations
 
@@ -491,6 +492,7 @@ In the next articles, I will cover other aspects of the work with `lldb`.
 Articles in this series:
 
 * The LLDB Debugger - Part 1: Basics
+* [The LLDB Debugger - Part 2: Breakpoints]({% post_url 2021-05-20-the-lldb-debugger-part2-breakpoints %})
 
 ## Resources:
 
