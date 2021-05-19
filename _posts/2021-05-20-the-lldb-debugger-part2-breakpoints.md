@@ -23,7 +23,7 @@ Articles in this series:
 
 * [The LLDB Debugger - Part 1: Basics]({% post_url 2021-05-10-the-lldb-debugger-part1-basics %})
 * The LLDB Debugger - Part 2: Breakpoints
-
+* [The LLDB Debugger - Part 3: Watchpoint]({% post_url 2021-05-27-the-lldb-debugger-part3-watchpoint %})
 
 ## The breakpoint
 
@@ -499,6 +499,8 @@ Articles in this series:
 
 * [The LLDB Debugger - Part 1: Basics]({% post_url 2021-05-10-the-lldb-debugger-part1-basics %})
 * The LLDB Debugger - Part 2: Breakpoints
+* [The LLDB Debugger - Part 3: Watchpoint]({% post_url 2021-05-27-the-lldb-debugger-part3-watchpoint %})
+
 
 ## Resources
 
