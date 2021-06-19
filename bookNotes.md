@@ -15,6 +15,9 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.raywenderlich.com/books/app-design-apprentice/v1.0.pre0rder"><img src="{{site.baseurl}}/assets/books/appDesignRW/cover.png" alt="App Design Apprentice
+By Prateek Prasad & Rajiv Patel" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.raywenderlich.com/books/ios-app-distribution-best-practices/v1.0"><img src="{{site.baseurl}}/assets/books/appDistributionRW/cover.png" alt="Ard iOS App Distribution & Best Practices by Pietro Rea & Keegan Rush" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Arduino-Projects-Book-Scott-Fitzgerald/dp/B07G4PV9WS"><img src="{{site.baseurl}}/assets/books/arduinoProjectBook/cover.jpg" alt="Arduino Projects Book Paperback – January 1, 2013 by Scott Fitzgerald (Author), Michael Shiloh (Author)" style="width:110px;height:150px;padding:10px"></a>
