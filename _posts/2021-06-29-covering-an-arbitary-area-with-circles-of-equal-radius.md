@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "Covering an arbitary area with Circles of equal radius"
 categories: article
-tags: [iOS, mercator, hexgrid, longRead]
+tags: [iOS, geo, mercator, hexgrid, longRead]
 excerpt_separator: <!--more-->
 comments_id: 50
 
