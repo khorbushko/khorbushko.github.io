@@ -56,7 +56,8 @@ Long story short - let's check and test them all. Also, if possible we can try t
 
 Related articles:
 
-* Old new friends - Part 1
+* Old new friends - Part 1: Buttons, Menus, Pick
+* [Old new friends - Part 2: DatePickers, TextFields, Toggles]({% post_url 2021-08-25-old-new-friends-p2-datePickers-textFields-toggles %})
 
 ## Buttons
 
@@ -271,7 +272,8 @@ As u can see here, there is a bunch of the private types that start from the und
 
 Related articles:
 
-* Old new friends - Part 1
+* Old new friends - Part 1: Buttons, Menus, Pick
+* [Old new friends - Part 2: DatePickers, TextFields, Toggles]({% post_url 2021-08-25-old-new-friends-p2-datePickers-textFields-toggles %})
 
 ## Resources
 
