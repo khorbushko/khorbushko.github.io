@@ -1,0 +1,90 @@
+sil_stage raw
+
+import Builtin
+import Swift
+import SwiftShims
+
+class Bar {
+  @inline(__always) dynamic func interesting()
+  @objc deinit
+  init()
+}
+
+// main
+sil [ossa] @main : $@convention(c) (Int32, UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>) -> Int32 {
+bb0(%0 : $Int32, %1 : $UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>):
+  %2 = integer_literal $Builtin.Int32, 0          // user: %3
+  %3 = struct $Int32 (%2 : $Builtin.Int32)        // user: %4
+  return %3 : $Int32                              // id: %4
+} // end sil function 'main'
+
+// Bar.interesting()
+sil hidden [dynamically_replacable] [always_inline] [ossa] @$s22test_combined_keywords3BarC11interestingyyF : $@convention(method) (@guaranteed Bar) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $Bar):
+  debug_value %0 : $Bar, let, name "self", argno 1 // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function '$s22test_combined_keywords3BarC11interestingyyF'
+
+// Bar.deinit
+sil hidden [ossa] @$s22test_combined_keywords3BarCfd : $@convention(method) (@guaranteed Bar) -> @owned Builtin.NativeObject {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @guaranteed $Bar):
+  debug_value %0 : $Bar, let, name "self", argno 1 // id: %1
+  %2 = unchecked_ref_cast %0 : $Bar to $Builtin.NativeObject // user: %3
+  %3 = unchecked_ownership_conversion %2 : $Builtin.NativeObject, @guaranteed to @owned // user: %4
+  return %3 : $Builtin.NativeObject               // id: %4
+} // end sil function '$s22test_combined_keywords3BarCfd'
+
+// Bar.__deallocating_deinit
+sil hidden [ossa] @$s22test_combined_keywords3BarCfD : $@convention(method) (@owned Bar) -> () {
+// %0 "self"                                      // users: %6, %3, %1
+bb0(%0 : @owned $Bar):
+  debug_value %0 : $Bar, let, name "self", argno 1 // id: %1
+  // function_ref Bar.deinit
+  %2 = function_ref @$s22test_combined_keywords3BarCfd : $@convention(method) (@guaranteed Bar) -> @owned Builtin.NativeObject // user: %4
+  %3 = begin_borrow %0 : $Bar                     // users: %5, %4
+  %4 = apply %2(%3) : $@convention(method) (@guaranteed Bar) -> @owned Builtin.NativeObject // user: %7
+  end_borrow %3 : $Bar                            // id: %5
+  end_lifetime %0 : $Bar                          // id: %6
+  %7 = unchecked_ref_cast %4 : $Builtin.NativeObject to $Bar // user: %8
+  dealloc_ref %7 : $Bar                           // id: %8
+  %9 = tuple ()                                   // user: %10
+  return %9 : $()                                 // id: %10
+} // end sil function '$s22test_combined_keywords3BarCfD'
+
+// Bar.__allocating_init()
+sil hidden [exact_self_class] [ossa] @$s22test_combined_keywords3BarCACycfC : $@convention(method) (@thick Bar.Type) -> @owned Bar {
+// %0 "$metatype"
+bb0(%0 : $@thick Bar.Type):
+  %1 = alloc_ref $Bar                             // user: %3
+  // function_ref Bar.init()
+  %2 = function_ref @$s22test_combined_keywords3BarCACycfc : $@convention(method) (@owned Bar) -> @owned Bar // user: %3
+  %3 = apply %2(%1) : $@convention(method) (@owned Bar) -> @owned Bar // user: %4
+  return %3 : $Bar                                // id: %4
+} // end sil function '$s22test_combined_keywords3BarCACycfC'
+
+// Bar.init()
+sil hidden [ossa] @$s22test_combined_keywords3BarCACycfc : $@convention(method) (@owned Bar) -> @owned Bar {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @owned $Bar):
+  debug_value %0 : $Bar, let, name "self", argno 1 // id: %1
+  %2 = mark_uninitialized [rootself] %0 : $Bar    // users: %4, %3
+  %3 = copy_value %2 : $Bar                       // user: %5
+  destroy_value %2 : $Bar                         // id: %4
+  return %3 : $Bar                                // id: %5
+} // end sil function '$s22test_combined_keywords3BarCACycfc'
+
+sil_vtable Bar {
+  #Bar.interesting: (Bar) -> () -> () : @$s22test_combined_keywords3BarC11interestingyyF	// Bar.interesting()
+  #Bar.init!allocator: (Bar.Type) -> () -> Bar : @$s22test_combined_keywords3BarCACycfC	// Bar.__allocating_init()
+  #Bar.deinit!deallocator: @$s22test_combined_keywords3BarCfD	// Bar.__deallocating_deinit
+}
+
+
+
+// Mappings from '#fileID' to '#filePath':
+//   'test_combined_keywords/test_combined_keywords.swift' => '/Users/khb/Desktop/test_combined_keywords.swift'
+
+

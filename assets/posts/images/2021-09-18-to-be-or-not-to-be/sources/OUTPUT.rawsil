@@ -1,0 +1,212 @@
+sil_stage raw
+
+import Builtin
+import Swift
+import SwiftShims
+
+import Foundation
+
+class Foo {
+  func myFunc_0()
+  @objc func myFunc_1()
+  @objc deinit
+  init()
+}
+
+final class Bar {
+  final func myFunc_1()
+  @objc deinit
+  init()
+}
+
+struct FooBar {
+  func myFunc_2()
+  init()
+}
+
+// main
+sil [ossa] @main : $@convention(c) (Int32, UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>) -> Int32 {
+bb0(%0 : $Int32, %1 : $UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>):
+  %2 = integer_literal $Builtin.Int32, 0          // user: %3
+  %3 = struct $Int32 (%2 : $Builtin.Int32)        // user: %4
+  return %3 : $Int32                              // id: %4
+} // end sil function 'main'
+
+// Foo.myFunc_0()
+sil hidden [ossa] @$s13test_dispatch3FooC8myFunc_0yyF : $@convention(method) (@guaranteed Foo) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $Foo):
+  debug_value %0 : $Foo, let, name "self", argno 1 // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function '$s13test_dispatch3FooC8myFunc_0yyF'
+
+// Foo.myFunc_1()
+sil hidden [ossa] @$s13test_dispatch3FooC8myFunc_1yyF : $@convention(method) (@guaranteed Foo) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $Foo):
+  debug_value %0 : $Foo, let, name "self", argno 1 // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function '$s13test_dispatch3FooC8myFunc_1yyF'
+
+// @objc Foo.myFunc_1()
+sil hidden [thunk] [ossa] @$s13test_dispatch3FooC8myFunc_1yyFTo : $@convention(objc_method) (Foo) -> () {
+// %0                                             // user: %1
+bb0(%0 : @unowned $Foo):
+  %1 = copy_value %0 : $Foo                       // users: %6, %2
+  %2 = begin_borrow %1 : $Foo                     // users: %5, %4
+  // function_ref Foo.myFunc_1()
+  %3 = function_ref @$s13test_dispatch3FooC8myFunc_1yyF : $@convention(method) (@guaranteed Foo) -> () // user: %4
+  %4 = apply %3(%2) : $@convention(method) (@guaranteed Foo) -> () // user: %7
+  end_borrow %2 : $Foo                            // id: %5
+  destroy_value %1 : $Foo                         // id: %6
+  return %4 : $()                                 // id: %7
+} // end sil function '$s13test_dispatch3FooC8myFunc_1yyFTo'
+
+// Foo.deinit
+sil hidden [ossa] @$s13test_dispatch3FooCfd : $@convention(method) (@guaranteed Foo) -> @owned Builtin.NativeObject {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @guaranteed $Foo):
+  debug_value %0 : $Foo, let, name "self", argno 1 // id: %1
+  %2 = unchecked_ref_cast %0 : $Foo to $Builtin.NativeObject // user: %3
+  %3 = unchecked_ownership_conversion %2 : $Builtin.NativeObject, @guaranteed to @owned // user: %4
+  return %3 : $Builtin.NativeObject               // id: %4
+} // end sil function '$s13test_dispatch3FooCfd'
+
+// Foo.__deallocating_deinit
+sil hidden [ossa] @$s13test_dispatch3FooCfD : $@convention(method) (@owned Foo) -> () {
+// %0 "self"                                      // users: %6, %3, %1
+bb0(%0 : @owned $Foo):
+  debug_value %0 : $Foo, let, name "self", argno 1 // id: %1
+  // function_ref Foo.deinit
+  %2 = function_ref @$s13test_dispatch3FooCfd : $@convention(method) (@guaranteed Foo) -> @owned Builtin.NativeObject // user: %4
+  %3 = begin_borrow %0 : $Foo                     // users: %5, %4
+  %4 = apply %2(%3) : $@convention(method) (@guaranteed Foo) -> @owned Builtin.NativeObject // user: %7
+  end_borrow %3 : $Foo                            // id: %5
+  end_lifetime %0 : $Foo                          // id: %6
+  %7 = unchecked_ref_cast %4 : $Builtin.NativeObject to $Foo // user: %8
+  dealloc_ref %7 : $Foo                           // id: %8
+  %9 = tuple ()                                   // user: %10
+  return %9 : $()                                 // id: %10
+} // end sil function '$s13test_dispatch3FooCfD'
+
+// Foo.__allocating_init()
+sil hidden [exact_self_class] [ossa] @$s13test_dispatch3FooCACycfC : $@convention(method) (@thick Foo.Type) -> @owned Foo {
+// %0 "$metatype"
+bb0(%0 : $@thick Foo.Type):
+  %1 = alloc_ref $Foo                             // user: %3
+  // function_ref Foo.init()
+  %2 = function_ref @$s13test_dispatch3FooCACycfc : $@convention(method) (@owned Foo) -> @owned Foo // user: %3
+  %3 = apply %2(%1) : $@convention(method) (@owned Foo) -> @owned Foo // user: %4
+  return %3 : $Foo                                // id: %4
+} // end sil function '$s13test_dispatch3FooCACycfC'
+
+// Foo.init()
+sil hidden [ossa] @$s13test_dispatch3FooCACycfc : $@convention(method) (@owned Foo) -> @owned Foo {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @owned $Foo):
+  debug_value %0 : $Foo, let, name "self", argno 1 // id: %1
+  %2 = mark_uninitialized [rootself] %0 : $Foo    // users: %4, %3
+  %3 = copy_value %2 : $Foo                       // user: %5
+  destroy_value %2 : $Foo                         // id: %4
+  return %3 : $Foo                                // id: %5
+} // end sil function '$s13test_dispatch3FooCACycfc'
+
+// Bar.myFunc_1()
+sil hidden [ossa] @$s13test_dispatch3BarC8myFunc_1yyF : $@convention(method) (@guaranteed Bar) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $Bar):
+  debug_value %0 : $Bar, let, name "self", argno 1 // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function '$s13test_dispatch3BarC8myFunc_1yyF'
+
+// Bar.deinit
+sil hidden [ossa] @$s13test_dispatch3BarCfd : $@convention(method) (@guaranteed Bar) -> @owned Builtin.NativeObject {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @guaranteed $Bar):
+  debug_value %0 : $Bar, let, name "self", argno 1 // id: %1
+  %2 = unchecked_ref_cast %0 : $Bar to $Builtin.NativeObject // user: %3
+  %3 = unchecked_ownership_conversion %2 : $Builtin.NativeObject, @guaranteed to @owned // user: %4
+  return %3 : $Builtin.NativeObject               // id: %4
+} // end sil function '$s13test_dispatch3BarCfd'
+
+// Bar.__deallocating_deinit
+sil hidden [ossa] @$s13test_dispatch3BarCfD : $@convention(method) (@owned Bar) -> () {
+// %0 "self"                                      // users: %6, %3, %1
+bb0(%0 : @owned $Bar):
+  debug_value %0 : $Bar, let, name "self", argno 1 // id: %1
+  // function_ref Bar.deinit
+  %2 = function_ref @$s13test_dispatch3BarCfd : $@convention(method) (@guaranteed Bar) -> @owned Builtin.NativeObject // user: %4
+  %3 = begin_borrow %0 : $Bar                     // users: %5, %4
+  %4 = apply %2(%3) : $@convention(method) (@guaranteed Bar) -> @owned Builtin.NativeObject // user: %7
+  end_borrow %3 : $Bar                            // id: %5
+  end_lifetime %0 : $Bar                          // id: %6
+  %7 = unchecked_ref_cast %4 : $Builtin.NativeObject to $Bar // user: %8
+  dealloc_ref %7 : $Bar                           // id: %8
+  %9 = tuple ()                                   // user: %10
+  return %9 : $()                                 // id: %10
+} // end sil function '$s13test_dispatch3BarCfD'
+
+// Bar.__allocating_init()
+sil hidden [exact_self_class] [ossa] @$s13test_dispatch3BarCACycfC : $@convention(method) (@thick Bar.Type) -> @owned Bar {
+// %0 "$metatype"
+bb0(%0 : $@thick Bar.Type):
+  %1 = alloc_ref $Bar                             // user: %3
+  // function_ref Bar.init()
+  %2 = function_ref @$s13test_dispatch3BarCACycfc : $@convention(method) (@owned Bar) -> @owned Bar // user: %3
+  %3 = apply %2(%1) : $@convention(method) (@owned Bar) -> @owned Bar // user: %4
+  return %3 : $Bar                                // id: %4
+} // end sil function '$s13test_dispatch3BarCACycfC'
+
+// Bar.init()
+sil hidden [ossa] @$s13test_dispatch3BarCACycfc : $@convention(method) (@owned Bar) -> @owned Bar {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @owned $Bar):
+  debug_value %0 : $Bar, let, name "self", argno 1 // id: %1
+  %2 = mark_uninitialized [rootself] %0 : $Bar    // users: %4, %3
+  %3 = copy_value %2 : $Bar                       // user: %5
+  destroy_value %2 : $Bar                         // id: %4
+  return %3 : $Bar                                // id: %5
+} // end sil function '$s13test_dispatch3BarCACycfc'
+
+// FooBar.myFunc_2()
+sil hidden [ossa] @$s13test_dispatch6FooBarV8myFunc_2yyF : $@convention(method) (FooBar) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : $FooBar):
+  debug_value %0 : $FooBar, let, name "self", argno 1 // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function '$s13test_dispatch6FooBarV8myFunc_2yyF'
+
+// FooBar.init()
+sil hidden [ossa] @$s13test_dispatch6FooBarVACycfC : $@convention(method) (@thin FooBar.Type) -> FooBar {
+// %0 "$metatype"
+bb0(%0 : $@thin FooBar.Type):
+  %1 = alloc_box ${ var FooBar }, let, name "self" // user: %2
+  %2 = mark_uninitialized [rootself] %1 : ${ var FooBar } // users: %5, %3
+  %3 = project_box %2 : ${ var FooBar }, 0        // user: %4
+  %4 = load [trivial] %3 : $*FooBar               // user: %6
+  destroy_value %2 : ${ var FooBar }              // id: %5
+  return %4 : $FooBar                             // id: %6
+} // end sil function '$s13test_dispatch6FooBarVACycfC'
+
+sil_vtable Foo {
+  #Foo.myFunc_0: (Foo) -> () -> () : @$s13test_dispatch3FooC8myFunc_0yyF	// Foo.myFunc_0()
+  #Foo.myFunc_1: (Foo) -> () -> () : @$s13test_dispatch3FooC8myFunc_1yyF	// Foo.myFunc_1()
+  #Foo.init!allocator: (Foo.Type) -> () -> Foo : @$s13test_dispatch3FooCACycfC	// Foo.__allocating_init()
+  #Foo.deinit!deallocator: @$s13test_dispatch3FooCfD	// Foo.__deallocating_deinit
+}
+
+sil_vtable Bar {
+  #Bar.init!allocator: (Bar.Type) -> () -> Bar : @$s13test_dispatch3BarCACycfC	// Bar.__allocating_init()
+  #Bar.deinit!deallocator: @$s13test_dispatch3BarCfD	// Bar.__deallocating_deinit
+}
+
+
+
+// Mappings from '#fileID' to '#filePath':
+//   'test_dispatch/test_dispatch.swift' => '/Users/khb/Desktop/test_dispatch.swift'
+
+
