@@ -15,7 +15,7 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
-<a href="https://www.amazon.com/Mastering-Professional-Scrum-Coaches-Challenges/dp/0134841522"><img src="{{site.baseurl}}/assets/books/OckermanScrum/cover.jpg" alt="Mastering Professional Scrum: A Practitioner’s Guide to Overcoming Challenges and Maximizing the Benefits of Agility (The Professional Scrum Series) 1st Edition by Stephanie Ockerman  (Author), Simon Reindl" style="width:110px;height:150px;padding:10px"></a>
+<a href="{{site.baseurl}}/bookNotes/scrum"><img src="{{site.baseurl}}/assets/books/OckermanScrum/cover.jpg" alt="Mastering Professional Scrum: A Practitioner’s Guide to Overcoming Challenges and Maximizing the Benefits of Agility by Stephanie Ockerman  (Author), Simon Reindl" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.raywenderlich.com/books/swiftui-apprentice/v1.0"><img src="{{site.baseurl}}/assets/books/swiftUIAprentticeRW/cover.png" alt="SwiftUI Apprentice By Caroline Begbie & Audrey Tam" style="width:110px;height:150px;padding:10px"></a>
 
