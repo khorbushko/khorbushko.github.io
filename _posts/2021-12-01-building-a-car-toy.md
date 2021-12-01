@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "Building a car with Arduino"
 categories: article
-tags: [arduino]
+tags: [arduino, Arduino UNO]
 excerpt_separator: <!--more-->
 comments_id: 65
 
