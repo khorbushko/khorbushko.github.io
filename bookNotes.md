@@ -11,6 +11,14 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <br>
 
+### 2022
+
+<div style="text-align:center">
+
+<a href="{{site.baseurl}}/bookNotes/devops"><img src="{{site.baseurl}}/assets/books/devops/cover.jpg" alt="The DevOps Handbook: How to Create World-Class Agility, Reliability, and Security in Technology Organizations Paperback – Illustrated, October 6, 2016 by Gene Kim  (Author), Patrick Debois (Author), John Willis (Author), & 2 more" style="width:110px;height:150px;padding:10px"></a>
+
+</div>
+
 ### 2021
 
 <div style="text-align:center">
