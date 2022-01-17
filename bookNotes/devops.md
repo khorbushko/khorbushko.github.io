@@ -27,7 +27,7 @@ author: kyryl horbushko
 <img src="{{site.baseurl}}/assets/books/devops/quotes/thumb rule for ops.png" alt="thumb rule for ops.png" width="350"/>
 </div>
 
-* thumb rule for ops
+* telemetry
 
 <div style="text-align:center">
 <img src="{{site.baseurl}}/assets/books/devops/quotes/telemetry.png" alt="telemetry" width="350"/>
