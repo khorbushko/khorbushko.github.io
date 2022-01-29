@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1174px" height="555px" viewBox="0 0 1174 555" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Slice</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="329.5" y="407.5" width="188" height="40" rx="8"></rect>
+        <text id="Sequence" font-family="SFProDisplay-Regular, SF Pro Display" font-size="20" font-weight="normal" fill="#000000">
+            <tspan x="381.166016" y="435">Sequence</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="329.5" y="305.5" width="188" height="40" rx="8"></rect>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="875.5" y="296.5" width="272" height="40" rx="8"></rect>
+        <text id="Collection" font-family="SFProDisplay-Regular, SF Pro Display" font-size="20" font-weight="normal" fill="#000000">
+            <tspan x="381.46875" y="332">Collection</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="551.5" y="202.5" width="272" height="40" rx="8"></rect>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="875.5" y="202.5" width="272" height="40" rx="8"></rect>
+        <text id="BidirectionalCollect" font-family="SFProDisplay-Regular, SF Pro Display" font-size="20" font-weight="normal" fill="#000000">
+            <tspan x="593.953885" y="229">BidirectionalCollection</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="555.5" y="88.5" width="272" height="40" rx="8"></rect>
+        <text id="RandomAccessCollecti" font-family="SFProDisplay-Regular, SF Pro Display" font-size="20" font-weight="normal" fill="#000000">
+            <tspan x="583.62283" y="115">RandomAccessCollection</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="329.5" y="203.5" width="188" height="40" rx="8"></rect>
+        <text id="MutableCollection" font-family="SFProDisplay-Regular, SF Pro Display" font-size="20" font-weight="normal" fill="#000000">
+            <tspan x="347.157227" y="230">MutableCollection</tspan>
+        </text>
+        <rect id="Rectangle" stroke="#979797" fill="#D8D8D8" x="23.5" y="203.5" width="272" height="40" rx="8"></rect>
+        <text id="RangeReplacableColle" font-family="SFProDisplay-Regular, SF Pro Display" font-size="20" font-weight="normal" fill="#000000">
+            <tspan x="44.1826172" y="231">RangeReplacableCollection</tspan>
+        </text>
+        <path id="Line" d="M424,346 L424,399 L428,399 L423.5,408 L419,399 L423,399 L423,346 L424,346 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line" d="M424,243 L424,296 L428,296 L423.5,305 L419,296 L423,296 L423,243 L424,243 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line" d="M1011,242 L1011,287 L1015,287 L1010.5,296 L1006,287 L1010,287 L1010,242 L1011,242 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line" d="M1011.93739,336.944399 L1012.0556,337.937388 L1011.55911,337.996494 L431.999,406.991 L432.472358,410.963638 L423.003506,407.559106 L431.408442,402.026743 L431.881,405.998 L1011.44089,337.003506 L1011.93739,336.944399 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line" d="M687.8746,242.900271 L688.099729,243.8746 L687.612565,243.987164 L431.894,303.073 L432.794877,306.970883 L423.012836,304.612565 L430.768715,298.201923 L431.668,302.098 L687.387435,243.012836 L687.8746,242.900271 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line" d="M1010.94472,241.950247 L1011.04975,242.944715 L1010.55252,242.997234 L432.005,304.104 L432.425649,308.082288 L423.002766,304.552519 L431.480311,299.132074 L431.9,303.11 L1010.44748,242.002766 L1010.94472,241.950247 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line" d="M159.123244,243.901623 L159.610811,244.012434 L415.322,302.129 L416.208666,298.228123 L423.987566,304.610811 L414.214076,307.004318 L415.1,303.104 L159.389189,244.987566 L158.901623,244.876756 L159.123244,243.901623 Z" fill="#979797" fill-rule="nonzero"></path>
+        <path id="Line" d="M688,128 L688,193 L692,193 L687.5,202 L683,193 L687,193 L687,128 L688,128 Z" fill="#979797" fill-rule="nonzero"></path>
+        <text id="LazyCollectionProtoc" font-family="SFProDisplay-Regular, SF Pro Display" font-size="20" font-weight="normal" fill="#000000">
+            <tspan x="914.320312" y="229">LazyCollectionProtocol</tspan>
+        </text>
+        <text id="LazySequenceProtocol" font-family="SFProDisplay-Regular, SF Pro Display" font-size="20" font-weight="normal" fill="#000000">
+            <tspan x="914.017578" y="320">LazySequenceProtocol</tspan>
+        </text>
+    </g>
+</svg>
