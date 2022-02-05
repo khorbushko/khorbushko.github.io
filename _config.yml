@@ -40,14 +40,20 @@ donations:
     text:           Buy me a coffee
     id:             KKXW84CNZ5PGN
 
+comments:
+  # 'disqus' or 'utterances' and fetch are available
+  provider:            utterances
+  
+utterances:
+  repo:                "khorbushko/khorbushko.github.io"
+  label:               "Comments"
+  theme:               "github-light"  
+
 #discus
 #disabled - use gitHUB issues instead
 #disqus:
 #  shortname: khorbushko-blog
 #url: https://khorbushko.github.io
-
-#payment
-payment_pointer: $ilp.uphold.com/GiEjnNF98h8k
 
 archive_path: blog/archives/
 
@@ -67,4 +73,4 @@ exclude:
   - README.md
   - CNAME
 
-paginate: 25
+paginate: 20

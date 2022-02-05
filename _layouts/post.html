@@ -53,10 +53,6 @@ layout: default
 {% include donation-paypal.html %}
 {% include share.html %}
 
-{% include comments.html element=".post-content" github_account="khorbushko/khorbushko.github.io" require_cookie_consent="true" %}
-
 {% include advertisements.html %}
 
-{% if site.disqus.shortname %}
-  {% include disqus_comments.html %}
-{% endif %}
+{% include comments-holder.html %}
