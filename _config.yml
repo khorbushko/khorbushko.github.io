@@ -41,7 +41,6 @@ donations:
     id:             KKXW84CNZ5PGN
 
 comments:
-  # 'disqus' or 'utterances' and fetch are available
   provider:            utterances
   
 utterances:
