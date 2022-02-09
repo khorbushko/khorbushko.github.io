@@ -15,6 +15,10 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+
+
+<a href="https://www.amazon.com/JavaScript-Definitive-Most-Used-Programming-Language-dp-1491952024/dp/1491952024/ref=mt_other?_encoding=UTF8&me=&qid="><img src="{{site.baseurl}}/assets/books/js7/cover.jpg" alt="JavaScript: The Definitive Guide: Master the World's Most-Used Programming Language 7th Edition by David Flanagan  (Author)" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/Swift-Depth-Tjeerd-t-Veen/dp/1617295183"><img src="{{site.baseurl}}/assets/books/swiftInDepth/cover.jpg" alt="Swift in Depth 1st Edition by Tjeerd in 't Veen" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="{{site.baseurl}}/bookNotes/devops"><img src="{{site.baseurl}}/assets/books/devops/cover.jpg" alt="The DevOps Handbook: How to Create World-Class Agility, Reliability, and Security in Technology Organizations Paperback – Illustrated, October 6, 2016 by Gene Kim  (Author), Patrick Debois (Author), John Willis (Author), & 2 more" style="width:110px;height:150px;padding:10px"></a>
