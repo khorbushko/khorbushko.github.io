@@ -204,6 +204,51 @@ But still, we have unanswered question number 2 (*how the `SwiftUI` calls the `u
 
 Now, it's become more clear - why only `SwiftUI` `DynamicProperties` (an initial name `DynamicViewProperty`) works in such way: all data stored in some external memory and all changes tracked by some internal mechanism, change is done in swift runtime. A bit complex idea, but the result is great (in my opinion).
 
+## Update
+
+Thanks to comment from *@Chris Eidhof* - 
+> `StoredValue` implementation you should be using a `StateObject` instead of `ObservedObject`. 
+
+With usage of `@ObservedObject` property storage will be shared (in our case counter), with `@StateObject` - independen.
+
+Here is a small test code:
+
+{% highlight swift %}
+struct Nested: View {
+  @StoredValue var value = 0
+
+  var body: some View {
+    Button("Counter \(value)") {
+      value += 1
+    }
+  }
+}
+
+struct DynamicTestView: View {
+  @StoredValue private var testValue: Int = 0
+
+  var body: some View {
+    let n = Nested()
+    VStack {
+      n
+      n
+    }
+  }
+}
+{% endhighlight %}
+
+> this also require update init of `@StoredValue` with `_storage = StateObject(wrappedValue: Storage(value))`
+
+Result:
+
+<div style="text-align:center">
+<a href="{{site.baseurl}}/assets/posts/images/2021-01-08-dynamicProperty/comparison_demo.gif">
+<img src="{{site.baseurl}}/assets/posts/images/2021-01-08-dynamicProperty/comparison_demo.gif" alt="comparison_demo.gif" width="400"/>
+</a>
+</div>
+<br>
+<br>
+
 ## Resources
 
 1. [Thread at Swift forum](https://forums.swift.org/t/dynamicviewproperty/25627)
