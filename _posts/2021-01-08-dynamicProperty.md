@@ -206,6 +206,9 @@ Now, it's become more clear - why only `SwiftUI` `DynamicProperties` (an initial
 
 ## Update
 
+> 19.04.2022
+
+
 Thanks to comment from *@Chris Eidhof* - 
 > `StoredValue` implementation you should be using a `StateObject` instead of `ObservedObject`. 
 
