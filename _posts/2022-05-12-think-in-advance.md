@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "Think in advance"
 categories: article
-tags: [think, code design]
+tags: [think, code design, swift, ios]
 excerpt_separator: <!--more-->
 comments_id: 78
 
