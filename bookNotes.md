@@ -15,7 +15,7 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
-<a href="https://www.amazon.com/Debug-Repair-Prevent-Pragmatic-Programmers/dp/193435628X"><img src="{{site.baseurl}}/assets/books/debugit/cover.jpg" alt="Debug It!: Find, Repair, and Prevent Bugs in Your Code (Pragmatic Programmers) 1st Edition
+<a href="https://www.amazon.com/Debug-Repair-Prevent-Pragmatic-Programmers/dp/193435628X"><img src="{{site.baseurl}}/assets/books/debugIt/cover.jpg" alt="Debug It!: Find, Repair, and Prevent Bugs in Your Code (Pragmatic Programmers) 1st Edition
 by Paul Butcher" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/JavaScript-Definitive-Most-Used-Programming-Language-dp-1491952024/dp/1491952024/ref=mt_other?_encoding=UTF8&me=&qid="><img src="{{site.baseurl}}/assets/books/js7/cover.jpg" alt="JavaScript: The Definitive Guide: Master the World's Most-Used Programming Language 7th Edition by David Flanagan  (Author)" style="width:110px;height:150px;padding:10px"></a>
