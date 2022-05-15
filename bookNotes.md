@@ -15,6 +15,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.amazon.com/Good-Math-Computation-Pragmatic-Programmers/dp/1937785335"><img src="{{site.baseurl}}/assets/books/goodMath/cover.jpg" alt="Good Math : A Geek's Guide to the Beauty of Numbers, Logic, and Computation by Mark C. Chu-Carroll" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/Debug-Repair-Prevent-Pragmatic-Programmers/dp/193435628X"><img src="{{site.baseurl}}/assets/books/debugIt/cover.jpg" alt="Debug It!: Find, Repair, and Prevent Bugs in Your Code (Pragmatic Programmers) 1st Edition
 by Paul Butcher" style="width:110px;height:150px;padding:10px"></a>
 
