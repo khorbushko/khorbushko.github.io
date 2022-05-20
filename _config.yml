@@ -37,8 +37,10 @@ theme: minima
 
 donations:
   paypal:
-    text:           Buy me a coffee
+    text:           PayPal Coffee
     id:             KKXW84CNZ5PGN
+  mono:
+    text:           Mono Coffee
 
 comments:
   provider:            utterances

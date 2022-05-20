@@ -26,4 +26,4 @@ Enjoy your coding :]
 
 <br>
 <br>
-{% include donation-paypal.html %}
+{% include donation.html %}

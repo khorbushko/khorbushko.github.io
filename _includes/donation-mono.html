@@ -1,0 +1,9 @@
+{% if site.donations.mono %}
+  <form action="https://send.monobank.ua/jar/DBBUNdwgK" class="donation">
+       <button>
+        <input type="image" src="{{ root_url }}/assets/mono.webp" width=20 height=25/>
+        <br>
+        <span>{{ site.donations.mono.text | default: 'Donations' }}</span>
+    </button>
+  </form>
+{% endif %}
