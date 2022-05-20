@@ -1,0 +1,9 @@
+{% if site.donations.ua %}
+  <form action="https://send.monobank.ua/jar/uQD9tEJVW" class="donation">
+       <button>
+        <input type="image" src="{{ root_url }}/assets/ua.png" width=20 height=25/>
+        <br>
+        <span>{{ site.donations.ua.text | default: 'Support UA' }}</span>
+    </button>
+  </form>
+{% endif %}

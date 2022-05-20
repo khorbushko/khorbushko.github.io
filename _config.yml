@@ -41,6 +41,8 @@ donations:
     id:             KKXW84CNZ5PGN
   mono:
     text:           Mono Coffee
+  ua:
+    text:           Support UA
 
 comments:
   provider:            utterances
