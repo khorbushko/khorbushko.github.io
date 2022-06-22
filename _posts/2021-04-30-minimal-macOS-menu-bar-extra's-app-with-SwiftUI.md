@@ -303,6 +303,18 @@ Settings {
 
 Both variants are not ideal and have their own +/-. I Hope, this will be improved a bit in the next SwiftUI releases.
 
+----
+
+A great addition was added by **@marc-medley** (see comments) regarding `LSUIElement`:
+
+If `Info.plist` is manually added and edited, then the project build settings needs to be updated to not use the `GENERATE_INFOPLIST_FILE` **"Generated Info.plist File"** AND to *know where to find* the manually added `INFOPLIST_FILE` `"Info.plist File"`.
+
+<div style="text-align:center">
+<img src="{{site.baseurl}}/assets/posts/images/2021-04-30-minimal-macOS-menu-bar-extra's-app-with-SwiftUI/finding.png" alt="finding.png" width="450"/>
+</div>
+<br>
+<br>
+
 ### Open separate window
 
 Often, we would like to display a window with extended actions on some of the menu buttons click. To do so in SwiftUI, we should define a few more `Scene` in `@SceneBuilder` in type with `@main`annotations and use [`handlesExternalEvents(matching:)`](https://developer.apple.com/documentation/swiftui/group/handlesexternalevents(matching:)). This modifier can create a new scene in your app:
