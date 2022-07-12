@@ -15,6 +15,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://heckj.gumroad.com/l/usingcombine"><img src="{{site.baseurl}}/assets/books/usingCombine/cover.png" alt="Using Combine by Joseph Heck" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/gp/product/0999282905/ref=ppx_yo_dt_b_asin_image_o03_s00?ie=UTF8&psc=1"><img src="{{site.baseurl}}/assets/books/algorithms_illum_1/cover.jpg" alt="Algorithms Illuminated: Part 1: The Basics Illustrated Edition by Tim Roughgarden" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Pragmatic-Thinking-Learning-Refactor-Programmers/dp/1934356050"><img src="{{site.baseurl}}/assets/books/PragmaticThinkingandLearning/cover.jpg" alt="Pragmatic Thinking and Learning: Refactor Your Wetware (Pragmatic Programmers) 1st Edition by Andy Hunt" style="width:110px;height:150px;padding:10px"></a>
