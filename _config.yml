@@ -37,7 +37,7 @@ theme: minima
 
 donations:
   paypal:
-    text:           PayPal Coffee
+    text:           PP Coffee
     id:             KKXW84CNZ5PGN
   mono:
     text:           Mono Coffee
