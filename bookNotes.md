@@ -15,6 +15,9 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.raywenderlich.com/books/expert-swift"><img src="{{site.baseurl}}/assets/books/expertSwiftRW/cover.png" alt="Expert Swift
+By Ray Fix, Marin Bencevic, Shai Mishali and Ehab Yosry Amer" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.raywenderlich.com/books/advanced-ios-app-architecture"><img src="{{site.baseurl}}/assets/books/advancedArchRW/cover.png" alt="Advanced iOS App Architecture By René Cacheaux & Josh Berlin" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://heckj.gumroad.com/l/usingcombine"><img src="{{site.baseurl}}/assets/books/usingCombine/cover.png" alt="Using Combine by Joseph Heck" style="width:110px;height:150px;padding:10px"></a>
