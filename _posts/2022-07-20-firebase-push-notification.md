@@ -58,7 +58,7 @@ Create a new project and add a new app to it. Just follow the next-next flow. Th
 </a>
 </div>
 <br>
-<br>success_add.png
+<br>
 	
 ### SDK
 
