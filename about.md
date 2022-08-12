@@ -22,7 +22,12 @@ Hope my notes can help someone.
 Enjoy your coding :]
 
 <br>
-> If u have a question - drop me an [email](mailto:kirill.ge@gmail.com). My resume [here]({% link assets/resume/CV_Kyryl_Horbushko.pdf %})
+> If u have a question - drop me an [email](mailto:kirill.ge@gmail.com). My cv [here]({% link assets/resume/CV_Kyryl_Horbushko.pdf %})
+
+
+----
+
+Glory to Ukraine! 🇺🇦
 
 <br>
 <br>
