@@ -15,6 +15,10 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.manning.com/books/grokking-algorithms"><img src="{{site.baseurl}}/assets/books/algorithms_grokking/cover.png" alt="Grokking Algorithms 
+An illustrated guide for programmers and other curious people by Aditya Y. Bhargava" style="width:110px;height:150px;padding:10px"></a>
+
+
 <a href="https://www.raywenderlich.com/books/expert-swift"><img src="{{site.baseurl}}/assets/books/expertSwiftRW/cover.png" alt="Expert Swift
 By Ray Fix, Marin Bencevic, Shai Mishali and Ehab Yosry Amer" style="width:110px;height:150px;padding:10px"></a>
 
