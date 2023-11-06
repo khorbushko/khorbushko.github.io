@@ -33,6 +33,7 @@ header_pages:
  - myApps.md
  - contact.md
  - about.md
+ - privacypolicy.md
 
 theme: minima
 
@@ -66,13 +67,11 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
   - jekyll-paginate
-  - jekyll/web_monetization
+#  - jekyll/web_monetization
 
 
 # Exclude these files from your production _site
 exclude:
-  - Gemfile
-  - Gemfile.lock
   - LICENSE
   - README.md
   - CNAME

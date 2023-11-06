@@ -11,7 +11,27 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <br>
 
-### 2022
+
+
+## 2023
+
+**I'm at WAR...**
+
+<div style="text-align:center">
+
+<a href="https://www.amazon.com/Modern-Concurrency-Swift-Second-Introducing/dp/1950325814"><img src="{{site.baseurl}}/assets/books/modernConcurrencyRW/cover.jpg" alt="Modern Concurrency in Swift (Second Edition): Introducing Async/Await, Task Groups & Actors
+by Kodeco Team (Author), Marin Todorov (Author)
+" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com.au/Introduction-Game-Systems-Design-Gazaway/dp/0137440847"><img src="{{site.baseurl}}/assets/books/gameDesign/cover.jpg" alt="Introduction to Game Systems Design" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com/Clean-Craftsmanship-Disciplines-Standards-Ethics/dp/013691571X"><img src="{{site.baseurl}}/assets/books/cleanCraftsmanship/cover.jpg" alt="Clean-Craftsmanship-Disciplines-Standards-Ethics" style="width:110px;height:150px;padding:10px"></a>
+
+</div>
+
+## 2022
+
+**I'm at WAR...**
 
 <div style="text-align:center">
 
@@ -86,7 +106,7 @@ By Prateek Prasad & Rajiv Patel" style="width:110px;height:150px;padding:10px"><
 <br>
 
 
-### ...2020
+## ...2020
 
 <div style="text-align:center">
 
