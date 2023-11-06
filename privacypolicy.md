@@ -7,16 +7,15 @@ permalink: /privacy/
 **Last updated**  
 October 28 2023
 
-# Privacy Policy
 Kyryl Horbushko built the khorbushko.github.io blog as a Free site. This SERVICE is provided by Kyryl Horbushko at no cost and is intended for use as is.
 
-This page is used to inform Service users and website (https://gzd3.github.io/privacypolicy/) visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.
+This page is used to inform Service users and website (https://khorbushko.github.io/privacy/) visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.
 
 By using or accessing the Service, you agree to the terms of this Privacy Policy.
 
 If you choose to use my Service, then you agree to the collection and use of information in relation to this policy. The Personal Information that I collect is used for providing and improving the Service. I will not use or share your information with anyone except as described in this Privacy Policy.
 
-The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at khorbushko.github.io blog website unless otherwise defined in this Privacy Policy.
+The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at https://khorbushko.github.io/privacy/ website unless otherwise defined in this Privacy Policy.
 
 ### Information Collection and Use
 
