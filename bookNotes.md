@@ -19,6 +19,9 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.amazon.in/SwiftUI-Animations-Tutorials-First-Motion/dp/1950325792"><img src="{{site.baseurl}}/assets/books/swiftUIAnimationsRW/cover.jpg" alt="SwiftUI Animations by Tutorials (First Edition): SwiftUI in Motion Paperback – Import, 22 November 2022
+by Irina Galata (Author), Bill Morefield (Author), & 1 More" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/Modern-Concurrency-Swift-Second-Introducing/dp/1950325814"><img src="{{site.baseurl}}/assets/books/modernConcurrencyRW/cover.jpg" alt="Modern Concurrency in Swift (Second Edition): Introducing Async/Await, Task Groups & Actors
 by Kodeco Team (Author), Marin Todorov (Author)
 " style="width:110px;height:150px;padding:10px"></a>
