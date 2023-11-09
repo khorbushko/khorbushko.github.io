@@ -15,6 +15,12 @@ author:
 Creating a minimal utility app for macOS is quite often needs. Such an app is always available in the menu bar and can perform some operation with just a few clicks or some shortcut can show information instantly.
 <!--more-->
 
+> Good catch from [@liemeldert](https://github.com/liemeldert) - 
+> 
+> *I just wanted to bring your attention to the addition of MenuBarExtras into native SwiftUI. [Here's their docs](https://developer.apple.com/documentation/swiftui/menubarextra)*
+> 
+> so please also refer to this doc.
+
 When I facing some problem, that requires the same and same activities, I always try to automate it or at least minimize it. Menu bar extra's app - may be a perfect solution for this.
 
 > *["Menu Bar Extras"](https://developer.apple.com/design/human-interface-guidelines/macos/extensions/menu-bar-extras/)* is an official name for icons in the menu bar. Often it's called status-bar items, but this is not an official name.
