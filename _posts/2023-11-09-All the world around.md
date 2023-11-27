@@ -9,7 +9,7 @@ comments_id: 89
 
 author:
 - kyryl horbushko
-- Lviv
+- Kyiv
 - 🇺🇦 Ukraine 🇺🇦
 ---
 
