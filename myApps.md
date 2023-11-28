@@ -19,6 +19,11 @@ td {
     border:2px solid #00000000;
     background-color:transparent;
 }
+
+img {
+  aspect-ratio: auto;
+}
+
 </style>
 
 <table>
