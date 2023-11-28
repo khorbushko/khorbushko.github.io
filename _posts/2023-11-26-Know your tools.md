@@ -23,8 +23,8 @@ Toolset is very important - u can be a master within some tools, but u may never
 Some time ago, I bought a little card game for my kids. The idea is to travel across the country and visit all the cities on the cards you have.
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2023-11-09-Know your tools/map.jpeg">
-<img src="{{site.baseurl}}/assets/posts/images/2023-11-09-Know your tools/map_small.jpeg" alt="map.jpeg" width="400"/>
+<a href="{{site.baseurl}}/assets/posts/images/2023-11-26-Know your tools/map.jpeg">
+<img src="{{site.baseurl}}/assets/posts/images/2023-11-26-Know your tools/map_small.jpeg" alt="map.jpeg" width="400"/>
 </a>
 </div>
 <br>
@@ -33,8 +33,8 @@ Some time ago, I bought a little card game for my kids. The idea is to travel ac
 U may travel by bus or train. In the case of a bus, if you have a few steps in between cities (depending on the city), you can use 1D6 for determining the available step count per turn or use a train. With a train, you need to check the departure board to check available paths, and if there are any, you can perform such a trip in one step.
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2023-11-09-Know your tools/dep_board.png">
-<img src="{{site.baseurl}}/assets/posts/images/2023-11-09-Know your tools/dep_board_small.png" alt="dep_board" width="300"/>
+<a href="{{site.baseurl}}/assets/posts/images/2023-11-26-Know your tools/dep_board.png">
+<img src="{{site.baseurl}}/assets/posts/images/2023-11-26-Know your tools/dep_board_small.png" alt="dep_board" width="300"/>
 </a>
 </div>
 <br>
@@ -170,7 +170,7 @@ static func calculateFastestTripBetween(_ cities: [City]) -> [Graph.Edge<City>]
 
 The first one prepares a set of cities for either a train or a car. The second one - calculate the trip route.
 
-> For implementation details, check [source code]({{site.baseurl}}/assets/posts/images/2023-11-09-Know your tools/source/source.zip)
+> For implementation details, check [source code]({{site.baseurl}}/assets/posts/images/2023-11-26-Know your tools/source/source.zip)
 
 To implement the algorithm described above, let's move step by step. So we are starting to determine all train connections suitable for us—connections that require 1-2 steps.  
 
@@ -206,8 +206,8 @@ We must prepare a `citiesGroupsForTrain` set of all possible city combinations b
 The result of this is a few paths from trains with 1 or 2 or 3 tickets needed, but no more than 4. Anyway this moves is much faster than with a car.  
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2023-11-09-Know your tools/selection_code_1.png">
-<img src="{{site.baseurl}}/assets/posts/images/2023-11-09-Know your tools/selection_code_1.png" alt="selection_code_1" width="300"/>
+<a href="{{site.baseurl}}/assets/posts/images/2023-11-26-Know your tools/selection_code_1.png">
+<img src="{{site.baseurl}}/assets/posts/images/2023-11-26-Know your tools/selection_code_1.png" alt="selection_code_1" width="300"/>
 </a>
 </div>
 <br>
@@ -453,7 +453,7 @@ That's almost twice as good as before. Can we improve even more? I guess yes.
 
 I won't dive into these improvements more (at least for now) -  10 seconds is good enough for testing purposes. The most interesting part of this trip I have covered; all others can be improved infinitely.
 
-> [source code]({{site.baseurl}}/assets/posts/images/2023-11-09-Know your tools/source/source.zip)
+> [source code]({{site.baseurl}}/assets/posts/images/2023-11-26-Know your tools/source/source.zip)
 
 ### visualize result
 
