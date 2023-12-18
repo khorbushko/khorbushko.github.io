@@ -15,8 +15,6 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 ## 2023
 
-**I'm at WAR...**
-
 <div style="text-align:center">
 
 <a href="https://www.amazon.in/SwiftUI-Animations-Tutorials-First-Motion/dp/1950325792"><img src="{{site.baseurl}}/assets/books/swiftUIAnimationsRW/cover.jpg" alt="SwiftUI Animations by Tutorials (First Edition): SwiftUI in Motion Paperback – Import, 22 November 2022
@@ -33,8 +31,6 @@ by Kodeco Team (Author), Marin Todorov (Author)
 </div>
 
 ## 2022
-
-**I'm at WAR...**
 
 <div style="text-align:center">
 
