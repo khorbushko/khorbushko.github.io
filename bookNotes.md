@@ -17,6 +17,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.kodeco.com/books/macos-by-tutorials/v1.0"><img src="{{site.baseurl}}/assets/books/macOSSwiftUIRW/cover.png" alt="macOS by Tutorials" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.in/SwiftUI-Animations-Tutorials-First-Motion/dp/1950325792"><img src="{{site.baseurl}}/assets/books/swiftUIAnimationsRW/cover.jpg" alt="SwiftUI Animations by Tutorials (First Edition): SwiftUI in Motion Paperback – Import, 22 November 2022
 by Irina Galata (Author), Bill Morefield (Author), & 1 More" style="width:110px;height:150px;padding:10px"></a>
 
@@ -27,6 +29,9 @@ by Kodeco Team (Author), Marin Todorov (Author)
 <a href="https://www.amazon.com.au/Introduction-Game-Systems-Design-Gazaway/dp/0137440847"><img src="{{site.baseurl}}/assets/books/gameDesign/cover.jpg" alt="Introduction to Game Systems Design" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Clean-Craftsmanship-Disciplines-Standards-Ethics/dp/013691571X"><img src="{{site.baseurl}}/assets/books/cleanCraftsmanship/cover.jpg" alt="Clean-Craftsmanship-Disciplines-Standards-Ethics" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.kodeco.com/books/macos-by-tutorials/v1.0"><img src="{{site.baseurl}}/assets/books/headFirstHTMLCSS/cover.jpg" alt="Head First HTML with CSS & XHTML Paperback – Dec 18 2005
+by Elisabeth Robson (Author), Eric Freeman (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 </div>
 
