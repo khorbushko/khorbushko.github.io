@@ -11,7 +11,14 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <br>
 
+## 2024
 
+<div style="text-align:center">
+
+<a href="https://www.amazon.com/Functional-Design-Principles-Patterns-Practices/dp/0138176396"><img src="{{site.baseurl}}/assets/books/functionalDesign/cover.jpg" alt="Functional Design: Principles, Patterns, and Practices (Robert C. Martin Series) 1st Edition by Robert Martin (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+
+</div>
 
 ## 2023
 
