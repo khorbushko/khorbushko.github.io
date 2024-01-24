@@ -18,6 +18,12 @@ I like to solve some interesting task - the one of the last one has no practical
 
 Toolset is very important - u can be a master within some tools, but u may never do some stuff without a proper tool. One of them - an algorithm. There are a lot of articles, books, and other stuff that can describe them.
 
+Articles in this series:
+
+* Know your tools
+* [Know your tools - part 2]({% post_url 2024-01-24-Know your tools - part 2 %})
+
+
 ### The Problem
 
 Some time ago, I bought a little card game for my kids. The idea is to travel across the country and visit all the cities on the cards you have.
