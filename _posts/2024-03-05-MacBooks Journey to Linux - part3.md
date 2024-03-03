@@ -1,7 +1,7 @@
 ---
 layout: post
 comments: true
-title: "MacBook's Journey to Linux - Part 3: my little fairies"
+title: "MacBook's Journey to Linux - Part 3: My little fairies"
 categories: article
 tags: [linux, Debian, terminal]
 excerpt_separator: <!--more-->
