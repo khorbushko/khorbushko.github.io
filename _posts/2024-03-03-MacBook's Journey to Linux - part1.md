@@ -301,7 +301,7 @@ And the loaded Debian:
 
 Of course, as I expect, some hardware is not working. The problem list contains the following items:
 
-- wifi 
+- [wifi]({% post_url 2024-03-04-MacBooks Journey to Linux - part2 %})
 - audio
 - video
 

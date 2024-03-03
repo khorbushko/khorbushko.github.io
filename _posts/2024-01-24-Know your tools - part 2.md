@@ -21,7 +21,7 @@ In this part I just want to cover the idea of visualization for the process.
 Articles in this series:
 
 * [Know your tools]({% post_url 2023-11-26-Know your tools %})
-* [Know your tools - part 2](% post_url %)
+* Know your tools - part 2
 
 ### The problem
 
