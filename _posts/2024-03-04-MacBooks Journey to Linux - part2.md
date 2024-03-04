@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "MacBook's Journey to Linux - Part 2: Bring the light!"
 categories: article
-tags: [linux, Debian, wifi]
+tags: [linux, Debian, wifi, driver]
 excerpt_separator: <!--more-->
 comments_id: 94
 
