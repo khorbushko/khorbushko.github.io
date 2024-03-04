@@ -1,7 +1,7 @@
 title: kyryl horbushko
 author:
   name: khorbushko
-  email: kirill.ge@gmail.com
+  email: khorbushko@gmail.com
 logo: /assets/favicon.png
 description: >
   blog about diferent aspects of programming,
@@ -15,7 +15,7 @@ minima:
   date_format: "%b %-d, %Y"
 
   social_links:
-    email: kirill.ge@gmail.com
+    email: khorbushko@gmail.com
     github: khorbushko
     stackoverflow: "2012219"
     linkedin: "kyryl-horbushko-67936bb5"
