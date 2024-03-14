@@ -18,6 +18,13 @@ In [previous post]({% post_url 2024-03-03-MacBook's Journey to Linux - part1 %})
 
 > This is just a note, mainly for me, that describes how to fix wifi on Debian with MacBook hardware
 
+Related articles:
+
+- [MacBook's Journey to Linux - Part 1: Hello world!]({% post_url 2024-03-03-MacBook's Journey to Linux - part1 %})
+- MacBook's Journey to Linux - Part 2: Bring the light!
+- [MacBook's Journey to Linux - Part 3: My little fairies]({% post_url 2024-03-05-MacBooks Journey to Linux - part3 %})
+- [MacBook's Journey to Linux - Part 4: Speak to me.]({% post_url 2024-03-14-MacBook's Journey to Linux - part 4 %})
+
 ## Problem
 
 The problem is clear - wifi can discover part(!) of networks (only 2.4GHz), but cannot connect to them.

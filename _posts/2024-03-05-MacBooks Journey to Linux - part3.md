@@ -18,6 +18,13 @@ Configuration of the system requires a lot of actions and tasks. Without a termi
 
 Here, I just want to note a list of very useful commands, that can be used by everyone. Part of them are available on Mac, but some - are only for Linux.
 
+Related articles:
+
+- [MacBook's Journey to Linux - Part 1: Hello world!]({% post_url 2024-03-03-MacBook's Journey to Linux - part1 %})
+- [MacBook's Journey to Linux - Part 2: Bring the light!]({% post_url 2024-03-04-MacBooks Journey to Linux - part2 %})
+- MacBook's Journey to Linux - Part 3: My little fairies
+- [MacBook's Journey to Linux - Part 4: Speak to me.]({% post_url 2024-03-14-MacBook's Journey to Linux - part 4 %})
+
 ## My little fairies
 
 Below I noted just the most used commands by myself. 

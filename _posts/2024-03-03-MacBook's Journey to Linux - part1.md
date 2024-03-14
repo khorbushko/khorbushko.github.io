@@ -19,6 +19,14 @@ Recently I faced a task, that required me usage of Linux. I'm not a very experie
 I have only my old MacBookPro14,3 that can be used for installation and running Linux. Due to the task, the preferred distributive of Linux is Debian.
 As a result, I decided to note every step I took, to make this happen.
 
+Related articles:
+
+- MacBook's Journey to Linux - Part 1: Hello world!
+- [MacBook's Journey to Linux - Part 2: Bring the light!]({% post_url 2024-03-04-MacBooks Journey to Linux - part2 %})
+- [MacBook's Journey to Linux - Part 3: My little fairies]({% post_url 2024-03-05-MacBooks Journey to Linux - part3 %})
+- [MacBook's Journey to Linux - Part 4: Speak to me.]({% post_url 2024-03-14-MacBook's Journey to Linux - part 4 %})
+
+
 ## Installation of a second OS to MacBook
 
 As I mentioned above, I have only an old Macbook, that can be used for this. At the same moment I use that PC, so some files and other stuff are present there. So the only option for me was to install Linux on the same machine.
@@ -302,7 +310,7 @@ And the loaded Debian:
 Of course, as I expect, some hardware is not working. The problem list contains the following items:
 
 - [wifi]({% post_url 2024-03-04-MacBooks Journey to Linux - part2 %})
-- audio
+- [audio]({% post_url 2024-03-14-MacBook's Journey to Linux - part 4 %})
 - video
 
 In the next articles, I will cover how to fix these problems to make u'r Debian shine.
