@@ -15,6 +15,10 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://learning.oreilly.com/library/view/beaglebone-robotic-projects/9781788293136/"><img src="{{site.baseurl}}/assets/books/bbbLearnrobotic/cover.jpeg" alt="BeagleBone Robotic Projects - Second Edition Write the  first review By Dr. Richard Grimmett" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com/Digital-Marketing-Strategy-Integrated-Approach/dp/1398605972"><img src="{{site.baseurl}}/assets/books/dms/cover.jpg" alt="Digital Marketing Strategy: An Integrated Approach to Online Marketing 3rd Edition by Simon Kingsnorth (Author)" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/Functional-Design-Principles-Patterns-Practices/dp/0138176396"><img src="{{site.baseurl}}/assets/books/functionalDesign/cover.jpg" alt="Functional Design: Principles, Patterns, and Practices (Robert C. Martin Series) 1st Edition by Robert Martin (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 
