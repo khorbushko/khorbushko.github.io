@@ -19,6 +19,9 @@ To utilize such a possibility u need to set up a proper environment and IDE that
 
 In this article, I would like to cover the process of configuring Eclipse for [cross-compile](https://www.gnu.org/software/automake/manual/html_node/Cross_002dCompilation.html) on Beaglebone Blue (BBB).
 
+- [BeagleBone® Blue - initial config via serial port]({% post_url 2024-03-12-Beaglebone Blue - initial config via serial port %})
+- Beaglebone® Blue - environment setup
+
 ## Toolchain
 
 I have some experience in work related to cross-compile environments - some time ago I was working with the [open-wrt](https://openwrt.org) platform. This is also a great platform with wide possibilities. The only moment - u need to spend some time correctly configuring the environment. Without some hints sometimes this can be a bit tricky.
