@@ -25,6 +25,7 @@ Related articles:
 - Beaglebone® Blue - environment setup
 - [BeagleBone® Blue - remote debug]({% post_url 2024-03-16-Beaglebone Blue - remote debug %})
 - [BeagleBone® Blue - debug remote app with root]({% post_url 2024-03-17-Beaglebone Blue - debug remote app with root %})
+- [BeagleBone® Blue - duplicate & distribute]({% post_url 2024-03-18-Beaglebone Blue - duplicate and distribute %})
 
 
 ## Toolchain
