@@ -5,7 +5,7 @@ title: "BeagleBone® Blue - remote debug"
 categories: article
 tags: [linux, ssh, ED25519, Eclipse, remote-debug, BeagleBone® Blue, cross-compile]
 excerpt_separator: <!--more-->
-comments_id: 100
+comments_id: 99
 
 author:
 - kyryl horbushko

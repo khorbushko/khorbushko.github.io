@@ -5,7 +5,7 @@ title: "BeagleBone® Blue - initial config via serial port"
 categories: article
 tags: [linux, Debian, BeagleBone® Blue]
 excerpt_separator: <!--more-->
-comments_id: 99
+comments_id: 100
 
 author:
 - kyryl horbushko
