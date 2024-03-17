@@ -26,7 +26,7 @@ Related articles:
 - [BeagleBone® Blue - initial config via serial port]({% post_url 2024-03-12-Beaglebone Blue - initial config via serial port %})
 - [Beaglebone® Blue - environment setup]({% post_url 2024-03-15-Beaglebone Blue - environment setup %})
 - BeagleBone® Blue - remote debug
-- [BeagleBone® Blue - debug remote app with root]({% post_url 2024-03-16-Beaglebone Blue - debug remote app with root %})
+- [BeagleBone® Blue - debug remote app with root]({% post_url 2024-03-17-Beaglebone Blue - debug remote app with root %})
 
 ## gdbserver
 
