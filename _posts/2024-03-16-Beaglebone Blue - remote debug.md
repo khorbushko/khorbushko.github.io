@@ -26,6 +26,7 @@ Related articles:
 - [BeagleBone® Blue - initial config via serial port]({% post_url 2024-03-12-Beaglebone Blue - initial config via serial port %})
 - [Beaglebone® Blue - environment setup]({% post_url 2024-03-15-Beaglebone Blue - environment setup %})
 - BeagleBone® Blue - remote debug
+- [BeagleBone® Blue - debug remote app with root]({% post_url 2024-03-16-Beaglebone Blue - debug remote app with root %})
 
 ## gdbserver
 
@@ -66,14 +67,14 @@ We also can use some nice [script](https://github.com/yusuphwickama/wickerscript
 Unfortunately - this script does not support downloading for the different arch, we can either use it for finding references or apply a few changes and use it.
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/pckgdwnld.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/pckgdwnld.png" alt="pckgdwnld.png" width="500"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/pckgdwnld.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/pckgdwnld.png" alt="pckgdwnld.png" width="500"/>
 </a>
 </div>
 <br>
 <br>
 
-> [here predownloaded]({% link assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/gdbserver_armhf debian.zip %}) set of *.deb needed for gdbserver_armhf debian config.
+> [here predownloaded]({% link assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/gdbserver_armhf debian.zip %}) set of *.deb needed for gdbserver_armhf debian config.
 
 Now, just install all packages on the board
 
@@ -83,8 +84,8 @@ sudo dpkg -i *.deb
 > `-i` means install
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/install gdbserver manually.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/install gdbserver manually.png" alt="install gdbserver manually" width="500"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/install gdbserver manually.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/install gdbserver manually.png" alt="install gdbserver manually" width="500"/>
 </a>
 </div>
 <br>
@@ -93,8 +94,8 @@ sudo dpkg -i *.deb
 if everything is done correctly, u can now check the gdbserver
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/check.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/check.png" alt="check" width="500"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/check.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/check.png" alt="check" width="500"/>
 </a>
 </div>
 <br>
@@ -116,8 +117,8 @@ In the last post I covered how to create and configure project [`helloWorldonBBB
 Now we have our toolchain configured and ready:
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/toolchain.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/toolchain.png" alt="toolchain" width="500"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/toolchain.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/toolchain.png" alt="toolchain" width="500"/>
 </a>
 </div>
 <br>
@@ -137,8 +138,8 @@ sudo passwd debugger
 Now it's time to create a new debug target. To do so, on the Eclipse Run menu, select **Run Configurations** -> **C/C++ Remote Application**, and choose **New launch configuration** at the top left corner.
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/new run config.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/new run config.png" alt="new run config" width="500"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/new run config.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/new run config.png" alt="new run config" width="500"/>
 </a>
 </div>
 <br>
@@ -147,8 +148,8 @@ Now it's time to create a new debug target. To do so, on the Eclipse Run menu, s
 Now, we should configure our target, by specifying a project, application, and absolute path to the target on the board (where our binary will be placed):
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/remote debug target.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/remote debug target.png" alt="remote debug target" width="500"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/remote debug target.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/remote debug target.png" alt="remote debug target" width="500"/>
 </a>
 </div>
 <br>
@@ -163,8 +164,8 @@ chmod +x /home/debugger/install/testBuild/helloWorldonBBB
 We also should update our debugger config - so we become able to correctly understand symbols received from binary:
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/remote debug target debugger.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/remote debug target debugger.png" alt="remote debug target debugger" width="500"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/remote debug target debugger.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/remote debug target debugger.png" alt="remote debug target debugger" width="500"/>
 </a>
 </div>
 <br>
@@ -183,8 +184,8 @@ Last, but not least stuff - we should create a connection, a way how the eclipse
 Select **New** near **Connection**, choose type **SSH**, and enter the address and the port, as well as the Hostname. Select **Public key-based authentication** and click on **Keys are set at Network Connections, SSH2** to specify the previously configured SSH key. finally press **Finish**.
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/connection.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/connection.png" alt="connection" width="400"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/connection.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/connection.png" alt="connection" width="400"/>
 </a>
 </div>
 <br>
@@ -193,16 +194,16 @@ Select **New** near **Connection**, choose type **SSH**, and enter the address a
 U now should be able to press **Browse** - and navigate through the file system on the remote device.
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/hello from BBB.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/hello from BBB.png" alt="browse files" width="500"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/hello from BBB.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/hello from BBB.png" alt="browse files" width="500"/>
 </a>
 </div>
 <br>
 <br>
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/browse files.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/browse files.png" alt="browse files" width="500"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/browse files.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/browse files.png" alt="browse files" width="500"/>
 </a>
 </div>
 <br>
@@ -211,8 +212,8 @@ U now should be able to press **Browse** - and navigate through the file system 
 U may also include some arguments that will be run within your app, for example `--verbose`. Off cause u need to implement this on your own in the app u develop.
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/arguments.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/arguments.png" alt="arguments" width="500"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/arguments.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/arguments.png" alt="arguments" width="500"/>
 </a>
 </div>
 <br>
@@ -221,16 +222,16 @@ U may also include some arguments that will be run within your app, for example 
 And the last thing - let's add [launch target](https://wiki.eclipse.org/CDT/LaunchBar#Launch_Target) - a machine that the launch will run on. On the toolbar select **New Launch Target** -> Select the type of target to create as **GDB Remote TCP** -> **Next** -> **Enter the connection information for gdb remote connection**: hostname and a port -> **Finish**
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/launch target-1.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/launch target-1.png" alt="launch target" width="300"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/launch target-1.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/launch target-1.png" alt="launch target" width="300"/>
 </a>
 </div>
 <br>
 <br>
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/launch target-2.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/launch target-2.png" alt="launch target" width="300"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/launch target-2.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/launch target-2.png" alt="launch target" width="300"/>
 </a>
 </div>
 <br>
@@ -239,8 +240,8 @@ And the last thing - let's add [launch target](https://wiki.eclipse.org/CDT/Laun
 Now we are ready to run the app on a remote host in debug mode.
 
 <div style="text-align:center">
-<a href="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/debug.png">
-<img src="{{site.baseurl}}/assets/posts/images/2024-03-17-Beaglebone Blue - remote debug/debug.png" alt="debug" width="600"/>
+<a href="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/debug.png">
+<img src="{{site.baseurl}}/assets/posts/images/2024-03-16-Beaglebone Blue - remote debug/debug.png" alt="debug" width="600"/>
 </a>
 </div>
 <br>

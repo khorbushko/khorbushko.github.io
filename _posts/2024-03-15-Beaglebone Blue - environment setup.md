@@ -23,7 +23,9 @@ Related articles:
 
 - [BeagleBone® Blue - initial config via serial port]({% post_url 2024-03-12-Beaglebone Blue - initial config via serial port %})
 - Beaglebone® Blue - environment setup
-- [BeagleBone® Blue - remote debug]({% post_url 2024-03-17-Beaglebone Blue - remote debug %})
+- [BeagleBone® Blue - remote debug]({% post_url 2024-03-16-Beaglebone Blue - remote debug %})
+- [BeagleBone® Blue - debug remote app with root]({% post_url 2024-03-17-Beaglebone Blue - debug remote app with root %})
+
 
 ## Toolchain
 
@@ -300,3 +302,4 @@ This was a long setup, but we learned a lot. The next step is to prepare remote 
 - [Compiling and Deploying BeagleBone Black Kernel](https://embedjournal.com/kernel-compilation-beaglebone-black/)
 - [`update-alternatives`](https://www.baeldung.com/linux/update-alternatives-command)
 - [workaround for python2.6](https://ubuntuforums.org/showthread.php?t=2486174) 
+- [alternative config with rootfs](https://github.com/robamu-org/beaglebone-crosscompiling?tab=readme-ov-file#rootfs)
