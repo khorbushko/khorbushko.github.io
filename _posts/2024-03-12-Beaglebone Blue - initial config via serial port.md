@@ -28,6 +28,7 @@ Related articles:
 
 - BeagleBone® Blue - initial config via serial port
 - [Beaglebone® Blue - environment setup]({% post_url 2024-03-15-Beaglebone Blue - environment setup %})
+- [BeagleBone® Blue - remote debug]({% post_url 2024-03-17-Beaglebone Blue - remote debug %})
 
 
 ## First connection

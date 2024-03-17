@@ -13,14 +13,17 @@ author:
 - 🇺🇦 Ukraine 🇺🇦
 ---
 
-Recently I got a [Beaglebone Blue](https://www.beagleboard.org/boards/beaglebone-blue) board that uses Linux and provides a wide possibilities for u'r creativity. Using this board u can create a lot of stuff and cover wide areas - from home automation to production purposes.
+Recently I got a [Beaglebone® Blue](https://www.beagleboard.org/boards/beaglebone-blue) board that uses Linux and provides a wide possibilities for u'r creativity. Using this board u can create a lot of stuff and cover wide areas - from home automation to production purposes.
 
 To utilize such a possibility u need to set up a proper environment and IDE that improves u'r productivity. I choose [Eclipse](https://www.eclipse.org/downloads/) and [Linux](https://www.debian.org), thus first is one of the well-known IDEs for embedded development with great support for different tools and last is because of [librobotcontrol](https://github.com/beagleboard/librobotcontrol) library that is written for Linux only os.
 
 In this article, I would like to cover the process of configuring Eclipse for [cross-compile](https://www.gnu.org/software/automake/manual/html_node/Cross_002dCompilation.html) on Beaglebone Blue (BBB).
 
+Related articles:
+
 - [BeagleBone® Blue - initial config via serial port]({% post_url 2024-03-12-Beaglebone Blue - initial config via serial port %})
 - Beaglebone® Blue - environment setup
+- [BeagleBone® Blue - remote debug]({% post_url 2024-03-17-Beaglebone Blue - remote debug %})
 
 ## Toolchain
 
@@ -275,7 +278,7 @@ This was a long setup, but we learned a lot. The next step is to prepare remote 
 
 ## Resources
 
-- [Beaglebone Blue](https://www.beagleboard.org/boards/beaglebone-blue) 
+- [Beaglebone® Blue](https://www.beagleboard.org/boards/beaglebone-blue) 
 - [Eclipse](https://www.eclipse.org/downloads/)
 - [Linux](https://www.debian.org)
 - [librobotcontrol](https://github.com/beagleboard/librobotcontrol)

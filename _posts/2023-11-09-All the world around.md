@@ -141,7 +141,7 @@ Result - a set of models that u need. I put everything into one package, so it b
 <br>
 <br>
 
-> source code for this package available [here]({{site.baseurl}}/assets/posts/images/2023-11-09-All the world around/source/GeoJSON.zip)
+> source code for this package available [here]({% link assets/posts/images/2023-11-09-All the world around/source/GeoJSON.zip %})
 
 #### Rendering data on screen
 
