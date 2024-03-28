@@ -18,7 +18,7 @@ Automation of each small amount of work that is repeatedly needed in your daily 
 
 As an example, I would like to describe the process of managing anthroponyms for Ukrainian names - quite a simple process, but it can require some ["monkey" actions](https://www.urbandictionary.com/define.php?term=Monkey%20job) each time u need this.
 
-## script
+## Script
 
 To solve this task, we need to know how to create anthroponyms correctly. Naturally, we, as native speakers of the Ukrainian language, easily do this, but actually [there are](https://udhtu.edu.ua/wp-content/uploads/2017/08/b7ae096b1e5cedc59c9371524703b474.pdf) a lot of rules for this action. To manage these rules we need some tool that can do such action (if there is no tool available we always can create one). Luckily for us, such a tool exists - [shevchenko.js](https://github.com/tooleks/shevchenko-js):
 
