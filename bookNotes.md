@@ -15,6 +15,12 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://alloytools.org/book.html"><img src="{{site.baseurl}}/assets/books/alloyBook/cover.png" alt="book on alloy" style="width:110px;height:150px;padding:10px"></a>
+
+
+<a href="https://www.amazon.co.uk/Digital-First-Customer-Experience-Strategies-Leading/dp/1398612669"><img src="{{site.baseurl}}/assets/books/dfce-sevenDesignStrategy/cover.png" alt="The Digital-First Customer Experience: Seven Design Strategies from the World’s Leading Brands Hardcover – 3 July 2023 by Joe Wheeler" style="width:110px;height:150px;padding:10px"></a>
+
+
 <a href="https://learning.oreilly.com/library/view/beaglebone-robotic-projects/9781788293136/"><img src="{{site.baseurl}}/assets/books/bbbLearnrobotic/cover.jpeg" alt="BeagleBone Robotic Projects - Second Edition Write the  first review By Dr. Richard Grimmett" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Digital-Marketing-Strategy-Integrated-Approach/dp/1398605972"><img src="{{site.baseurl}}/assets/books/dms/cover.jpg" alt="Digital Marketing Strategy: An Integrated Approach to Online Marketing 3rd Edition by Simon Kingsnorth (Author)" style="width:110px;height:150px;padding:10px"></a>
