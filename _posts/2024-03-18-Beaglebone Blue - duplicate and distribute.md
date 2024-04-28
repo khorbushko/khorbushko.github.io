@@ -5,7 +5,7 @@ title: "BeagleBone® Blue - duplicate & distribute"
 categories: article
 tags: [BeagleBone® Blue, distribution]
 excerpt_separator: <!--more-->
-comments_id: 101
+comments_id: 105
 
 author:
 - kyryl horbushko
