@@ -15,6 +15,12 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+
+<a href="https://www.amazon.com/Dart-Apprentice-Object-Oriented-Programming-Concurrency/dp/1950325784"><img src="{{site.baseurl}}/assets/books/dartApprenticeRW/cover.jpg" alt="Dart Apprentice: Beyond the Basics (First Edition): Object-Oriented Programming, Concurrency & More by Kodeco Tutorial Team (Author), Jonathan Sande (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+
+<a href="https://www.amazon.com/Mastering-BeagleBone-Robotics-Richard-Grimmett/dp/1783988908"><img src="{{site.baseurl}}/assets/books/bbb/cover.jpg" alt="Mastering Beaglebone Robotics: Master the Power of the Beaglebone Black to Maximize Your Robot-building Skills and Create Awesome Projects Paperback – Illustrated, December 26, 2014 by Richard Grimmett (Author)" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://alloytools.org/book.html"><img src="{{site.baseurl}}/assets/books/alloyBook/cover.png" alt="book on alloy" style="width:110px;height:150px;padding:10px"></a>
 
 
@@ -27,6 +33,7 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <a href="https://www.amazon.com/Functional-Design-Principles-Patterns-Practices/dp/0138176396"><img src="{{site.baseurl}}/assets/books/functionalDesign/cover.jpg" alt="Functional Design: Principles, Patterns, and Practices (Robert C. Martin Series) 1st Edition by Robert Martin (Author)" style="width:110px;height:150px;padding:10px"></a>
 
+<a href="https://www.amazon.com/TCP-IP-Dummies-Candace-Leiden/dp/0470450606"><img src="{{site.baseurl}}/assets/books/tcpip/cover.jpg" alt="TCP / IP for Dummies 6th ed. Edition by Candace Leiden" style="width:110px;height:150px;padding:10px"></a>
 
 </div>
 
