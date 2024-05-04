@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "Another language, same approach"
 categories: article
-tags: [socket, dart, networking, IO]
+tags: [socket, dart, networking, IO, flutter]
 excerpt_separator: <!--more-->
 comments_id: 104
 
