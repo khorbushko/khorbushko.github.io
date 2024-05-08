@@ -15,6 +15,9 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.amazon.com/Building-Cross-Platform-Apps-Flutter-Dart/dp/9389423570"><img src="{{site.baseurl}}/assets/books/flutterCrossPlatform/cover.jpg" alt="Building Cross-Platform Apps with Flutter and Dart: Build scalable apps for Android, iOS, and web from a single codebase (English Edition)" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com/Dart-Apprentice-Fundamentals-Cross-Platform-Programming/dp/1950325776"><img src="{{site.baseurl}}/assets/books/dartApprF/cover.jpg" alt="Dart Apprentice: Fundamentals (First Edition): Modern Cross-Platform Programming With Dart" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Dart-Apprentice-Object-Oriented-Programming-Concurrency/dp/1950325784"><img src="{{site.baseurl}}/assets/books/dartApprenticeRW/cover.jpg" alt="Dart Apprentice: Beyond the Basics (First Edition): Object-Oriented Programming, Concurrency & More by Kodeco Tutorial Team (Author), Jonathan Sande (Author)" style="width:110px;height:150px;padding:10px"></a>
 
