@@ -6,14 +6,17 @@ permalink: /bookNotes/
 
 I would like to keep here small notes/quotes from books, that may be usefull or just interesting.
 
-> I tried to remember and sort all books that I read in chronological order.
-> When click on the book's image u may found interesting notes for some of them.
+> I tried to remember and sort all books that I read that is releated somehow to programming in chronological order.
+> 
+> When click on some of the book's image u may found interesting notes for some of them.
 
 <br>
 
 ## 2024
 
 <div style="text-align:center">
+
+<a href="https://www.amazon.com/Data-Structures-Algorithms-Dart-First/dp/1950325571"><img src="{{site.baseurl}}/assets/books/dataStructFlutterRW/cover.jpg" alt="Data Structures & Algorithms in Dart (First Edition): Implementing Practical Data Structures in Dart" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Flutter-Apprentice-Third-Learn-Cross-Platform/dp/1950325741"><img src="{{site.baseurl}}/assets/books/flutterApprenticeRW/cover.jpg" alt="Flutter Apprentice (Third Edition): Learn to Build Cross-Platform Apps" style="width:110px;height:150px;padding:10px"></a>
 
@@ -23,18 +26,19 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <a href="https://www.amazon.com/Dart-Apprentice-Object-Oriented-Programming-Concurrency/dp/1950325784"><img src="{{site.baseurl}}/assets/books/dartApprenticeRW/cover.jpg" alt="Dart Apprentice: Beyond the Basics (First Edition): Object-Oriented Programming, Concurrency & More by Kodeco Tutorial Team (Author), Jonathan Sande (Author)" style="width:110px;height:150px;padding:10px"></a>
 
-
-<a href="https://www.amazon.com/Mastering-BeagleBone-Robotics-Richard-Grimmett/dp/1783988908"><img src="{{site.baseurl}}/assets/books/bbb/cover.jpg" alt="Mastering Beaglebone Robotics: Master the Power of the Beaglebone Black to Maximize Your Robot-building Skills and Create Awesome Projects Paperback – Illustrated, December 26, 2014 by Richard Grimmett (Author)" style="width:110px;height:150px;padding:10px"></a>
-
-<a href="https://alloytools.org/book.html"><img src="{{site.baseurl}}/assets/books/alloyBook/cover.png" alt="book on alloy" style="width:110px;height:150px;padding:10px"></a>
-
+<a href="https://www.amazon.com/Strategy-Digital-Age-Mastering-Transformation/dp/1503635198"><img src="{{site.baseurl}}/assets/books/strategyDigital/cover.jpg" alt="Strategy in the Digital Age: Mastering Digital Transformation 1st Edition by Michael Lenox (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.co.uk/Digital-First-Customer-Experience-Strategies-Leading/dp/1398612669"><img src="{{site.baseurl}}/assets/books/dfce-sevenDesignStrategy/cover.png" alt="The Digital-First Customer Experience: Seven Design Strategies from the World’s Leading Brands Hardcover – 3 July 2023 by Joe Wheeler" style="width:110px;height:150px;padding:10px"></a>
 
 
+<a href="https://www.amazon.com/Digital-Marketing-Strategy-Integrated-Approach/dp/1398605972"><img src="{{site.baseurl}}/assets/books/dms/cover.jpg" alt="Digital Marketing Strategy: An Integrated Approach to Online Marketing 3rd Edition by Simon Kingsnorth (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+
+<a href="https://www.amazon.com/Mastering-BeagleBone-Robotics-Richard-Grimmett/dp/1783988908"><img src="{{site.baseurl}}/assets/books/bbb/cover.jpg" alt="Mastering Beaglebone Robotics: Master the Power of the Beaglebone Black to Maximize Your Robot-building Skills and Create Awesome Projects Paperback – Illustrated, December 26, 2014 by Richard Grimmett (Author)" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://learning.oreilly.com/library/view/beaglebone-robotic-projects/9781788293136/"><img src="{{site.baseurl}}/assets/books/bbbLearnrobotic/cover.jpeg" alt="BeagleBone Robotic Projects - Second Edition Write the  first review By Dr. Richard Grimmett" style="width:110px;height:150px;padding:10px"></a>
 
-<a href="https://www.amazon.com/Digital-Marketing-Strategy-Integrated-Approach/dp/1398605972"><img src="{{site.baseurl}}/assets/books/dms/cover.jpg" alt="Digital Marketing Strategy: An Integrated Approach to Online Marketing 3rd Edition by Simon Kingsnorth (Author)" style="width:110px;height:150px;padding:10px"></a>
+<a href="https://alloytools.org/book.html"><img src="{{site.baseurl}}/assets/books/alloyBook/cover.png" alt="book on alloy" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Functional-Design-Principles-Patterns-Practices/dp/0138176396"><img src="{{site.baseurl}}/assets/books/functionalDesign/cover.jpg" alt="Functional Design: Principles, Patterns, and Practices (Robert C. Martin Series) 1st Edition by Robert Martin (Author)" style="width:110px;height:150px;padding:10px"></a>
 
@@ -55,12 +59,13 @@ by Irina Galata (Author), Bill Morefield (Author), & 1 More" style="width:110px;
 by Kodeco Team (Author), Marin Todorov (Author)
 " style="width:110px;height:150px;padding:10px"></a>
 
-<a href="https://www.amazon.com.au/Introduction-Game-Systems-Design-Gazaway/dp/0137440847"><img src="{{site.baseurl}}/assets/books/gameDesign/cover.jpg" alt="Introduction to Game Systems Design" style="width:110px;height:150px;padding:10px"></a>
-
 <a href="https://www.amazon.com/Clean-Craftsmanship-Disciplines-Standards-Ethics/dp/013691571X"><img src="{{site.baseurl}}/assets/books/cleanCraftsmanship/cover.jpg" alt="Clean-Craftsmanship-Disciplines-Standards-Ethics" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.kodeco.com/books/macos-by-tutorials/v1.0"><img src="{{site.baseurl}}/assets/books/headFirstHTMLCSS/cover.jpg" alt="Head First HTML with CSS & XHTML Paperback – Dec 18 2005
 by Elisabeth Robson (Author), Eric Freeman (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+
+<a href="https://www.amazon.com.au/Introduction-Game-Systems-Design-Gazaway/dp/0137440847"><img src="{{site.baseurl}}/assets/books/gameDesign/cover.jpg" alt="Introduction to Game Systems Design" style="width:110px;height:150px;padding:10px"></a>
 
 </div>
 
