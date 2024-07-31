@@ -16,6 +16,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.kodeco.com/books/real-world-flutter-by-tutorials/v1.0"><img src="{{site.baseurl}}/assets/books/realWorldFlutterRW/cover.png" alt="Real-World Flutter by Tutorials" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/Data-Structures-Algorithms-Dart-First/dp/1950325571"><img src="{{site.baseurl}}/assets/books/dataStructFlutterRW/cover.jpg" alt="Data Structures & Algorithms in Dart (First Edition): Implementing Practical Data Structures in Dart" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Flutter-Apprentice-Third-Learn-Cross-Platform/dp/1950325741"><img src="{{site.baseurl}}/assets/books/flutterApprenticeRW/cover.jpg" alt="Flutter Apprentice (Third Edition): Learn to Build Cross-Platform Apps" style="width:110px;height:150px;padding:10px"></a>
