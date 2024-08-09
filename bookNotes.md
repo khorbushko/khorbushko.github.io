@@ -16,6 +16,10 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.amazon.com/Flutter-Jobseekers-cross-platform-development-English/dp/9355512619"><img src="{{site.baseurl}}/assets/books/fluuterJobSeeker/cover.jpg" alt="Flutter for Jobseekers: Learn Flutter and take your cross-platform app development skills to the next level (English Edition) by Hans Kokx (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com/Building-Cross-Platform-Apps-Flutter-Dart/dp/9389423570"><img src="{{site.baseurl}}/assets/books/flutterCrossPlatform/cover.jpg" alt="Building Cross-Platform Apps with Flutter and Dart: Build scalable apps for Android, iOS, and web from a single codebase (English Edition)" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/Flutter-Cookbook-step-step-professional-grade/dp/1803245433"><img src="{{site.baseurl}}/assets/books/flutterCookbook/cover.jpg" alt="Flutter Cookbook - Second Edition: 100+ real-world recipes to build cross-platform applications with Flutter 3.x powered by Dart 3 (alpha) 2nd ed. Edition by Simone Alessandria (Author)s" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.kodeco.com/books/real-world-flutter-by-tutorials/v1.0"><img src="{{site.baseurl}}/assets/books/realWorldFlutterRW/cover.png" alt="Real-World Flutter by Tutorials" style="width:110px;height:150px;padding:10px"></a>
@@ -23,8 +27,6 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 <a href="https://www.amazon.com/Data-Structures-Algorithms-Dart-First/dp/1950325571"><img src="{{site.baseurl}}/assets/books/dataStructFlutterRW/cover.jpg" alt="Data Structures & Algorithms in Dart (First Edition): Implementing Practical Data Structures in Dart" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Flutter-Apprentice-Third-Learn-Cross-Platform/dp/1950325741"><img src="{{site.baseurl}}/assets/books/flutterApprenticeRW/cover.jpg" alt="Flutter Apprentice (Third Edition): Learn to Build Cross-Platform Apps" style="width:110px;height:150px;padding:10px"></a>
-
-<a href="https://www.amazon.com/Building-Cross-Platform-Apps-Flutter-Dart/dp/9389423570"><img src="{{site.baseurl}}/assets/books/flutterCrossPlatform/cover.jpg" alt="Building Cross-Platform Apps with Flutter and Dart: Build scalable apps for Android, iOS, and web from a single codebase (English Edition)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Dart-Apprentice-Fundamentals-Cross-Platform-Programming/dp/1950325776"><img src="{{site.baseurl}}/assets/books/dartApprF/cover.jpg" alt="Dart Apprentice: Fundamentals (First Edition): Modern Cross-Platform Programming With Dart" style="width:110px;height:150px;padding:10px"></a>
 
