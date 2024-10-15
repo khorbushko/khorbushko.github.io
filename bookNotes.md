@@ -16,7 +16,12 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
-<a href="https://www.amazon.com/Flutter-Jobseekers-cross-platform-development-English/dp/9355512619"><img src="{{site.baseurl}}/assets/books/fluuterJobSeeker/cover.jpg" alt="Flutter for Jobseekers: Learn Flutter and take your cross-platform app development skills to the next level (English Edition) by Hans Kokx (Author)" style="width:110px;height:150px;padding:10px"></a>
+<a href="https://www.amazon.com/Stealing-Fire-Maverick-Scientists-Revolutionizing/dp/0062429655"><img src="{{site.baseurl}}/assets/books/Kotler-StealingFire/cover.jpg" alt="C++20 - The Complete Guide by Nicolai M. Josuttis" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com/AI-Savvy-Leader-Nine-Ways-Control/dp/B0CW7FVQYH"><img src="{{site.baseurl}}/assets/books/Cremer-aiSavvyLeader/cover.jpg" alt="The AI-Savvy Leader: Nine Ways to Take Back Control and Make AI Work Audio CD – Unabridged, June 18, 2024
+by David De Cremer (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://cppstd20.com"><img src="{{site.baseurl}}/assets/books/Josuttis-c++20/cover.png" alt="C++20 - The Complete Guide by Nicolai M. Josuttis" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Building-Cross-Platform-Apps-Flutter-Dart/dp/9389423570"><img src="{{site.baseurl}}/assets/books/flutterCrossPlatform/cover.jpg" alt="Building Cross-Platform Apps with Flutter and Dart: Build scalable apps for Android, iOS, and web from a single codebase (English Edition)" style="width:110px;height:150px;padding:10px"></a>
 
@@ -47,6 +52,9 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 <a href="https://alloytools.org/book.html"><img src="{{site.baseurl}}/assets/books/alloyBook/cover.png" alt="book on alloy" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Functional-Design-Principles-Patterns-Practices/dp/0138176396"><img src="{{site.baseurl}}/assets/books/functionalDesign/cover.jpg" alt="Functional Design: Principles, Patterns, and Practices (Robert C. Martin Series) 1st Edition by Robert Martin (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com/Everything-Computer-Science-Coding-Notebook/dp/1523502770"><img src="{{site.baseurl}}/assets/books/Smith-EverythingYouNeedToKnow/cover.jpg" alt="Everything You Need to Ace Computer Science and Coding in One Big Fat Notebook: The Complete Middle School Study Guide (Big Fat Notebooks) Paperback – Illustrated, April 14, 2020
+by Workman Publishing (Author), Grant Smith (Contributor)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/TCP-IP-Dummies-Candace-Leiden/dp/0470450606"><img src="{{site.baseurl}}/assets/books/tcpip/cover.jpg" alt="TCP / IP for Dummies 6th ed. Edition by Candace Leiden" style="width:110px;height:150px;padding:10px"></a>
 
