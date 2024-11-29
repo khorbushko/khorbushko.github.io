@@ -49,7 +49,7 @@ The `@preconcurrency` attribute can be applied to:
 
 
 
-#### **Example 1: Marking Types**
+#### Example 1: Marking Types
 
 Here’s how to mark a legacy class with `@preconcurrency` to suppress concurrency warnings:
 
@@ -75,7 +75,7 @@ This ensures the `LegacyAPIWrapper` can be used safely in concurrent contexts.
 
 
 
-#### **Example 2: Marking Protocol Conformances**
+#### Example 2: Marking Protocol Conformances
 
 Suppose a protocol predates Swift's concurrency model. You can use `@preconcurrency` to mark a conforming class as compatible.
 
@@ -103,11 +103,11 @@ Task {
 
 
 
-#### **Example 3: Combining `@MainActor` with `@preconcurrency`**
+#### Example 3: Combining `@MainActor` with `@preconcurrency`
 
 Using `@MainActor` ensures a method or class operates on the main thread. When combined with `@preconcurrency`, you can suppress warnings for legacy APIs like `UIDevice`.
 
-##### **Scenario: Updating UI Based on Device Orientation**
+##### Scenario: Updating UI Based on Device Orientation
 
 ```swift
 import UIKit
@@ -136,7 +136,8 @@ Task { @MainActor in
 }
 ```
 
-**Why `@preconcurrency`?**  
+Why `@preconcurrency`?
+
 `UIDevice` predates Swift's concurrency model and is not `Sendable`. Adding `@preconcurrency` ensures safe usage of `UIDevice` within an `@MainActor` context.
 
 
