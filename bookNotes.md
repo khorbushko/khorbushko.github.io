@@ -16,6 +16,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.lua.org/pil/"><img src="{{site.baseurl}}/assets/books/Ierusalimschy-lua/cover.jpg" alt="Programming in Lua" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/Stealing-Fire-Maverick-Scientists-Revolutionizing/dp/0062429655"><img src="{{site.baseurl}}/assets/books/Kotler-StealingFire/cover.jpg" alt="C++20 - The Complete Guide by Nicolai M. Josuttis" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/AI-Savvy-Leader-Nine-Ways-Control/dp/B0CW7FVQYH"><img src="{{site.baseurl}}/assets/books/Cremer-aiSavvyLeader/cover.jpg" alt="The AI-Savvy Leader: Nine Ways to Take Back Control and Make AI Work Audio CD – Unabridged, June 18, 2024
