@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "any and Any"
 categories: article
-tags: [swift, any, Any]
+tags: [swift, any, Any, keywords]
 excerpt_separator: <!--more-->
 comments_id: 111
 
@@ -17,6 +17,11 @@ Swift is a powerful, expressive programming language developed by Apple for buil
 <!--more-->
 
 However, Swift also provides mechanisms to work with types in a more flexible and dynamic way, which is where the keywords `any` and `Any` come into play. These keywords are important for handling situations where the exact type of an object is unknown or when you're dealing with multiple types under a common abstraction.
+
+Related posts:
+
+- any and Any
+- [any and some]({% post_url 2024-12-06-any and some %})
 
 ## Historical Context and Evolution in Swift
 
