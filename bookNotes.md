@@ -18,6 +18,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <a href="https://www.lua.org/pil/"><img src="{{site.baseurl}}/assets/books/Ierusalimschy-lua/cover.jpg" alt="Programming in Lua" style="width:110px;height:150px;padding:10px"></a>
 
+<a href="https://www.amazon.com/Digital-Mindset-Really-Thrive-Algorithms/dp/1647820103"><img src="{{site.baseurl}}/assets/books/digital-mindset-leonardi/cover.jpg" alt="The Digital Mindset: What It Really Takes to Thrive in the Age of Data, Algorithms, and AI Hardcover – May 10, 2022 by Paul Leonardi (Author), Tsedal Neeley (Author)" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/Stealing-Fire-Maverick-Scientists-Revolutionizing/dp/0062429655"><img src="{{site.baseurl}}/assets/books/Kotler-StealingFire/cover.jpg" alt="C++20 - The Complete Guide by Nicolai M. Josuttis" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/AI-Savvy-Leader-Nine-Ways-Control/dp/B0CW7FVQYH"><img src="{{site.baseurl}}/assets/books/Cremer-aiSavvyLeader/cover.jpg" alt="The AI-Savvy Leader: Nine Ways to Take Back Control and Make AI Work Audio CD – Unabridged, June 18, 2024
@@ -59,6 +61,8 @@ by David De Cremer (Author)" style="width:110px;height:150px;padding:10px"></a>
 by Workman Publishing (Author), Grant Smith (Contributor)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/TCP-IP-Dummies-Candace-Leiden/dp/0470450606"><img src="{{site.baseurl}}/assets/books/tcpip/cover.jpg" alt="TCP / IP for Dummies 6th ed. Edition by Candace Leiden" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com/Elevate-SwiftUI-Skills-Building-Projects/dp/1803242078"><img src="{{site.baseurl}}/assets/books/elevate-swiftUI-hussain/cover.jpg" alt="Elevate SwiftUI Skills by Building Projects: Build four modern applications using Swift, Xcode 14, and SwiftUI for iPhone, iPad, Mac, and Apple Watch by Frahaan Hussain (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 </div>
 
