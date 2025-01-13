@@ -12,6 +12,14 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <br>
 
+## 2025
+
+<div style="text-align:center">
+
+<a href="https://www.amazon.com/Full-Stack-Development-Swift-Vapor/dp/9355518323"><img src="{{site.baseurl}}/assets/books/Dutt-FullStackiOSDev/cover.jpg" alt="Full Stack iOS Development with Swift and Vapor: Full stack iOS development made easy (English Edition) by Hem Dutt (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+</div>
+
 ## 2024
 
 <div style="text-align:center">
