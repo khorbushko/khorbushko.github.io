@@ -16,6 +16,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://wowprogramming.com"><img src="{{site.baseurl}}/assets/books/WOWLUA/cover.png" alt="World of Warcraft Programming" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://theswiftdev.gumroad.com/l/practical-server-side-swift"><img src="{{site.baseurl}}/assets/books/TibServerSide/cover.png" alt="Practical Server Side Swift" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Full-Stack-Development-Swift-Vapor/dp/9355518323"><img src="{{site.baseurl}}/assets/books/Dutt-FullStackiOSDev/cover.jpg" alt="Full Stack iOS Development with Swift and Vapor: Full stack iOS development made easy (English Edition) by Hem Dutt (Author)" style="width:110px;height:150px;padding:10px"></a>
