@@ -20,6 +20,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <a href="https://automatetheboringstuff.com"><img src="{{site.baseurl}}/assets/books/automatetheboringstuff/cover.webp" alt="Exploring Android" style="width:110px;height:150px;padding:10px"></a>
 
+<a href="https://www.amazon.com/Deep-Learning-Scratch-Building-Principles/dp/1492041416"><img src="{{site.baseurl}}/assets/books/DeepLearning_Scratch_SethWeidman/cover.jpg" alt="Deep Learning from Scratch: Building with Python from First Principles 1st Edition by Seth Weidman" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/Grokking-Deep-Learning-Andrew-Trask/dp/1617293709"><img src="{{site.baseurl}}/assets/books/grokkingDeepLearn/cover.jpg" alt="Grokking Deep Learning" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://wowprogramming.com"><img src="{{site.baseurl}}/assets/books/WOWLUA/cover.png" alt="World of Warcraft Programming" style="width:110px;height:150px;padding:10px"></a>
