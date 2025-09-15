@@ -30,6 +30,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <a href="https://www.amazon.com/Full-Stack-Development-Swift-Vapor/dp/9355518323"><img src="{{site.baseurl}}/assets/books/Dutt-FullStackiOSDev/cover.jpg" alt="Full Stack iOS Development with Swift and Vapor: Full stack iOS development made easy (English Edition) by Hem Dutt (Author)" style="width:110px;height:150px;padding:10px"></a>
 
+<a href="https://www.amazon.com/Automating-Workflows-GitHub-Actions-applications/dp/1800560400"><img src="{{site.baseurl}}/assets/books/githubAction/cover.jpg" alt="Automating Workflows with GitHub Actions: Automate software development workflows and seamlessly deploy your applications using GitHub Actions" style="width:110px;height:150px;padding:10px"></a>
+
 </div>
 
 ## 2024
