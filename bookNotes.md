@@ -32,6 +32,9 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <a href="https://www.amazon.com/Automating-Workflows-GitHub-Actions-applications/dp/1800560400"><img src="{{site.baseurl}}/assets/books/githubAction/cover.jpg" alt="Automating Workflows with GitHub Actions: Automate software development workflows and seamlessly deploy your applications using GitHub Actions" style="width:110px;height:150px;padding:10px"></a>
 
+<a href="https://www.amazon.co.uk/Bluetooth-Low-Energy-Technical-Internet/dp/1775128083"><img src="{{site.baseurl}}/assets/books/ble/cover.jpg" alt="Bluetooth Low Energy: A Technical Primer 
+by Tony Gaitatzis (Author), Andrew Ward (Editor), Linda Manning (Editor)" style="width:110px;height:150px;padding:10px"></a>
+
 </div>
 
 ## 2024
