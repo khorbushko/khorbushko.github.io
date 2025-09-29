@@ -16,6 +16,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://www.amazon.com/We-Programmers-Chronicle-Coders-Robert/dp/0135344263"><img src="{{site.baseurl}}/assets/books/martinWeProg/cover.jpg" alt="We, Programmers: A Chronicle of Coders from Ada to AI (Robert C. Martin Series)" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://commonsware.com/AndExplore"><img src="{{site.baseurl}}/assets/books/CW_ExploringAndroid/cover.png" alt="Exploring Android" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://automatetheboringstuff.com"><img src="{{site.baseurl}}/assets/books/automatetheboringstuff/cover.webp" alt="Exploring Android" style="width:110px;height:150px;padding:10px"></a>
@@ -286,6 +288,8 @@ By Prateek Prasad & Rajiv Patel" style="width:110px;height:150px;padding:10px"><
 <a href="https://www.amazon.com/Microsoft-Server-Fundamentals-Developer-Reference/dp/0735658145/ref=sr_1_5?crid=1Z3URN37DDNCN&dchild=1&keywords=tsql+fundamentals&qid=1608371041&sprefix=TSQl+fun,aps,260&sr=8-5"><img src="{{site.baseurl}}/assets/books/MicrosoftSQLServer2012/cover.jpg" alt="Microsoft SQL Server 2012 T-SQL Fundamentals (Developer Reference) by Itzik Ben-Gan  (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Hello-Android-Introducing-Development-Platform/dp/1680500376/ref=sr_1_3?dchild=1&keywords=hello+android&qid=1608393019&sr=8-3"><img src="{{site.baseurl}}/assets/books/helloAndroid/cover.jpeg" alt="Hello, Android: Introducing Google's Mobile Development Platform 4th Edition by Ed Burnette (Author)" style="width:110px;height:150px;padding:10px"></a>
+
+<a href="https://www.amazon.com/Turbo-Pascal-7-0-Walter-Savitch/dp/0805304185/ref=sr_1_2?crid=MSTXU29WMJ3&dib=eyJ2IjoiMSJ9.1Igm__ow07kf6rk3K5fe5aeX7ALl5T1mMQzlDcGh6IzJAODYC2ef301Db3Uaj9bQ1-NKGzma-AxkDU2TQcwyxAEvalZD7Svw5efuApzhagrT2EkyHvkKx22tJlAFtSPCES4K_2g26YP5k93u6dpedDPsCZUyTDgNi0aQP687eda3NtHFZ1msUy4ofWMnaZCpZgzfHlTwDpbWzVXTZhKVA8wYqKswwVdlcbtDc6cfdEc.P0oa6OhmD4Sbn7k5Dl-ckd7lFjupSKRWwL1ndvOAJQo&dib_tag=se&keywords=turbo+pascal+7.0&qid=1759168508&s=books&sprefix=turbo+pascal+7.0%2Cstripbooks-intl-ship%2C213&sr=1-2"><img src="{{site.baseurl}}/assets/books/tpascal/cover.jpg" alt="Hello, Android: Introducing Google's Mobile Development Platform 4th Edition by Ed Burnette (Author)" style="width:110px;height:150px;padding:10px"></a>
 
 <a href="https://www.amazon.com/Java-Complete-Reference-Herbert-Schildt/dp/0071808558/ref=sr_1_fkmr1_2?dchild=1&keywords=herbert+child+java+complete&qid=1608394000&sr=8-2-fkmr1"><img src="{{site.baseurl}}/assets/books/JavaTheCompleteReference/cover.jpeg" alt="Java: The Complete Reference, Ninth Edition 9th Edition by Herbert Schildt  (Author)" style="width:110px;height:150px;padding:10px"></a>
 
