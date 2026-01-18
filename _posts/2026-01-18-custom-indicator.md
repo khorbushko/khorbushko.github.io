@@ -104,7 +104,7 @@ struct StressModel: Hashable {
     }
 }
 
-{% highlight swift %}
+{% endhighlight %}
 
 > Real model can be a way more complex, but this is not important right now
 
