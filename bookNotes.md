@@ -16,6 +16,8 @@ I would like to keep here small notes/quotes from books, that may be usefull or 
 
 <div style="text-align:center">
 
+<a href="https://swift.org"><img src="{{site.baseurl}}/assets/books/swiftPL/cover.png" alt="The Swift Programming Language Apple Inc. Swift.org" style="width:110px;height:150px;padding:10px"></a>
+
 <a href="https://www.amazon.com/AI-Engineering-Building-Applications-Foundation/dp/1098166302"><img src="{{site.baseurl}}/assets/books/aiEnginnering/cover.jpg" alt="AI Engineering: Building Applications with Foundation Models 1st Edition by Chip Huyen" style="width:110px;height:150px;padding:10px"></a>
 
 </div>
