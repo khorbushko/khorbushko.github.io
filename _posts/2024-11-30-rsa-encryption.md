@@ -3,7 +3,7 @@ layout: post
 comments: true
 title: "RSA Encryption"
 categories: article
-tags: [swift, rca, encryption]
+tags: [swift, RSA, encryption]
 excerpt_separator: <!--more-->
 comments_id: 110
 
@@ -20,6 +20,7 @@ Recently, I encountered RSA encryption while working on a project and realized i
  
 RSA was introduced in 1977 by Ron Rivest, Adi Shamir, and Leonard Adleman at MIT. It was the first algorithm for public-key cryptography that could encrypt and digitally sign data. Its foundation lies in number theory, specifically the difficulty of factoring large composite numbers, making it a reliable choice for securing communications.
 
+[Simple RSA implementation]({% post_url 2026-04-24-rsa-deeper-view %})
 
 ## How it Works
 
