@@ -30,6 +30,16 @@ img {
 
 	<tr>
 		<td style="width:50%">
+			<a href="https://github.com/khorbushko/DevForge"><img src="{{site.baseurl}}/myApps/DevForge.png" alt="A collection of lightweight developer utilities" style="width:300px;height:180px;padding:10px"></a>
+		</td>
+			
+		<td>
+			A collection of lightweight developer utilities. (In Progress...)
+		</td>
+	</tr>
+
+	<tr>
+		<td style="width:50%">
 			<a href="https://github.com/khorbushko/Hush"><img src="{{site.baseurl}}/myApps/hush.png" alt="Hush is a lightweight macOS menu-bar app for building a calm soundscape: mix ambient loops, save presets, and set a sleep timer — without cluttering your Dock." style="width:300px;height:180px;padding:10px"></a>
 		</td>
 			
@@ -56,6 +66,16 @@ img {
 			
 		<td>
 			OS X app for sending push with Apple Push Notification service (APNs) over HTTP/2 API.
+		</td>
+	</tr>
+	
+	<tr>
+		<td style="width:50%">
+			<a href="https://apps.apple.com/us/app/roxypenguin-vocabulary-builder/id1246985501"><img src="{{site.baseurl}}/myApps/roxy.png" alt="A language-learning application featuring a built-in dictionary and pop-up vocabulary, helps users expand their language skills using flashcard-style learning, stickers, and interactive mini-games" style="width:300px;height:180px;padding:10px"></a>
+		</td>
+			
+		<td>
+			A language-learning application featuring a built-in dictionary and pop-up vocabulary, helps users expand their language skills using flashcard-style learning, stickers, and interactive mini-games.
 		</td>
 	</tr>
 	
